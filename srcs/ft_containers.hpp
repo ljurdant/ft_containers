@@ -5,8 +5,4 @@
 # include "Vector.hpp"
 # include <vector>
 
-namespace   ft {
-    Vector  vector;;
-}
-
 #endif
