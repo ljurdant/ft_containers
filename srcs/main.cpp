@@ -2,7 +2,7 @@
 #include "ft_containers.hpp"
 #include <vector>
 
-#define LIB std
+#define LIB ft
 
 int main()
 {
@@ -24,5 +24,5 @@ int main()
     std::cout << "vector.back() = " << vector.back() << std::endl << std::endl;
     std::cout << "begin" << std::endl;
     it = vector.begin();
-    std::cout << "vector.begin() = " << vector.begin() << std::endl << std::endl;
+    std::cout << "vector.begin() = " << *vector.begin() << std::endl << std::endl;
 }

@@ -16,9 +16,10 @@ class vector {
 			typedef	size_t	size_type;
 			typedef	value_type&	reference;
 			typedef value_type const & const_reference;
-		class: public std:: iterator<random_access_iterator_tag,T> iterator {
 			
-		};
+			class iterator: public std::iterator<std::random_access_iterator_tag, T> {};
+			class iterator_traits: public std::iterator_traits<iterator>{};
+
 		
 		private:
 			allocator_type	_alloc;
@@ -39,7 +40,9 @@ class vector {
 			
 			//Iterators:
 			iterator begin() {
-			 	return ();
+				iterator	it;
+				it.key() = _pointer;
+			 	return (it);
 			}
 
 			// Element access:
