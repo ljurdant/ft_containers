@@ -2,24 +2,45 @@
 #ifndef VECTOR_H
 # define VECTOR_H
 
-# include <iostream>
-# include <memory>
-# include <iterator>
+# include <iostream> //std::cout
+# include <memory> //std::allocator
+# include <iterator> //std::iterator_traits
 
 namespace ft {
 template	<typename T, class Alloc = std::allocator<T> >
 class vector {
 		public:
-			typedef T	value_type;
-			typedef Alloc	allocator_type;
+			typedef T									value_type;
+			typedef Alloc								allocator_type;
 			typedef typename allocator_type::pointer	pointer;
-			typedef	size_t	size_type;
-			typedef	value_type&	reference;
-			typedef value_type const & const_reference;
-			
-			class iterator: public std::iterator<std::random_access_iterator_tag, T> {};
-			class iterator_traits: public std::iterator_traits<iterator>{};
+			typedef	size_t								size_type;
+			typedef	value_type &						reference;
+			typedef value_type const & 					const_reference;
+			typedef	std::iterator_traits<pointer>		iterator_traits;
+			template<class _Iter>						
+			class	 __wrap_iter {
+				public:
+					typedef _Iter														iterator_type;
+					typedef typename iterator_traits<iterator_type>::iterator_category	iterator_category;
+					typedef typename iterator_traits<iterator_type>::value_type			value_type;
+					typedef typename iterator_traits<iterator_type>::difference_type	difference_type;
+					typedef typename iterator_traits<iterator_type>::pointer			pointer;
+					typedef typename iterator_traits<iterator_type>::reference			reference;
+				
+				private:
+					iterator_type	__i;
+				
+					__wrap_iter(pointer &p) {
+						__i = p;
+						return ;
+					}
+					value_type &	operator*() [
+						return (*__i);
+					]
+			}
 
+			typedef __wrap_iter<pointer>				iterator;
+		
 		
 		private:
 			allocator_type	_alloc;
@@ -39,10 +60,12 @@ class vector {
 			}
 			
 			//Iterators:
-			iterator begin() {
-				iterator	it;
-				it.key() = _pointer;
-			 	return (it);
+			iterator	begin() {
+			 	iterator it(_pointer);
+				return (it);
+			}
+			iterator	end() {
+				return (*_pointer + _size);
 			}
 
 			// Element access:
