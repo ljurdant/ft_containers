@@ -20,27 +20,39 @@ class vector {
 			template<class _Iter>						
 			class	 __wrap_iter {
 				public:
-					typedef _Iter														iterator_type;
-					typedef typename iterator_traits<iterator_type>::iterator_category	iterator_category;
-					typedef typename iterator_traits<iterator_type>::value_type			value_type;
-					typedef typename iterator_traits<iterator_type>::difference_type	difference_type;
-					typedef typename iterator_traits<iterator_type>::pointer			pointer;
-					typedef typename iterator_traits<iterator_type>::reference			reference;
+					typedef _Iter															iterator_type;
+					typedef typename std::iterator_traits<iterator_type>::iterator_category	iterator_category;
+					typedef typename std::iterator_traits<iterator_type>::value_type		value_type;
+					typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
+					typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
+					typedef typename std::iterator_traits<iterator_type>::reference			reference;
 				
 				private:
 					iterator_type	__i;
-				
-					__wrap_iter(pointer &p) {
+				public:
+					__wrap_iter() {}
+					__wrap_iter(__wrap_iter &copy) {*this = copy;}
+					__wrap_iter<iterator_type>	&operator=(__wrap_iter<iterator_type>& rhs) {
+						__i = rhs.__i;
+						return (*this);
+					}
+					bool	operator==(__wrap_iter &rhs) { return (__i == rhs.__i);}
+					bool	operator!=(__wrap_iter &rhs) { return (__i != rhs.__i);}
+					reference	operator*() {
+						return (*__i);
+					}
+					iterator_type		operator++(int) {
+						return (__i++);
+					}
+
+					__wrap_iter(iterator_type &p) {
 						__i = p;
 						return ;
 					}
-					value_type &	operator*() [
-						return (*__i);
-					]
-			}
+			};
 
-			typedef __wrap_iter<pointer>				iterator;
-		
+			typedef __wrap_iter<pointer>			iterator;
+
 		
 		private:
 			allocator_type	_alloc;
@@ -65,7 +77,9 @@ class vector {
 				return (it);
 			}
 			iterator	end() {
-				return (*_pointer + _size);
+				pointer end_pointer = _pointer + _size;
+				iterator it(end_pointer);
+				return (it);
 			}
 
 			// Element access:
@@ -96,7 +110,6 @@ class vector {
 
 
 			vector	(const vector& x);
-
 	};
 }
 #endif
