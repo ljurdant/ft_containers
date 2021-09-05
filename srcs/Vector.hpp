@@ -31,24 +31,21 @@ class vector {
 					iterator_type	__i;
 				public:
 					__wrap_iter() {}
-					__wrap_iter(__wrap_iter &copy) {*this = copy;}
-					__wrap_iter<iterator_type>	&operator=(__wrap_iter<iterator_type>& rhs) {
+					__wrap_iter(__wrap_iter const &copy) {*this = copy;}
+					__wrap_iter		&operator=(__wrap_iter<iterator_type>  const &rhs) {
 						__i = rhs.__i;
 						return (*this);
 					}
-					bool	operator==(__wrap_iter &rhs) { return (__i == rhs.__i);}
-					bool	operator!=(__wrap_iter &rhs) { return (__i != rhs.__i);}
-					reference	operator*() {
-						return (*__i);
-					}
-					iterator_type		operator++(int) {
-						return (__i++);
-					}
+					bool			operator==(__wrap_iter const &rhs) const { return (__i == rhs.__i);}
+					bool			operator!=(__wrap_iter const &rhs) const { return (__i != rhs.__i);}
+					reference		operator*() const { return (*__i);}
+					iterator_type	operator++(int) { return (__i++);}
+					iterator_type	operator++() { return (++__i);}
+					iterator_type	operator--(int) { return (__i--);}
+					iterator_type	operator--() { return (--__i);}			
+					iterator_type	operator+(difference_type n) const {return (__i + n);}	
 
-					__wrap_iter(iterator_type &p) {
-						__i = p;
-						return ;
-					}
+					__wrap_iter(iterator_type const &p): __i(p){}
 			};
 
 			typedef __wrap_iter<pointer>			iterator;
