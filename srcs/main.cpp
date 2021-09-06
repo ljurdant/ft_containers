@@ -45,5 +45,11 @@ int main()
 	size_t n = 3;
 	std::cout << "it + " << n << " = " << *(it + n) << std::endl;
 	std::cout << n << " + it = " << *(n + it) << std::endl;
+    LIB::vector<int>::reverse_iterator  rit = vector.rbegin();
+    std::cout << "vector.rbegin() = " << *rit << std::endl;
+    std::cout << "++rit = " << *(++rit) << std::endl;
+    std::cout << "Capacity" << std::endl;
+    std::cout << "vector.size() = " << vector.size() << std::endl;
+    std::cout << "vector.size_max()" << vector.max_size() << std::endl;
 
 }
