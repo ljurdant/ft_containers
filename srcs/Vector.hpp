@@ -26,17 +26,30 @@ class vector {
 			allocator_type	_alloc;
 			pointer _pointer;
 			size_type	_size;
+			size_type	_capacity;
+			size_type	const _alloc_size;
+			size_type	const _max_size;
+
+			pointer	allocate(size_type n) {
+				pointer	new_pointer;
+				_capacity = (n / _alloc_size + 1) * (_alloc_size);
+				new_pointer = _alloc.allocate(_capacity);
+				_size = n;
+				return (new_pointer);
+			}
 		
 		public:
 			//Constructors:
-			explicit vector	(const allocator_type& alloc = allocator_type()): _alloc(alloc) {}
+			explicit vector	(const allocator_type& alloc = allocator_type()): _alloc(alloc), _alloc_size(128) {}
 			
 			explicit vector	(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):
-			_alloc(alloc),
-			_pointer(_alloc.allocate(n)),
-			_size(n) {
+			_alloc_size(128), _max_size(max_size())
+			{
+				_alloc = alloc;
+				_pointer = allocate(n);
 				for (size_type i = 0; i < n; i++)
 					_alloc.construct(_pointer + i, val);
+				
 			}
 			
 			//Iterators:
@@ -61,16 +74,22 @@ class vector {
 				return (max_size > _alloc_size ? _alloc_size : max_size);
 			};
 			void	resize(size_type n, value_type val = value_type()) {
-				pointer	new_pointer;
-				new_pointer = _alloc.allocate(n);
-				for (size_type i = 0; i < n && i < _size; i++)
-					_alloc.construct(new_pointer + i, *(_pointer + i));
-				for (size_type i = _size; i < n; i++)
-					_alloc.construct(new_pointer + i, val);
-				_alloc.deallocate(_pointer, _size);
-				_alloc.destroy(_pointer);
-				_pointer = new_pointer;
-				_size = n;
+				if (n > _max_size)
+				{
+					throw std::length_error("vector");
+					return ;
+				}
+				if (n > _capacity)
+				{
+					pointer new_pointer = allocate(n);
+					for (size_type i = 0; i < _size; i++)
+						_alloc.construct(new_pointer  + i, *(_pointer + i));
+					_pointer = new_pointer;
+				} 
+				while (_size < n)
+					_alloc.construct(_pointer + _size++, val);
+				while (n < _size)
+					_alloc.destroy(_pointer + _size--);
 				return ;
 			}
 

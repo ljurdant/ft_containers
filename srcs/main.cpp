@@ -2,10 +2,12 @@
 #include "ft_containers.hpp"
 #include <vector>
 
-#define LIB ft
+#define LIB std
 
 int main()
 {
+    try
+    {
     size_t  size = 10;
     size_t  index = 2;
     size_t  value = 7;
@@ -51,8 +53,13 @@ int main()
     std::cout << "Capacity" << std::endl;
     std::cout << "vector.size() = " << vector.size() << std::endl;
     std::cout << "vector.size_max() = " << vector.max_size() << std::endl;
-	vector.resize(size + 3, 60);
+	vector.resize(size - 128, 60);
 	for (size_t i = 0; i < vector.size(); i++)
 		std::cout << "vector[" << i << "] = " << vector[i] << std::endl;
+    }
+    catch(std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 
 }
