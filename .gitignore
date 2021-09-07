@@ -1,0 +1,4 @@
+srcs/*.o
+srcs/*.swp
+*.swp
+ft_container
