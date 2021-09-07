@@ -40,7 +40,7 @@ class vector {
 		
 		public:
 			//Constructors:
-			explicit vector	(const allocator_type& alloc = allocator_type()): _alloc(alloc), _alloc_size(128) {}
+			explicit vector	(const allocator_type& alloc = allocator_type()): _alloc(alloc), _alloc_size(128), _max_size(max_size()) {}
 			
 			explicit vector	(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):
 			_alloc_size(128), _max_size(max_size())
@@ -49,7 +49,6 @@ class vector {
 				_pointer = allocate(n);
 				for (size_type i = 0; i < n; i++)
 					_alloc.construct(_pointer + i, val);
-				
 			}
 			
 			//Iterators:
@@ -89,6 +88,8 @@ class vector {
 					_alloc.destroy(_pointer + _size--);
 				return ;
 			}
+			size_type	capacity() const { return (_capacity); }
+			bool		empty() const { return (!_size); }
 
 			// Element access:
 			reference	operator[](size_type n) { return (*(_pointer + n)); }

@@ -53,9 +53,18 @@ int main()
     std::cout << "Capacity" << std::endl;
     std::cout << "vector.size() = " << vector.size() << std::endl;
     std::cout << "vector.size_max() = " << vector.max_size() << std::endl;
-	vector.resize(size - 128, 60);
+	std::cout << "vector.resize(size + 3)" << std::endl;
+    vector.resize(size + 3, 60);
 	for (size_t i = 0; i < vector.size(); i++)
-		std::cout << "vector[" << i << "] = " << vector[i] << std::endl;
+		std::cout << "vector[" << i << "] = " << vector[i] << ", ";
+	std::cout << std::endl << std::endl;
+    std::cout << "vector.resize(size - 6)" << std::endl;
+    vector.resize(size - 3, 60);
+	for (size_t i = 0; i < vector.size(); i++)
+		std::cout << "vector[" << i << "] = " << vector[i] << ", ";
+    std::cout << std::endl;
+    std::cout << "vector.capacity = " << vector.capacity() << std:: endl;
+    std::cout << "vector.empty() = " << vector.empty() << std::endl;
     }
     catch(std::exception &e)
     {
