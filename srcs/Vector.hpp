@@ -75,10 +75,7 @@ class vector {
 			};
 			void	resize(size_type n, value_type val = value_type()) {
 				if (n > _max_size)
-				{
 					throw std::length_error("vector");
-					return ;
-				}
 				if (n > _capacity)
 				{
 					pointer new_pointer = allocate(n);

@@ -2,7 +2,7 @@
 #include "ft_containers.hpp"
 #include <vector>
 
-#define LIB std
+#define LIB ft
 
 int main()
 {
