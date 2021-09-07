@@ -18,39 +18,6 @@ class vector {
 			typedef	value_type &							reference;
 			typedef value_type const & 						const_reference;
 			typedef	std::iterator_traits<pointer>			iterator_traits;
-			// template<class _Iter>						
-			// class	 __wrap_iter {
-			// 	public:
-			// 		typedef _Iter															iterator_type;
-			// 		typedef typename std::iterator_traits<iterator_type>::iterator_category	iterator_category;
-			// 		typedef typename std::iterator_traits<iterator_type>::value_type		value_type;
-			// 		typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
-			// 		typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
-			// 		typedef typename std::iterator_traits<iterator_type>::reference			reference;
-				
-			// 	private:
-			// 		iterator_type	__i;
-			// 	public:
-			// 		__wrap_iter() {}
-			// 		__wrap_iter(__wrap_iter const &copy) {*this = copy;}
-			// 		__wrap_iter		&operator=(__wrap_iter<iterator_type>  const &rhs) {
-			// 			__i = rhs.__i;
-			// 			return (*this);
-			// 		}
-			// 		bool			operator==(__wrap_iter const &rhs) const { return (__i == rhs.__i);}
-			// 		bool			operator!=(__wrap_iter const &rhs) const { return (__i != rhs.__i);}
-			// 		reference		operator*() const { return (*__i);}
-			// 		pointer			operator->() const { return (__i);}
-			// 		iterator_type	operator++(int) { return (__i++);}
-			// 		iterator_type	operator++() { return (++__i);}
-			// 		iterator_type	operator--(int) { return (__i--);}
-			// 		iterator_type	operator--() { return (--__i);}			
-			// 		iterator_type	operator+(difference_type n) const {return (__i + n);}
-
-					
-			// 		__wrap_iter(iterator_type const &p): __i(p){}
-			// };
-			// typedef __wrap_iter<pointer>			iterator;
 			typedef	pointer							iterator;
 			typedef	const_pointer					const_iterator;
 			typedef	std::reverse_iterator<iterator>	reverse_iterator;
@@ -88,33 +55,34 @@ class vector {
 
 			//Capacity
 			size_type	size() const { return (_size); };
-			size_type	max_size() const {return (4611686018427387903); };
+			size_type	max_size() const {
+				size_type	max_size = ~0;
+				typename allocator_type::size_type	_alloc_size = _alloc.max_size();
+				return (max_size > _alloc_size ? _alloc_size : max_size);
+			};
+			void	resize(size_type n, value_type val = value_type()) {
+				pointer	new_pointer;
+				new_pointer = _alloc.allocate(n);
+				for (size_type i = 0; i < n && i < _size; i++)
+					_alloc.construct(new_pointer + i, *(_pointer + i));
+				for (size_type i = _size; i < n; i++)
+					_alloc.construct(new_pointer + i, val);
+				_alloc.deallocate(_pointer, _size);
+				_alloc.destroy(_pointer);
+				_pointer = new_pointer;
+				_size = n;
+				return ;
+			}
 
 			// Element access:
-			reference	operator[](size_type n) {
-				return (*(_pointer + n));
-			}
-			const_reference operator[] (size_type n) const {
-				return (*this[n]);
-			}
-			reference at (size_type n) {
-				return (*this[n]);
-			}
-			const_reference at (size_type n) const {
-				return (*this[n]);
-			}
-		    reference front() {
-				return (*_pointer);
-			}
-			const_reference front() const {
-				return (front());
-			}
-			reference back() {
-				return (*(_pointer + _size - 1));
-			}
-			const_reference back() const {
-				return (back());
-			}
+			reference	operator[](size_type n) { return (*(_pointer + n)); }
+			const_reference operator[] (size_type n) const { return (*this[n]); }
+			reference at (size_type n) { return (*this[n]); }
+			const_reference at (size_type n) const { return (*this[n]); }
+		    reference front() { return (*_pointer); }
+			const_reference front() const { return (front()); }
+			reference back() { return (*(_pointer + _size - 1)); }
+			const_reference back() const { return (back()); }
 
 
 			vector	(const vector& x);

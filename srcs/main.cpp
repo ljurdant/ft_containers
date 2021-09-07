@@ -50,6 +50,9 @@ int main()
     std::cout << "++rit = " << *(++rit) << std::endl;
     std::cout << "Capacity" << std::endl;
     std::cout << "vector.size() = " << vector.size() << std::endl;
-    std::cout << "vector.size_max()" << vector.max_size() << std::endl;
+    std::cout << "vector.size_max() = " << vector.max_size() << std::endl;
+	vector.resize(size + 3, 60);
+	for (size_t i = 0; i < vector.size(); i++)
+		std::cout << "vector[" << i << "] = " << vector[i] << std::endl;
 
 }
