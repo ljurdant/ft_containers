@@ -51,7 +51,14 @@ int main()
 	std::cout << "it + " << n << " = " << *(it + n) << std::endl;
 	std::cout << n << " + it = " << *(n + it) << std::endl;
     std::cout << "it - " << n << " = " << *(it - n) << std::endl;
-    std::cout << "it - it2 = " << (it - it2) << std::endl; 
+    std::cout << "it - it2 = " << (it - it2) << std::endl;
+    std::cout << "it < it3 = " << (it < ++it3) << std::endl;
+    std::cout << "it > it3 = " << (it > it3) << std::endl;
+    std::cout << "it <= it3 = " << (it <= it3) << std::endl;
+    std::cout << "it >= it3 = " << (it >= it3) << std::endl;
+    std::cout << "it += 4 = " << *(it+=4) << std::endl;
+    std::cout << "it -= 3 = " << *(it-=3) << std::endl;
+    std::cout << "it[1] = " << it[1] << std::endl;
 
 
     LIB::vector<int>::reverse_iterator  rit = vector.rbegin();

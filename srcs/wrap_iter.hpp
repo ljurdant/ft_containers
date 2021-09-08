@@ -14,7 +14,7 @@ template<class _Iter>
 				public:
 					__wrap_iter() {}
 					__wrap_iter(__wrap_iter const &copy) {*this = copy;}
-					__wrap_iter		&operator=(__wrap_iter<iterator_type>  const &rhs) {
+					__wrap_iter					&operator=(__wrap_iter<iterator_type>  const &rhs) {
 						__i = rhs.__i;
 						return (*this);
 					}
@@ -22,13 +22,20 @@ template<class _Iter>
 					bool			operator!=(__wrap_iter const &rhs) const { return (__i != rhs.__i);}
 					reference		operator*() const { return (*__i);}
 					pointer			operator->() const { return (__i);}
-					__wrap_iter<iterator_type>	operator++(int) { return (__i++); }
-					__wrap_iter<iterator_type>	operator++() { return (++__i); }
-					__wrap_iter<iterator_type>	operator--(int) { return (__i--); }
-					__wrap_iter<iterator_type>	operator--() { return (--__i);}			
-					__wrap_iter<iterator_type>	operator+(difference_type n) const { return (__i + n); }
-					__wrap_iter<iterator_type>	operator-(difference_type n) const { return (__i - n); }
-					difference_type				operator-(__wrap_iter<iterator_type> b) const { return(*__i - *(b.__i)); }
+					__wrap_iter		operator++(int) { return (__i++); }
+					__wrap_iter		operator++() { return (++__i); }
+					__wrap_iter		operator--(int) { return (__i--); }
+					__wrap_iter		operator--() { return (--__i);}			
+					__wrap_iter		operator+(difference_type n) const { return (__i + n); }
+					__wrap_iter		operator-(difference_type n) const { return (__i - n); }
+					difference_type	operator-(__wrap_iter const &rhs) const { return(*__i - *(rhs.__i)); }
+					bool			operator<(__wrap_iter const &rhs) { return (__i < rhs.__i); }
+					bool			operator>(__wrap_iter const &rhs) { return (__i > rhs.__i); } 
+					bool			operator<=(__wrap_iter const &rhs) { return (__i <= rhs.__i); }
+					bool			operator>=(__wrap_iter const &rhs) { return (__i >= rhs.__i); }
+					__wrap_iter		operator+=(difference_type n) { return (__i+=n); }
+					__wrap_iter		operator-=(difference_type n) { return (__i-=n); }
+					reference		operator[](difference_type n) const { return (__i[n]); }			
 
 					__wrap_iter(iterator_type const &p): __i(p){}
 			};
