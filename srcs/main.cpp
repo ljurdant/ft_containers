@@ -83,6 +83,13 @@ int main()
     std::cout << "vector.reserve(" << vector.size() * 4 << ") -> vector.capacity() = " << vector.capacity() << std::endl;
     for (size_t i = 0; i < vector.size(); i++)
 		std::cout << "vector[" << i << "] = " << vector[i] << ", ";
+    std::cout << std::endl << "Modifiers" << std::endl;
+    it = vector.begin();
+    it2 = vector.end();
+    vector_empty.assign(it, it2);
+    std::cout << "assign(it2, it)" << std::endl;
+    for (size_t i = 0; i < vector_empty.size(); i++)
+		std::cout << "vector[" << i << "] = " << vector_empty[i] << ", ";
     }
     catch(std::exception &e)
     {

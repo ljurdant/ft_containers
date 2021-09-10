@@ -125,6 +125,16 @@ class vector {
 			reference back() { return (*(_pointer + _size - 1)); }
 			const_reference back() const { return (back()); }
 
+			//Modifiers
+			void	assign(iterator first, iterator last) {
+				size_type	_size = 0;
+				for (iterator it = first; it != last; it++)
+					_size++;
+				reserve(_size);
+				for (iterator it = first; it != last; it++)
+					_alloc.construct(_pointer + (it - first), *it);
+			}
+
 
 			vector	(const vector& x);
 	};
