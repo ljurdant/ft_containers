@@ -2,10 +2,10 @@ NAME =	containers
 
 FLAGS =  -Wall -Wextra -Werror -std=c++98
 
-SRCS =		srcs/main.cpp\
-			srcs/vector.hpp\
-			srcs/map.hpp\
-			srcs/stack.hpp
+SRCS =		tester/main.cpp\
+			tester/vector_test.cpp\
+			tester/map_tests.cpp\
+			tester/stack_tests
 
 OBJS =		${SRCS:.cpp=.o}
 

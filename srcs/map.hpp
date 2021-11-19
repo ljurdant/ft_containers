@@ -30,7 +30,8 @@ namespace ft {
 					friend class map;
 					protected:
 						Compare comp;
-						value_compare	(Compare c): comp(c) {}
+						value_compare	(Compare c): comp(c) {};
+
 					public:
 						typedef	bool result_type;
 						typedef value_type	first_argument_type;
@@ -47,11 +48,21 @@ namespace ft {
 				size_type		_size;
 				pointer			_pointer;
 				size_type const	_max_size;
+				// struct	Node {
+				// 			value_type	key;
+				// 			Node		*left;
+				// 			Node		*right;
+				// 			bool		color;
+				// 		}
+				// Node			*T;
 
+				// Node	*newNode(value_type value) {
+				// 	_alloc.allocate()
+				// }
 			public:
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0),_max_size(max_size()) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()) {
 				}
 				template <class InputIterator>
   					map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):

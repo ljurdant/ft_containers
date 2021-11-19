@@ -2,9 +2,9 @@
 #ifndef FT_CONTAINERS_H
 # define FT_CONTAINERS_H
 
-# include "vector.hpp"
-# include "stack.hpp"
-# include "map.hpp"
+# include "../srcs/vector.hpp"
+# include "../srcs/stack.hpp"
+# include "../srcs/map.hpp"
 
 # include <vector>
 # include <map>

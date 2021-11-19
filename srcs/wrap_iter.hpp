@@ -1,3 +1,6 @@
+#ifndef WRAP_ITER_H
+# define WRAP_ITER_H
+
 template<class _Iter>						
 	class	 __wrap_iter {
 		public:
@@ -144,3 +147,4 @@ template<class _Iter>
 
 		__wrap_reverse_biiter(iterator_type const &p): __i(p){}
 	};
+#endif
