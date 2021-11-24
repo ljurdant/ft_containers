@@ -81,7 +81,7 @@ namespace ft {
 					}
 					leaf_pointer	iter = Tree;
 					leaf_pointer	prev = iter;
-					while (iter)
+					while (iter && prev->key.first != value.first)
 					{
 						prev = iter;
 						if (value.first < iter->key.first)
@@ -90,9 +90,11 @@ namespace ft {
 							iter = iter->right;
 					}
 					if (value.first < prev->key.first)
-						prev->left = newleaf(value, )
-					else if (value.first > iter->key.first)
-						iter = iter->right;
+						prev->left = newleaf(value, RED)
+					else if (value.first > prev->key.first)
+						prev->right = newleaf(value, RED);
+					else
+						prev->key = value;
 					
 				}
 
