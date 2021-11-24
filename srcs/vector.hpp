@@ -129,7 +129,7 @@ class vector {
 
 			//Modifiers
 			template <class InputIterator>
- 				 void assign (InputIterator first, InputIterator last) {
+ 				 void assign (InputIterator first, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type last) {
 				size_type	new_size = 0;
 
 				for (InputIterator it = first; it != last; it++)

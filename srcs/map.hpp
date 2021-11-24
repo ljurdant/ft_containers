@@ -48,29 +48,38 @@ namespace ft {
 				size_type		_size;
 				pointer			_pointer;
 				size_type const	_max_size;
-				// struct	Node {
-				// 			value_type	key;
-				// 			Node		*left;
-				// 			Node		*right;
-				// 			bool		color;
-				// 		}
-				// Node			*T;
-
-				// Node	*newNode(value_type value) {
-				// 	_alloc.allocate()
-				// }
+				struct	leaf {
+							value_type	key;
+							leaf		*left;
+							leaf		*right;
+							bool		color;
+				};
+				typedef	std::allocator<leaf>	leaf_allocator_type;
+				typedef typename leaf_allocator_type::reference			leaf_reference;
+				typedef typename leaf_allocator_type::const_reference	leaf_const_reference;
+				typedef typename leaf_allocator_type::pointer			leaf_pointer;
+				typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
+				leaf_allocator_type				_leaf_alloc;
+				leaf_pointer	Tree;
+				leaf_pointer	newleaf(value_type const &value) {
+					leaf_pointer new_leaf = _leaf_alloc.allocate(1);
+					_leaf_alloc.construct(new_leaf,value);
+					return(new_leaf);
+				}
+				bool	leaf_compare(leaf_const_reference left, leaf_const_reference right) { return (value_compare(left.key,right.key)); }
+				
 			public:
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()),Tree(NULL) {
 				}
 				template <class InputIterator>
   					map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()), Tree(NULL) {
 						for (InputIterator it = first; it != last; it++)
 							insert(it);
 				}
-				map (const map& x): _value_compare(x._value_compare),_size(0), _max_size(x.max_size()) {
+				map (const map& x): _value_compare(x._value_compare),_size(0), _max_size(x.max_size()), Tree(NULL) {
 					*this = x;
 				}
 				~map() {

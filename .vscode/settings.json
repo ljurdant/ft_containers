@@ -71,6 +71,7 @@
 		"compare": "cpp",
 		"concepts": "cpp",
 		"ranges": "cpp",
-		"map": "cpp"
+		"map": "cpp",
+		"list": "cpp"
 	}
 }

@@ -1,4 +1,8 @@
+.gitignore
 srcs/*.o
 srcs/*.swp
 *.swp
+ft_out
+std_out
+.vscode
 ft_containers
