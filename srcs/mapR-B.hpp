@@ -3,8 +3,10 @@
 
 # include <memory> //std::allocator
 # include <iterator> //std::iterator_traits
+# include <iostream>
 # include "wrap_iter.hpp"
 # include "ft_utilities.hpp"
+// # include "RedBlackBinaryTree.hpp"
 # define BLACK 0
 # define RED 1
 
@@ -50,6 +52,7 @@ namespace ft {
 				pointer			_pointer;
 				size_type const	_max_size;
 				struct	leaf {
+							leaf(value_type &value): key(value) {}
 							value_type	key;
 							leaf		*left;
 							leaf		*right;
@@ -62,9 +65,8 @@ namespace ft {
 				typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
 				leaf_allocator_type				_leaf_alloc;
 				leaf_pointer	Tree;
-				leaf_pointer	newleaf(value_type const &value, bool &color) {
-					leaf	new_leaf;
-					new_leaf.key = value;
+				leaf_pointer	newleaf(value_type &value, bool color) {
+					leaf	new_leaf(value);
 					new_leaf.left = NULL;
 					new_leaf.right = NULL;
 					new_leaf.color = color;
@@ -72,12 +74,13 @@ namespace ft {
 					_leaf_alloc.construct(pointer, new_leaf);
 					return(pointer);
 				}
-				void	add_leaf(value_type const &value)
+
+				leaf_pointer	add_leaf(value_type value)
 				{
 					if (!Tree)
-					{
+					{ 
 						Tree = newleaf(value, BLACK);
-						return ;
+						return (Tree);
 					}
 					leaf_pointer	iter = Tree;
 					leaf_pointer	prev = iter;
@@ -90,12 +93,10 @@ namespace ft {
 							iter = iter->right;
 					}
 					if (value.first < prev->key.first)
-						prev->left = newleaf(value, RED)
+						prev->left = newleaf(value, RED);
 					else if (value.first > prev->key.first)
 						prev->right = newleaf(value, RED);
-					else
-						prev->key = value;
-					
+					return (prev);
 				}
 
 			public:
@@ -147,35 +148,35 @@ namespace ft {
 			};
 			//Element access
 				mapped_type& operator[] (const key_type& k) {
-					if (find(k) == end())
-					{
-						pointer	new_pointer;
-						new_pointer = _alloc.allocate(_size + 1);
-						iterator it = begin();
-						size_type	i = 0;
-						while(it != end() && _key_compare(it->first, k))
-						{
-							_alloc.construct(new_pointer + i, _pointer[i]);
-							it++;
-							i++;
-						}
-						_alloc.construct(new_pointer + i, ft::make_pair(k, mapped_type()));
-						it++;
-						i++;
-						_size++;
-						while (it != end())
-						{							
-							_alloc.construct(new_pointer + i, _pointer[i - 1]);
-							it++;
-							i++;
-						}
-						for (size_type i = 0; i < _size - 1; i++)
-							_alloc.destroy(_pointer + i);
-						if (_size - 1)
-							_alloc.deallocate(_pointer, _size);
-						_pointer = new_pointer;
-					}
-					return (find(k)->second);	
+					// if (find(k) == end())
+					// {
+					// 	pointer	new_pointer;
+					// 	new_pointer = _alloc.allocate(_size + 1);
+					// 	iterator it = begin();
+					// 	size_type	i = 0;
+					// 	while(it != end() && _key_compare(it->first, k))
+					// 	{
+					// 		_alloc.construct(new_pointer + i, _pointer[i]);
+					// 		it++;
+					// 		i++;
+					// 	}
+					// 	_alloc.construct(new_pointer + i, ft::make_pair(k, mapped_type()));
+					// 	it++;
+					// 	i++;
+					// 	_size++;
+					// 	while (it != end())
+					// 	{							
+					// 		_alloc.construct(new_pointer + i, _pointer[i - 1]);
+					// 		it++;
+					// 		i++;
+					// 	}
+					// 	for (size_type i = 0; i < _size - 1; i++)
+					// 		_alloc.destroy(_pointer + i);
+					// 	if (_size - 1)
+					// 		_alloc.deallocate(_pointer, _size);
+					// 	_pointer = new_pointer;
+					// }
+					return (add_leaf(ft::make_pair(k, mapped_type()))->key.second);	
 				}
 			//Modifiers
 				pair<iterator,bool> insert (const value_type& val) {
