@@ -6,7 +6,7 @@
 # include <iostream>
 # include "wrap_iter.hpp"
 # include "ft_utilities.hpp"
-// # include "RedBlackBinaryTree.hpp"
+# include "RedBlackBinaryTree.hpp"
 # define BLACK 0
 # define RED 1
 
@@ -51,66 +51,19 @@ namespace ft {
 				size_type		_size;
 				pointer			_pointer;
 				size_type const	_max_size;
-				struct	leaf {
-							leaf(value_type &value): key(value) {}
-							value_type	key;
-							leaf		*left;
-							leaf		*right;
-							bool		color;
-				};
-				typedef	std::allocator<leaf>	leaf_allocator_type;
-				typedef typename leaf_allocator_type::reference			leaf_reference;
-				typedef typename leaf_allocator_type::const_reference	leaf_const_reference;
-				typedef typename leaf_allocator_type::pointer			leaf_pointer;
-				typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
-				leaf_allocator_type				_leaf_alloc;
-				leaf_pointer	Tree;
-				leaf_pointer	newleaf(value_type &value, bool color) {
-					leaf	new_leaf(value);
-					new_leaf.left = NULL;
-					new_leaf.right = NULL;
-					new_leaf.color = color;
-					leaf_pointer pointer = _leaf_alloc.allocate(1);
-					_leaf_alloc.construct(pointer, new_leaf);
-					return(pointer);
-				}
-
-				leaf_pointer	add_leaf(value_type value)
-				{
-					if (!Tree)
-					{ 
-						Tree = newleaf(value, BLACK);
-						return (Tree);
-					}
-					leaf_pointer	iter = Tree;
-					leaf_pointer	prev = iter;
-					while (iter && prev->key.first != value.first)
-					{
-						prev = iter;
-						if (value.first < iter->key.first)
-							iter = iter->left;
-						else if (value.first > iter->key.first)
-							iter = iter->right;
-					}
-					if (value.first < prev->key.first)
-						prev->left = newleaf(value, RED);
-					else if (value.first > prev->key.first)
-						prev->right = newleaf(value, RED);
-					return (prev);
-				}
-
+				Tree			_tree;
 			public:
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()),Tree(NULL) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()),_tree(NULL) {
 				}
 				template <class InputIterator>
   					map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()), Tree(NULL) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()), _tree(NULL) {
 						for (InputIterator it = first; it != last; it++)
 							insert(it);
 				}
-				map (const map& x): _value_compare(x._value_compare),_size(0), _max_size(x.max_size()), Tree(NULL) {
+				map (const map& x): _value_compare(x._value_compare),_size(0), _max_size(x.max_size()), _tree(NULL) {
 					*this = x;
 				}
 				~map() {
@@ -147,36 +100,8 @@ namespace ft {
 				return (max_size > _alloc_size ? _alloc_size : max_size);
 			};
 			//Element access
-				mapped_type& operator[] (const key_type& k) {
-					// if (find(k) == end())
-					// {
-					// 	pointer	new_pointer;
-					// 	new_pointer = _alloc.allocate(_size + 1);
-					// 	iterator it = begin();
-					// 	size_type	i = 0;
-					// 	while(it != end() && _key_compare(it->first, k))
-					// 	{
-					// 		_alloc.construct(new_pointer + i, _pointer[i]);
-					// 		it++;
-					// 		i++;
-					// 	}
-					// 	_alloc.construct(new_pointer + i, ft::make_pair(k, mapped_type()));
-					// 	it++;
-					// 	i++;
-					// 	_size++;
-					// 	while (it != end())
-					// 	{							
-					// 		_alloc.construct(new_pointer + i, _pointer[i - 1]);
-					// 		it++;
-					// 		i++;
-					// 	}
-					// 	for (size_type i = 0; i < _size - 1; i++)
-					// 		_alloc.destroy(_pointer + i);
-					// 	if (_size - 1)
-					// 		_alloc.deallocate(_pointer, _size);
-					// 	_pointer = new_pointer;
-					// }
-					return (add_leaf(ft::make_pair(k, mapped_type()))->key.second);	
+				mapped_type& operator[] (const key_type& k) 
+					return ((_tree.add_leaf(ft::make_pair(k, mapped_type())))->key.second);	
 				}
 			//Modifiers
 				pair<iterator,bool> insert (const value_type& val) {

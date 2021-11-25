@@ -48,6 +48,12 @@ class vector {
 					_alloc.construct(_pointer + i, val);
 			}
 
+			template <class InputIterator>
+         	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):
+			 _alloc(alloc), _size(0), _capacity(0), _max_size(max_size()) {
+				this->assign(first, last);
+			 }
+
 			vector (const vector& x): _size(0), _capacity(0), _max_size(x._max_size) {
 				*this = x;
 			}
@@ -120,8 +126,8 @@ class vector {
 			// Element access:
 			reference	operator[](size_type n) { return (_pointer[n]); }
 			const_reference operator[] (size_type n) const { return (_pointer[n]); }
-			reference at (size_type n) { return (*this[n]); }
-			const_reference at (size_type n) const { return (*this[n]); }
+			reference at (size_type n) { return ((*this)[n]); }
+			const_reference at (size_type n) const { return ((*this)[n]); }
 		    reference front() { return (*_pointer); }
 			const_reference front() const { return (front()); }
 			reference back() { return (_pointer[_size - 1]); }

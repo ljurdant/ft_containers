@@ -4,7 +4,6 @@ FLAGS =	-Wall -Wextra -Werror -std=c++98
 
 SRCS =	tester/main.cpp\
 		tester/vector_test.cpp\
-		tester/map_tests.cpp\
 		tester/stack_tests.cpp
 
 OBJS =	${SRCS:.cpp=.o}
