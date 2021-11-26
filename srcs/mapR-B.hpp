@@ -51,8 +51,8 @@ namespace ft {
 				size_type			_size;
 				pointer				_pointer;
 				size_type const		_max_size;
-				Tree<value_type>	_tree;
 			public:
+				Tree<value_type>	_tree;
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()){
@@ -93,15 +93,18 @@ namespace ft {
 			// //Capacity
 			// 	bool empty() const { return (!_size); }
 			// 	size_type size() const { return (_size); }
-			// 	size_type	max_size() const {
-			// 	size_type	max_size = ~0;
+				size_type	max_size() const {
+					size_type	max_size = ~0;
 
-			// 	typename allocator_type::size_type	_alloc_size = _alloc.max_size();
-			// 	return (max_size > _alloc_size ? _alloc_size : max_size);
-			// };
+					typename allocator_type::size_type	_alloc_size = _alloc.max_size();
+					return (max_size > _alloc_size ? _alloc_size : max_size);
+				};
 			// //Element access
 				mapped_type& operator[] (const key_type& k) {
-					return ((_tree.add_leaf(ft::make_pair(k, mapped_type())))->pair.second);	
+					leaf<value_type>	*node = _tree.add_leaf(ft::make_pair(k, mapped_type()));
+
+					// _tree.printTree();
+					return (node->_value.second);	
 				}
 			// //Modifiers
 			// 	pair<iterator,bool> insert (const value_type& val) {

@@ -4,7 +4,7 @@
 
 # include "../srcs/vector.hpp"
 # include "../srcs/stack.hpp"
-// # include "../srcs/mapR-B.hpp"
+# include "../srcs/mapR-B.hpp"
 
 # include <vector>
 # include <map>
@@ -15,6 +15,7 @@
 #ifndef LIB
 # define LIB ft
 #endif
+
 
 void	vector_tests();
 void	map_tests();

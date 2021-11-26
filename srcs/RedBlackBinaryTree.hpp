@@ -12,8 +12,8 @@ namespace ft {
     template <class value_type>
     struct leaf
     {
-        leaf(value_type &value): pair(value) {}
-        value_type	pair;
+        leaf(value_type &value): _value(value) {}
+        value_type	_value;
         leaf        *parent;
         leaf		*left;
         leaf		*right;
@@ -30,10 +30,10 @@ namespace ft {
             typedef typename leaf_allocator_type::pointer			leaf_pointer;
             typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
         private :
-            leaf_pointer    root;
+            leaf_pointer    _root;
             leaf_allocator_type    _leaf_alloc;
         public :
-            Tree():root(NULL){};
+            Tree():_root(NULL){};
             leaf_pointer	newleaf(value_type &value, leaf_pointer parent, bool color) {
                 node_type	new_leaf(value);
                 new_leaf.left = NULL;
@@ -47,34 +47,89 @@ namespace ft {
 
             leaf_pointer	add_leaf(value_type value)
 			{
-                leaf_pointer	iter = root;
+                leaf_pointer	iter = _root;
 				leaf_pointer    new_leaf;
-                if (!root)
+                leaf_pointer    prev;
+                if (!_root)
                 { 
-                    root = newleaf(value, NULL, BLACK);
-                    return (root);
+                    _root = newleaf(value, NULL, BLACK);
+                    return (_root);
                 }
-                while (iter && iter.value.first != value.first)
+                while (iter && iter->_value.first != value.first)
                 {
-                    if (value.first < iter->pair.first)
+                    prev = iter;
+                    if (value.first < iter->_value.first)
                         iter = iter->left;
-                    else if (value.first > iter->pair.first)
+                    else if (value.first > iter->_value.first)
                         iter = iter->right;
                 }
-                if (iter.value.first != value.first)
-                    new_leaf = newleaf(value, iter, RED);
-                else
+                if (iter)
                     new_leaf = iter;
-                if (value.first < iter->parent->value.first)
-                    iter->parent->left = new_leaf;
-                else if (value.first > prev->pair.first)
-                    iter->parent->right = new_leaf;
+                else
+                {   
+                    new_leaf = newleaf(value, prev, RED);
+                    if (value.first < prev->_value.first)
+                        prev->left = new_leaf;
+                    else if (value.first > prev->_value.first)
+                        prev->right = new_leaf;
+                }
                 return (new_leaf);
             }
 
-            void    leftrotate(leaf_pointer node) {
-                node->left = node;
+            void    leftrotate(leaf_pointer x) {
+                leaf_pointer y = x->right;
+                x->right = NULL;
+                y->parent = x->parent;
+                y->left = x;
+                if (!y->parent)
+                    _root = y;
+            }
 
+            void    printLeaf(leaf_pointer leaf)
+            {
+                if (leaf)
+                    std::cout << "(" << leaf->_value.first << ")" ;
+                else
+                    std::cout << "()";
+            }
+
+            void    printBranches(leaf_pointer  leaf, bool branch)
+            {   
+                // if (leaf)
+                // {
+                    if (leaf && !leaf->parent) 
+                    {   
+                        printLeaf(leaf);
+                        std::cout << std::endl;
+                    }
+                    if (leaf)
+                    {
+                        printLeaf(leaf->left);
+                        printLeaf(leaf->right);
+                    }
+                    if (!branch)
+                        std::cout << std::endl;
+                    //branch++;
+                    if (leaf)
+                    {
+                        printBranches(leaf->left, 1);
+                    // if (leaf->right)
+                        printBranches(leaf->right, 0);
+                    }
+                // }
+            }
+
+            void    printTree() {
+                int     branch = 0;
+                bool    b = 1;
+                leaf_node   print = _root;
+
+                while (b)
+                {
+                    while (branch)
+                        print = print->left;
+                }    
+            
             }
         };
 }
