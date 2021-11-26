@@ -45,25 +45,25 @@ namespace ft {
 						}
 				};
 			protected:
-				allocator_type	_alloc;
-				key_compare		_key_compare;
-				value_compare	_value_compare;
-				size_type		_size;
-				pointer			_pointer;
-				size_type const	_max_size;
-				Tree			_tree;
+				allocator_type		_alloc;
+				key_compare			_key_compare;
+				value_compare		_value_compare;
+				size_type			_size;
+				pointer				_pointer;
+				size_type const		_max_size;
+				Tree<value_type>	_tree;
 			public:
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()),_tree(NULL) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()){
 				}
 				template <class InputIterator>
   					map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()), _tree(NULL) {
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()){
 						for (InputIterator it = first; it != last; it++)
 							insert(it);
 				}
-				map (const map& x): _value_compare(x._value_compare),_size(0), _max_size(x.max_size()), _tree(NULL) {
+				map (const map& x): _value_compare(x._value_compare),_size(0), _max_size(x.max_size()) {
 					*this = x;
 				}
 				~map() {
@@ -100,8 +100,8 @@ namespace ft {
 				return (max_size > _alloc_size ? _alloc_size : max_size);
 			};
 			//Element access
-				mapped_type& operator[] (const key_type& k) 
-					return ((_tree.add_leaf(ft::make_pair(k, mapped_type())))->key.second);	
+				mapped_type& operator[] (const key_type& k) {
+					return ((_tree.add_leaf(ft::make_pair(k, mapped_type())))->pair.second);	
 				}
 			//Modifiers
 				pair<iterator,bool> insert (const value_type& val) {

@@ -9,19 +9,22 @@
 # define RED 1
 
 namespace ft {
-    template < class value_type >
+    template <class value_type>
+    struct leaf
+    {
+        leaf(value_type &value): pair(value) {}
+        value_type	pair;
+        leaf        *parent;
+        leaf		*left;
+        leaf		*right;
+        bool		color;
+    };
+
+    template < class value_type, class alloc = std::allocator<leaf <value_type> > >
 	class	Tree {
         public:
-            //
-            struct leaf
-            {
-                leaf(value_type &value): key(value) {}
-                value_type	key;
-                leaf		*left;
-                leaf		*right;
-                bool		color;
-            };
-            typedef	std::allocator<leaf>	leaf_allocator_type;
+            typedef leaf<value_type>                                node_type;
+            typedef alloc                                           leaf_allocator_type;
             typedef typename leaf_allocator_type::reference			leaf_reference;
             typedef typename leaf_allocator_type::const_reference	leaf_const_reference;
             typedef typename leaf_allocator_type::pointer			leaf_pointer;
@@ -32,9 +35,10 @@ namespace ft {
         public :
             Tree():root(NULL){};
             leaf_pointer	newleaf(value_type &value, bool color) {
-                leaf	new_leaf(value);
+                node_type	new_leaf(value);
                 new_leaf.left = NULL;
                 new_leaf.right = NULL;
+                new_leaf.parent = NULL;
                 new_leaf.color = color;
                 leaf_pointer pointer = _leaf_alloc.allocate(1);
                 _leaf_alloc.construct(pointer, new_leaf);
@@ -50,19 +54,24 @@ namespace ft {
                 }
                 leaf_pointer	iter = root;
                 leaf_pointer	prev = iter;
-                while (iter && prev->key.first != value.first)
+                while (iter && prev->pair.first != value.first)
                 {
                     prev = iter;
-                    if (value.first < iter->key.first)
+                    if (value.first < iter->pair.first)
                         iter = iter->left;
-                    else if (value.first > iter->key.first)
+                    else if (value.first > iter->pair.first)
                         iter = iter->right;
                 }
-                if (value.first < prev->key.first)
+                if (value.first < prev->pair.first)
                     prev->left = newleaf(value, RED);
-                else if (value.first > prev->key.first)
+                else if (value.first > prev->pair.first)
                     prev->right = newleaf(value, RED);
                 return (prev);
+            }
+
+            void    leftrotate(leaf_pointer node) {
+                node->left = node;
+
             }
         };
 }
