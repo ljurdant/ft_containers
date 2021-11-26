@@ -34,11 +34,11 @@ namespace ft {
             leaf_allocator_type    _leaf_alloc;
         public :
             Tree():root(NULL){};
-            leaf_pointer	newleaf(value_type &value, bool color) {
+            leaf_pointer	newleaf(value_type &value, leaf_pointer parent, bool color) {
                 node_type	new_leaf(value);
                 new_leaf.left = NULL;
                 new_leaf.right = NULL;
-                new_leaf.parent = NULL;
+                new_leaf.parent = parent;
                 new_leaf.color = color;
                 leaf_pointer pointer = _leaf_alloc.allocate(1);
                 _leaf_alloc.construct(pointer, new_leaf);
@@ -47,26 +47,29 @@ namespace ft {
 
             leaf_pointer	add_leaf(value_type value)
 			{
-				if (!root)
+                leaf_pointer	iter = root;
+				leaf_pointer    new_leaf;
+                if (!root)
                 { 
-                    root = newleaf(value, BLACK);
+                    root = newleaf(value, NULL, BLACK);
                     return (root);
                 }
-                leaf_pointer	iter = root;
-                leaf_pointer	prev = iter;
-                while (iter && prev->pair.first != value.first)
+                while (iter && iter.value.first != value.first)
                 {
-                    prev = iter;
                     if (value.first < iter->pair.first)
                         iter = iter->left;
                     else if (value.first > iter->pair.first)
                         iter = iter->right;
                 }
-                if (value.first < prev->pair.first)
-                    prev->left = newleaf(value, RED);
+                if (iter.value.first != value.first)
+                    new_leaf = newleaf(value, iter, RED);
+                else
+                    new_leaf = iter;
+                if (value.first < iter->parent->value.first)
+                    iter->parent->left = new_leaf;
                 else if (value.first > prev->pair.first)
-                    prev->right = newleaf(value, RED);
-                return (prev);
+                    iter->parent->right = new_leaf;
+                return (new_leaf);
             }
 
             void    leftrotate(leaf_pointer node) {
