@@ -87,48 +87,62 @@ namespace ft {
 
             void    printLeaf(leaf_pointer leaf)
             {
-                if (leaf)
-                    std::cout << "(" << leaf->_value.first << ")" ;
+                int count = 10;
+                // int level = 0;
+                leaf_pointer    iter = leaf->parent;
+                leaf_pointer    tmp = leaf;
+                while (iter)
+                {
+                    if (tmp == iter->right)
+                        count++;
+                    if (tmp == iter->left)
+                        count--;
+                    tmp = iter;    
+                    iter = iter->parent;
+                    // level++;
+                }
+                for (int i = 0; i < count; i++)
+                    std::cout << "    ";
+                if (leaf->color == RED)
+                    std::cout << "\033[0;41m";
                 else
-                    std::cout << "()";
+                    std::cout << "\033[0;40m";
+                std::cout << "(" << leaf->_value.first << ")" ;
+                std::cout << "\033[0;m";
             }
 
-            void    printBranches(leaf_pointer  leaf, bool branch)
+            void    printBranches(leaf_pointer  leaf)
             {   
                 // if (leaf)
                 // {
-                    if (leaf && !leaf->parent) 
-                    {   
+                    if (!leaf->parent)
+                    {
                         printLeaf(leaf);
                         std::cout << std::endl;
                     }
-                    if (leaf)
-                    {
+                    leaf_pointer    iter = leaf->parent;
+                    leaf_pointer    tmp = leaf;
+
+                    if (leaf->left)
                         printLeaf(leaf->left);
+                    if (leaf->right)
                         printLeaf(leaf->right);
-                    }
-                    if (!branch)
-                        std::cout << std::endl;
-                    //branch++;
-                    if (leaf)
+                    while (iter && tmp == iter->right)
                     {
-                        printBranches(leaf->left, 1);
-                    // if (leaf->right)
-                        printBranches(leaf->right, 0);
+                        tmp = iter;
+                        iter = iter->parent;
                     }
+                    if (!iter)
+                        std::cout << std::endl;
+                    if (leaf->left)
+                        printBranches(leaf->left);
+                    if (leaf->right)
+                        printBranches(leaf->right);
                 // }
             }
 
             void    printTree() {
-                int     branch = 0;
-                bool    b = 1;
-                leaf_node   print = _root;
-
-                while (b)
-                {
-                    while (branch)
-                        print = print->left;
-                }    
+                printBranches(_root);
             
             }
         };
