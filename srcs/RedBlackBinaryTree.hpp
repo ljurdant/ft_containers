@@ -79,21 +79,33 @@ namespace ft {
             void    leftrotate(leaf_pointer x) {
                 leaf_pointer y = x->right;
                 x->right = y->left;
-                y->left = x;
-                y->parent = x->parent;
-				x->parent = y;
-                if (!y->parent)
+                if (y->left)
+                    y->left->parent = x;
+				y->parent= x->parent;
+                if (!x->parent)
                     _root = y;
+                else if (x == x->parent->left)
+                    x->parent->left = y;
+                else
+                    x->parent->right = y;
+                y->left = x;
+                x->parent = y;
             }
 
 			void    rightrotate(leaf_pointer x) {
-                leaf_pointer y = x->parent;
-                y->left = x->right;
-				x->right = y;
-				x->parent = y->parent;
-                y->parent = x;
+                leaf_pointer y = x->left;
+                x->left = y->right;
+				if (y->right)
+                    y->right->parent = x;
+                y->parent = x->parent;
                 if (!x->parent)
-                    _root = x;
+                    _root = y;
+                else if (x == x->parent->right)
+                    x->parent->right = y;
+                else
+                    x->parent->right = y;
+                y->right = x;
+                x->parent = y;
             }
 
 			void	recolor(leaf_pointer x) {
@@ -149,21 +161,34 @@ namespace ft {
                     if (!iter)
                         std::cout << std::endl;
                     if (leaf->left)
-                        printBranches(leaf->left, indent - level, level - 1);
+                        printBranches(leaf->left, indent - level, level - 2);
                     if (leaf->right)
-                        printBranches(leaf->right, indent + level, level - 1);
+                        printBranches(leaf->right, indent + level, level - 2);
                 // }
             }
 
             void    printTree(int indent, int level) {
                 printBranches(_root, indent, level);
+                std::cout << std::endl;
             }
 
+            void    blackUncle(void (*rotate1)(leaf_pointer), void (*rotate2)(leaf_pointer), leaf_pointer node, std::string dir)
+            {
+                if ((dir == "right" && node == node->parent->left)
+                || (dir == "left" && node == node->parent->right))
+                {
+                    rotate1(node->parent);
+                    blackUncle(rotate1, rotate2, dir);
+                }
+                node->parent->parent->color = RED;
+                rotate2(node->parent->parent);
+                node->parent->color = BLACK;      
+            }
 			leaf_pointer	checkLeaf(leaf_pointer node) {
 				
 				if (node->parent->parent)
 				{
-					leaf_pointer uncle;
+				leaf_pointer uncle;
 					if (node->parent->parent->right == node->parent)
 						uncle = node->parent->parent->left;
 					else
@@ -172,21 +197,61 @@ namespace ft {
 					{
 						if (uncle && uncle->color == RED)
 						{
-							recolor(node->parent);
-							recolor(uncle);
-							recolor(node->parent->parent);
+							node->parent->color = BLACK;
+							uncle->color = BLACK;
+							node->parent->parent->color = RED;
 						}
 						else if (!uncle || uncle->color == BLACK)
 						{
 							if (node->parent == node->parent->parent->right)
 							{
-								node->parent->parent->color = RED;
-								leftrotate(node->parent->parent);
-								node->parent = BLACK;
+                                // blackUncle(leftrotate, rightrotate, node,"right");
+                                if (node == node->parent->left)
+                                {
+                                    rightrotate(node->parent);
+                                    return (checkLeaf(node));
+                                }
+                                node->parent->parent->color = RED;
+                                leftrotate(node->parent->parent);
+                                node->parent->color = BLACK;
 							}
+                            else if (node->parent == node->parent->parent->left)
+                            {
+                                // blackUncle(rightrotate, leftrotate, node, "left");
+                                if (node == node->parent->right)
+                                {
+                                    leftrotate(node->parent);
+                                    return (checkLeaf(node));
+                                }
+                                node->parent->parent->color = RED;
+                                rightrotate(node->parent->parent);
+                                node->parent->color = BLACK;
+                            }
 						}
+
 					}
 				}
+                // while (node->parent && node->parent->color == RED)
+                // {
+                //     if (node->parent->parent && node->parent == node->parent->parent->right)
+                //     {
+                //         uncle = node->parent->parent->left;
+                //         if (uncle->color && uncle->color == RED)
+                //         {
+                //             uncle->color = BLACK;
+                //             node->parent->color = BLACK;
+                //             node->parent->parent->color = RED;
+                //             node = node->parent->parent;
+                //         }
+                //         else if (node == node->parent->left)
+                //         {
+                //             node = node->parent;
+                //             leftrotate(node);
+                //         }
+                //         node->parent->color = BLACK;
+                //         node->parent->parent->color = RED;
+                //         rightrotate
+                // }
 				return (node);
 			}
         };
