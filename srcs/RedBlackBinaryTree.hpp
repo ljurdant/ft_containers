@@ -73,36 +73,38 @@ namespace ft {
                     else if (value.first > prev->_value.first)
                         prev->right = new_leaf;
                 }
-                return (new_leaf);
+                return (checkLeaf(new_leaf));
             }
 
             void    leftrotate(leaf_pointer x) {
                 leaf_pointer y = x->right;
-                x->right = NULL;
-                y->parent = x->parent;
+                x->right = y->left;
                 y->left = x;
+                y->parent = x->parent;
+				x->parent = y;
                 if (!y->parent)
                     _root = y;
             }
 
+			void    rightrotate(leaf_pointer x) {
+                leaf_pointer y = x->parent;
+                y->left = x->right;
+				x->right = y;
+				x->parent = y->parent;
+                y->parent = x;
+                if (!x->parent)
+                    _root = x;
+            }
+
+			void	recolor(leaf_pointer x) {
+				if (x->color == RED)
+					x->color = BLACK;
+				else
+					x->color = RED;
+			}
+
             void    printLeaf(leaf_pointer leaf)
             {
-                int count = 10;
-                // int level = 0;
-                leaf_pointer    iter = leaf->parent;
-                leaf_pointer    tmp = leaf;
-                while (iter)
-                {
-                    if (tmp == iter->right)
-                        count++;
-                    if (tmp == iter->left)
-                        count--;
-                    tmp = iter;    
-                    iter = iter->parent;
-                    // level++;
-                }
-                for (int i = 0; i < count; i++)
-                    std::cout << "    ";
                 if (leaf->color == RED)
                     std::cout << "\033[0;41m";
                 else
@@ -111,12 +113,18 @@ namespace ft {
                 std::cout << "\033[0;m";
             }
 
-            void    printBranches(leaf_pointer  leaf)
+			void	printIndent(int indent) {
+				for (int i = 0; i < indent; i++)
+					std::cout << " ";
+			}
+
+            void    printBranches(leaf_pointer  leaf, int indent, int level)
             {   
                 // if (leaf)
                 // {
                     if (!leaf->parent)
                     {
+						printIndent(indent);
                         printLeaf(leaf);
                         std::cout << std::endl;
                     }
@@ -124,10 +132,16 @@ namespace ft {
                     leaf_pointer    tmp = leaf;
 
                     if (leaf->left)
+					{
+						printIndent(indent - level);
                         printLeaf(leaf->left);
+					}
                     if (leaf->right)
-                        printLeaf(leaf->right);
-                    while (iter && tmp == iter->right)
+                    {
+						printIndent((leaf->left ? 2*level - 3: indent + level));
+						printLeaf(leaf->right);
+					}
+					while (iter && tmp == iter->right)
                     {
                         tmp = iter;
                         iter = iter->parent;
@@ -135,16 +149,46 @@ namespace ft {
                     if (!iter)
                         std::cout << std::endl;
                     if (leaf->left)
-                        printBranches(leaf->left);
+                        printBranches(leaf->left, indent - level, level - 1);
                     if (leaf->right)
-                        printBranches(leaf->right);
+                        printBranches(leaf->right, indent + level, level - 1);
                 // }
             }
 
-            void    printTree() {
-                printBranches(_root);
-            
+            void    printTree(int indent, int level) {
+                printBranches(_root, indent, level);
             }
+
+			leaf_pointer	checkLeaf(leaf_pointer node) {
+				
+				if (node->parent->parent)
+				{
+					leaf_pointer uncle;
+					if (node->parent->parent->right == node->parent)
+						uncle = node->parent->parent->left;
+					else
+						uncle = node->parent->parent->right;
+					if (node->parent->color == RED)
+					{
+						if (uncle && uncle->color == RED)
+						{
+							recolor(node->parent);
+							recolor(uncle);
+							recolor(node->parent->parent);
+						}
+						else if (!uncle || uncle->color == BLACK)
+						{
+							if (node->parent == node->parent->parent->right)
+							{
+								node->parent->parent->color = RED;
+								leftrotate(node->parent->parent);
+								node->parent = BLACK;
+							}
+						}
+					}
+				}
+				return (node);
+			}
         };
 }
 
