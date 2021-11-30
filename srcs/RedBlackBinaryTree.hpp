@@ -32,9 +32,12 @@ namespace ft {
         private :
             leaf_pointer    _root;
             leaf_pointer    _last;
+            leaf_pointer    _end;
             leaf_allocator_type    _leaf_alloc;
         public :
             Tree():_root(NULL), _last(NULL) {};
+
+            leaf_pointer    getLast() { return (_last); }
             leaf_pointer	newleaf(value_type &value, leaf_pointer parent, bool color) {
                 node_type	new_leaf(value);
                 new_leaf.left = NULL;
@@ -44,7 +47,10 @@ namespace ft {
                 leaf_pointer pointer = _leaf_alloc.allocate(1);
                 _leaf_alloc.construct(pointer, new_leaf);
                 if (!_last || value.first > _last->_value.first)
+                {
                     _last = pointer;
+
+                }
                 return(pointer);
             }
 
@@ -244,6 +250,39 @@ namespace ft {
             // deleteLeaf() {
             //     ;
             // }
+            class	 iterator {
+                public:
+                    typedef value_type&								reference;
+                    typedef value_type*								pointer;
+		// 	typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
+		// 	typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
+		// 	typedef typename std::iterator_traits<iterator_type>::reference			reference;
+                protected:
+                    leaf_pointer	__i;
+
+                public:
+                    iterator() {}
+                    iterator(iterator const &copy) {*this = copy;}
+                    iterator					&operator=(iterator  const &rhs) {
+                        __i = rhs.__i;
+                        return (*this);
+                    }
+                    bool			operator==(iterator const &rhs) const { return (__i == rhs.__i);}
+                    bool			operator!=(iterator const &rhs) const { return (__i != rhs.__i);}
+                    reference		operator*() const { return (__i->_value);}
+                    pointer			operator->() const { return (&(__i->_value));}
+                    iterator		operator++(int) { 
+                        if (__i->right)
+                            __i = __i->right;
+                        if (__i != _last)
+                            return(*this);
+                    }
+            // 	iterator		operator++() { return (++__i); }
+            // 	iterator		operator--(int) { return (__i--); }
+            // 	iterator		operator--() { return (--__i);}			
+
+            // 	iterator(iterator_type const &p): __i(p){}
+	        };
         };
 }
 

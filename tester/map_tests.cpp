@@ -36,7 +36,7 @@ void	map_tests(void)
 	std::cout << "map['f'] is " << map['f'] << std::endl;
 	std::cout << "map['b'] is " << map['b'] << std::endl;
 	std::cout << "map['z'] is " << map['z'] << std::endl;
-
+	
 	// std::cout << "map.empty() = " << map.empty() << std::endl;
 	// LIB::pair<char, std::string> pair('b', "cowboy");
 	// LIB::pair<LIB::map<char, std::string>::iterator, bool> ret;
