@@ -147,4 +147,48 @@ template<class _Iter>
 
 		__wrap_reverse_biiter(iterator_type const &p): __i(p){}
 	};
+// template<class value_type, class _Iter>
+// 	class __wrap_iter_RB {
+// public:
+// 			typedef _Iter															iterator_type;
+// 			// typedef typename std::iterator_traits<iterator_type>::iterator_category	iterator_category;
+// 			// typedef typename _iter::value_type										value_type;
+// 			// typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
+// 			// typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
+// 			// typedef typename std::iterator_traits<iterator_type>::reference			reference;
+// 		protected:
+// 			iterator_type	__i;
+
+// 		public:
+// 			__wrap_iter() {}
+// 			__wrap_iter(__wrap_iter const &copy) {*this = copy;}
+// 			__wrap_iter					&operator=(__wrap_iter<value_type, iterator_type>  const &rhs) {
+// 				__i = rhs.__i;
+// 				return (*this);
+// 			}
+// 			bool			operator==(__wrap_iter const &rhs) const { return (__i == rhs.__i);}
+// 			bool			operator!=(__wrap_iter const &rhs) const { return (__i != rhs.__i);}
+// 			reference		operator*() const { return (__i->_value);}
+// 			pointer			operator->() const { return (__i->_value);}
+// 			__wrap_iter		operator++(int) { 
+// 				if ()
+// 					__i = __i->right;
+// 				return (); 
+// 			}
+// 			// __wrap_iter		operator++() { return (++__i); }
+// 			// __wrap_iter		operator--(int) { return (__i--); }
+// 			// __wrap_iter		operator--() { return (--__i);}			
+// 			// __wrap_iter		operator+(difference_type n) const { return (__i + n); }
+// 			// __wrap_iter		operator-(difference_type n) const { return (__i - n); }
+// 			// difference_type	operator-(__wrap_iter const &rhs) const { return(__i - (rhs.__i)); }
+// 			// bool			operator<(__wrap_iter const &rhs) { return (__i < rhs.__i); }
+// 			// bool			operator>(__wrap_iter const &rhs) { return (__i > rhs.__i); } 
+// 			// bool			operator<=(__wrap_iter const &rhs) { return (__i <= rhs.__i); }
+// 			// bool			operator>=(__wrap_iter const &rhs) { return (__i >= rhs.__i); }
+// 			// __wrap_iter		operator+=(difference_type n) { return (__i+=n); }
+// 			// __wrap_iter		operator-=(difference_type n) { return (__i-=n); }
+// 			// reference		operator[](difference_type n) const { return (__i[n]); }			
+
+// 			// __wrap_iter(iterator_type const &p): __i(p){}
+// 	};
 #endif

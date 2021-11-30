@@ -31,9 +31,10 @@ namespace ft {
             typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
         private :
             leaf_pointer    _root;
+            leaf_pointer    _last;
             leaf_allocator_type    _leaf_alloc;
         public :
-            Tree():_root(NULL){};
+            Tree():_root(NULL), _last(NULL) {};
             leaf_pointer	newleaf(value_type &value, leaf_pointer parent, bool color) {
                 node_type	new_leaf(value);
                 new_leaf.left = NULL;
@@ -42,6 +43,8 @@ namespace ft {
                 new_leaf.color = color;
                 leaf_pointer pointer = _leaf_alloc.allocate(1);
                 _leaf_alloc.construct(pointer, new_leaf);
+                if (!_last || value.first > _last->_value.first)
+                    _last = pointer;
                 return(pointer);
             }
 
@@ -58,13 +61,17 @@ namespace ft {
                 while (iter && iter->_value.first != value.first)
                 {
                     prev = iter;
+                    // std::cout << iter->_value.first << std::endl;
                     if (value.first < iter->_value.first)
                         iter = iter->left;
                     else if (value.first > iter->_value.first)
                         iter = iter->right;
                 }
                 if (iter)
+                {
                     new_leaf = iter;
+                    return (new_leaf);
+                }
                 else
                 {   
                     new_leaf = newleaf(value, prev, RED);
@@ -72,8 +79,9 @@ namespace ft {
                         prev->left = new_leaf;
                     else if (value.first > prev->_value.first)
                         prev->right = new_leaf;
+                    // std::cout << "new_leaf->value.second = " << new_leaf->_value.second << std::endl;
+                    return (checkLeaf(new_leaf));
                 }
-                return (checkLeaf(new_leaf));
             }
 
             void    leftrotate(leaf_pointer x) {
@@ -108,13 +116,6 @@ namespace ft {
                 x->parent = y;
             }
 
-			void	recolor(leaf_pointer x) {
-				if (x->color == RED)
-					x->color = BLACK;
-				else
-					x->color = RED;
-			}
-
             void    printLeaf(leaf_pointer leaf)
             {
                 if (leaf->color == RED)
@@ -134,6 +135,7 @@ namespace ft {
             {   
                 // if (leaf)
                 // {
+                    int r = 0;
                     if (!leaf->parent)
                     {
 						printIndent(indent);
@@ -162,8 +164,12 @@ namespace ft {
                         std::cout << std::endl;
                     if (leaf->left)
                         printBranches(leaf->left, indent - level, level - 2);
+                    if (leaf->left && leaf->left->left)
+                        r+=indent - level- (level - 2) + 3;
+                    if (leaf->left && leaf->left->right)
+                        r+= (leaf->left->left ? 2*(level - 2) - 3: indent - level + (level - 2)) + 3;
                     if (leaf->right)
-                        printBranches(leaf->right, indent + level, level - 2);
+                        printBranches(leaf->right, indent + level -r, level - 2);
                 // }
             }
 
@@ -172,21 +178,9 @@ namespace ft {
                 std::cout << std::endl;
             }
 
-            void    blackUncle(void (*rotate1)(leaf_pointer), void (*rotate2)(leaf_pointer), leaf_pointer node, std::string dir)
-            {
-                if ((dir == "right" && node == node->parent->left)
-                || (dir == "left" && node == node->parent->right))
-                {
-                    rotate1(node->parent);
-                    blackUncle(rotate1, rotate2, dir);
-                }
-                node->parent->parent->color = RED;
-                rotate2(node->parent->parent);
-                node->parent->color = BLACK;      
-            }
 			leaf_pointer	checkLeaf(leaf_pointer node) {
-				
-				if (node->parent->parent)
+				// printTree(20, 8);
+				if (node->parent && node->parent->parent)
 				{
 				leaf_pointer uncle;
 					if (node->parent->parent->right == node->parent)
@@ -197,63 +191,59 @@ namespace ft {
 					{
 						if (uncle && uncle->color == RED)
 						{
+                            // std::cout << "3.1" << std::endl;
 							node->parent->color = BLACK;
 							uncle->color = BLACK;
-							node->parent->parent->color = RED;
+							node->parent->parent->color =  RED;
 						}
 						else if (!uncle || uncle->color == BLACK)
 						{
+                            // std::cout << "3.2" << std::endl;
 							if (node->parent == node->parent->parent->right)
 							{
                                 // blackUncle(leftrotate, rightrotate, node,"right");
                                 if (node == node->parent->left)
                                 {
+                                    // std::cout << "3.2.2" << std::endl;
                                     rightrotate(node->parent);
-                                    return (checkLeaf(node));
+                                    // std::cout << "node->value.key = " << node->_value.first << std::endl;
+                                    node = checkLeaf(node->right)->parent;
                                 }
-                                node->parent->parent->color = RED;
-                                leftrotate(node->parent->parent);
-                                node->parent->color = BLACK;
+                                else
+                                {
+                                // std::cout << "3.2.1" << std::endl;
+                                    node->parent->parent->color =  RED;
+                                    leftrotate(node->parent->parent);
+                                    node->parent->color = BLACK;
+                                }
 							}
                             else if (node->parent == node->parent->parent->left)
                             {
                                 // blackUncle(rightrotate, leftrotate, node, "left");
                                 if (node == node->parent->right)
                                 {
+                                    // std::cout << "3.2.4" << std::endl;
                                     leftrotate(node->parent);
-                                    return (checkLeaf(node));
+                                    node = checkLeaf(node->left)->parent;
                                 }
-                                node->parent->parent->color = RED;
-                                rightrotate(node->parent->parent);
-                                node->parent->color = BLACK;
+                                else
+                                {
+                                    // std::cout << "3.2.3" << std::endl;
+                                    node->parent->parent->color = RED;
+                                    rightrotate(node->parent->parent);
+                                    node->parent->color = BLACK;
+                                }
                             }
 						}
-
 					}
 				}
-                // while (node->parent && node->parent->color == RED)
-                // {
-                //     if (node->parent->parent && node->parent == node->parent->parent->right)
-                //     {
-                //         uncle = node->parent->parent->left;
-                //         if (uncle->color && uncle->color == RED)
-                //         {
-                //             uncle->color = BLACK;
-                //             node->parent->color = BLACK;
-                //             node->parent->parent->color = RED;
-                //             node = node->parent->parent;
-                //         }
-                //         else if (node == node->parent->left)
-                //         {
-                //             node = node->parent;
-                //             leftrotate(node);
-                //         }
-                //         node->parent->color = BLACK;
-                //         node->parent->parent->color = RED;
-                //         rightrotate
-                // }
+                if (_root->color == RED)
+                    _root->color = BLACK;
 				return (node);
 			}
+            // deleteLeaf() {
+            //     ;
+            // }
         };
 }
 

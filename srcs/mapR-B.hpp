@@ -106,17 +106,17 @@ namespace ft {
 					// _tree.printTree(20, 6);
 					return (node->_value.second);	
 				}
-			// //Modifiers
-			// 	pair<iterator,bool> insert (const value_type& val) {
-			// 		bool	exists;
+			//Modifiers
+				// pair<iterator,bool> insert (const value_type& val) {
+				// 	bool	exists;
 					
-			// 		exists = find(val.first) == end();
-			// 		if (exists)
-			// 			(*this)[val.first] = val.second;
-			// 		iterator	it = find(val.first);
-			// 		pair<iterator, bool> ret(it, exists);
-			// 		return (ret);
-			// 	}
+				// 	exists = find(val.first) == end();
+				// 	if (exists)
+				// 		(*this)[val.first] = val.second;
+				// 	iterator	it = find(val.first);
+				// 	pair<iterator, bool> ret(it, exists);
+				// 	return (ret);
+				// }
 			// void erase (iterator position) {
 			// 	erase(position, ++position);
 			// }
@@ -155,11 +155,11 @@ namespace ft {
 			// 	key_compare key_comp() const { return (_key_compare); }
 
 			// //Operations
-			// 	iterator find (const key_type& k) {
-			// 		iterator	it = begin();
-			// 		while (it != end() && it->first != k)
-			// 			it++;
-			// 		return (it);
+				// iterator find (const key_type& k) {
+				// 	iterator	it = begin();
+				// 	while (it != end() && it->first != k)
+				// 		it++;
+				// 	return (it);
 			// 	}
 			// 	const_iterator find (const key_type& k) const{
 			// 		const_iterator	it = begin();

@@ -20,17 +20,22 @@ void	map_tests(void)
 	// std::cout << "map.empty() = " << map.empty() << std::endl;
 	map['b'] = "snake";
 	map['k'] = "piano";
+	// map._tree.printTree(20, 8);
 	map['f'] = "koala";
+	// map._tree.printTree(20, 8);
 	map['a'] = "yoyo";
+	// map._tree.printTree(20, 8);
 	map['z'] = "nounours";
-	map['c'] = "nounours";
+	// map._tree.printTree(20, 8);
+	map['c'] = "pantatonic";
+	map['d'] = "cheddar";
 	map._tree.printTree(20, 8);
 	//print_map(map);
-	// std::cout << "map['a'] is " << map['a'] << std::endl;
-	// std::cout << "map['k'] is " << map['k'] << std::endl;
-	// std::cout << "map['f'] is " << map['f'] << std::endl;
-	// std::cout << "map['b'] is " << map['b'] << std::endl;
-	// std::cout << "map['-'] is " << map['-'] << std::endl;
+	std::cout << "map['a'] is " << map['a'] << std::endl;
+	std::cout << "map['k'] is " << map['k'] << std::endl;
+	std::cout << "map['f'] is " << map['f'] << std::endl;
+	std::cout << "map['b'] is " << map['b'] << std::endl;
+	std::cout << "map['z'] is " << map['z'] << std::endl;
 
 	// std::cout << "map.empty() = " << map.empty() << std::endl;
 	// LIB::pair<char, std::string> pair('b', "cowboy");
