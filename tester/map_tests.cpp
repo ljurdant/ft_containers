@@ -29,7 +29,8 @@ void	map_tests(void)
 	// map._tree.printTree(20, 8);
 	map['c'] = "pantatonic";
 	map['d'] = "cheddar";
-	map._tree.printTree(20, 8);
+	map['e'] = "castle";
+	map._tree.printTree(20, 9);
 	//print_map(map);
 	std::cout << "map['a'] is " << map['a'] << std::endl;
 	std::cout << "map['k'] is " << map['k'] << std::endl;

@@ -24,7 +24,7 @@ namespace ft {
 				typedef typename allocator_type::pointer					pointer;
 				typedef typename allocator_type::const_pointer				const_pointer;
 				typedef	std::iterator_traits<pointer>						iterator_traits;
-				typedef __wrap_biiter< typename Tree<value_type>::iterator>	iterator;
+				typedef __wrap_biiter< value_type >							iterator_i;
 				// typedef	__wrap_biiter<const_pointer>				const_iterator;
 				// typedef	__wrap_reverse_biiter<iterator>				reverse_iterator;
 				typedef	typename iterator_traits::difference_type			difference_type;
@@ -53,6 +53,7 @@ namespace ft {
 				size_type const		_max_size;
 			public:
 				Tree<value_type>	_tree;
+
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()){

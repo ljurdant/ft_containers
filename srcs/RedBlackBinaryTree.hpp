@@ -3,7 +3,8 @@
 # define REDBLACKBINARYTREE_H
 
 # include <memory> //std::allocator
-
+# include <iostream>
+# include <list>
 
 # define BLACK 0
 # define RED 1
@@ -29,7 +30,7 @@ namespace ft {
             typedef typename leaf_allocator_type::const_reference	leaf_const_reference;
             typedef typename leaf_allocator_type::pointer			leaf_pointer;
             typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
-        private :
+        protected :
             leaf_pointer    _root;
             leaf_pointer    _last;
             leaf_pointer    _end;
@@ -47,10 +48,7 @@ namespace ft {
                 leaf_pointer pointer = _leaf_alloc.allocate(1);
                 _leaf_alloc.construct(pointer, new_leaf);
                 if (!_last || value.first > _last->_value.first)
-                {
                     _last = pointer;
-
-                }
                 return(pointer);
             }
 
@@ -124,63 +122,68 @@ namespace ft {
 
             void    printLeaf(leaf_pointer leaf)
             {
-                if (leaf->color == RED)
+                if (leaf && leaf->color == RED)
                     std::cout << "\033[0;41m";
                 else
                     std::cout << "\033[0;40m";
-                std::cout << "(" << leaf->_value.first << ")" ;
+                if (leaf)
+                    std::cout << "(" << leaf->_value.first << ")" ;
+                // else
+                //     std::cout << "NUL" ;
                 std::cout << "\033[0;m";
             }
+            
+            struct printNode {
+                printNode(leaf_pointer l, int i): leaf(l), indent(i) {}
+                leaf_pointer leaf;
+                int indent;
+            };
 
-			void	printIndent(int indent) {
-				for (int i = 0; i < indent; i++)
-					std::cout << " ";
-			}
+            printNode makeprintNode(leaf_pointer l, int i) { return (printNode(l,i)); }
 
-            void    printBranches(leaf_pointer  leaf, int indent, int level)
-            {   
-                // if (leaf)
-                // {
-                    int r = 0;
-                    if (!leaf->parent)
-                    {
-						printIndent(indent);
-                        printLeaf(leaf);
-                        std::cout << std::endl;
-                    }
-                    leaf_pointer    iter = leaf->parent;
-                    leaf_pointer    tmp = leaf;
-
-                    if (leaf->left)
-					{
-						printIndent(indent - level);
-                        printLeaf(leaf->left);
-					}
-                    if (leaf->right)
-                    {
-						printIndent((leaf->left ? 2*level - 3: indent + level));
-						printLeaf(leaf->right);
-					}
-					while (iter && tmp == iter->right)
-                    {
-                        tmp = iter;
-                        iter = iter->parent;
-                    }
-                    if (!iter)
-                        std::cout << std::endl;
-                    if (leaf->left)
-                        printBranches(leaf->left, indent - level, level - 2);
-                    if (leaf->left && leaf->left->left)
-                        r+=indent - level- (level - 2) + 3;
-                    if (leaf->left && leaf->left->right)
-                        r+= (leaf->left->left ? 2*(level - 2) - 3: indent - level + (level - 2)) + 3;
-                    if (leaf->right)
-                        printBranches(leaf->right, indent + level -r, level - 2);
-                // }
+            void    printIndent(int indent)
+            {
+                for (int i = 0; i < indent; i++)
+                    std::cout << " ";
             }
 
+            std::list<printNode> printBranches(std::list<printNode> nodes, int level)
+            {
+                std::list<printNode> new_nodes;
+                int cumulativeIndent = 0;
+                for (typename std::list<printNode>::iterator it = nodes.begin(); it != nodes.end(); it++)
+                {
+                    if ((*it).leaf->left)
+                    {
+                        printIndent((*it).indent - level - cumulativeIndent);
+                        new_nodes.push_back(makeprintNode((*it).leaf->left, (*it).indent - level));
+                        printLeaf((*it).leaf->left);
+                        cumulativeIndent += (*it).indent - level - cumulativeIndent + 3;
+                    }
+                    if ((*it).leaf->right)
+                    {
+                        printIndent((*it).indent + level - cumulativeIndent);
+                        new_nodes.push_back(makeprintNode((*it).leaf->right, (*it).indent + level));
+                        printLeaf((*it).leaf->right);
+                        cumulativeIndent += (*it).indent + level - cumulativeIndent + 3;
+                    }
+                }
+                return (new_nodes);
+            }
+        
             void    printTree(int indent, int level) {
-                printBranches(_root, indent, level);
+                std::list<printNode> nodes(1, makeprintNode(_root, indent));
+                printIndent(indent);
+                printLeaf(_root);
+                std::cout << std::endl;
+                while (nodes.size())
+                {
+                    nodes = printBranches(nodes, level);
+                    level-=3;
+                    std::cout << std::endl;
+                }
+                (void)indent;
+                (void)level;
                 std::cout << std::endl;
             }
 
@@ -250,39 +253,37 @@ namespace ft {
             // deleteLeaf() {
             //     ;
             // }
-            class	 iterator {
-                public:
-                    typedef value_type&								reference;
-                    typedef value_type*								pointer;
-		// 	typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
-		// 	typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
-		// 	typedef typename std::iterator_traits<iterator_type>::reference			reference;
-                protected:
-                    leaf_pointer	__i;
+            // class	 iterator {
+            //     public:
+            //         typedef value_type&								reference;
+            //         typedef value_type*								pointer;
 
-                public:
-                    iterator() {}
-                    iterator(iterator const &copy) {*this = copy;}
-                    iterator					&operator=(iterator  const &rhs) {
-                        __i = rhs.__i;
-                        return (*this);
-                    }
-                    bool			operator==(iterator const &rhs) const { return (__i == rhs.__i);}
-                    bool			operator!=(iterator const &rhs) const { return (__i != rhs.__i);}
-                    reference		operator*() const { return (__i->_value);}
-                    pointer			operator->() const { return (&(__i->_value));}
-                    iterator		operator++(int) { 
-                        if (__i->right)
-                            __i = __i->right;
-                        if (__i != _last)
-                            return(*this);
-                    }
-            // 	iterator		operator++() { return (++__i); }
-            // 	iterator		operator--(int) { return (__i--); }
-            // 	iterator		operator--() { return (--__i);}			
+            //     protected:
+            //         leaf_pointer	__i;
 
-            // 	iterator(iterator_type const &p): __i(p){}
-	        };
+            //     public:
+            //         iterator() {}
+            //         iterator(iterator const &copy) {*this = copy;}
+            //         iterator					&operator=(iterator  const &rhs) {
+            //             __i = rhs.__i;
+            //             return (*this);
+            //         }
+            //         bool			operator==(iterator const &rhs) const { return (__i == rhs.__i);}
+            //         bool			operator!=(iterator const &rhs) const { return (__i != rhs.__i);}
+            //         reference		operator*() const { return (__i->_value);}
+            //         pointer			operator->() const { return (&(__i->_value));}
+            //         iterator		operator++(int) { 
+            //             if (__i->right)
+            //                 __i = __i->right;
+            //             if (__i != _last)
+            //                 return(*this);
+            //     }
+            // // 	iterator		operator++() { return (++__i); }
+            // // 	iterator		operator--(int) { return (__i--); }
+            // // 	iterator		operator--() { return (--__i);}			
+
+            // // 	iterator(iterator_type const &p): __i(p){}
+	        // };
         };
 }
 
