@@ -265,6 +265,7 @@ namespace ft {
 
                 protected:
                     leaf_pointer	__i;
+                    leaf_pointer    _prev;
 
                 public:
                     iterator() {}
@@ -280,12 +281,14 @@ namespace ft {
                     iterator		operator++(int) { 
                         if (__i && __i->right)
 						{
+                            _prev = __i;
 							__i = __i->right;
 							while (__i->left)
 								__i = __i->left;
 						}
 						else if (__i)
 						{
+                            _prev = __i;
 							while (__i->parent && __i == __i->parent->right)
 								__i = __i->parent;
 							__i = __i->parent;
@@ -308,11 +311,29 @@ namespace ft {
                         }
                         else
                         {
-                            
+                            __i = _prev;
                         }
                         return (*this); 
                     }
-            // 	iterator		operator--() { return (--__i);}			
+            	    iterator		operator--() {  
+                        if (__i && __i->left)
+                        {
+                            __i = __i->left;
+                            while (__i->right)
+                                __i = __i->right;
+                        }
+                        else if (__i)
+                        {
+                            while (__i->parent && __i == __i->parent->left)
+                                __i = __i->parent;
+                            __i = __i->parent;
+                        }
+                        else
+                        {
+                            __i = _prev;
+                        }
+                        return (*this); 
+                    }			
 
             	    iterator(leaf_pointer const &p): __i(p){}
 	        };

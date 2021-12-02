@@ -16,6 +16,21 @@ void	print_map(LIB::map<Key,T> &map)
 	std::cout << std::endl;
 }
 
+template < class Key, class T >
+void	print_map_reverse(LIB::map<Key,T> &map)
+{	
+	typename LIB::map<Key,T>::iterator it = map.end();
+	it--;
+	// it++;
+	// std::cout << "map[" << (*it).first << "] = " << (*it).second ;
+	while (it != map.begin())
+	{
+		std::cout << "map[" << (*it).first << "] = " << (*it).second ;
+		it--;
+	}
+	std::cout << std::endl;
+}
+
 void	map_tests(void)
 {
 	LIB::map<char, std::string>	map;
@@ -35,6 +50,7 @@ void	map_tests(void)
 	map['e'] = "castle";
 	map._tree.printTree(20, 9);
 	print_map(map);
+	print_map_reverse(map);
 	// std::cout << "map.empty() = " << map.empty() << std::endl;
 	// LIB::pair<char, std::string> pair('b', "cowboy");
 	// LIB::pair<LIB::map<char, std::string>::iterator, bool> ret;

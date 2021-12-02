@@ -95,8 +95,8 @@ namespace ft {
 					return (it); 
 				}
 				// const_iterator end() const { return (NULL); }
-			// 	reverse_iterator	rbegin() { return (end() - 1); }
-			// 	reverse_iterator	rend() { return (begin()); }
+				// reverse_iterator	rbegin() { return (end() - 1); }
+				// reverse_iterator	rend() { return (begin()); }
 			// //Capacity
 			// 	bool empty() const { return (!_size); }
 			// 	size_type size() const { return (_size); }

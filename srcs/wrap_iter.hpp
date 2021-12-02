@@ -141,7 +141,7 @@ class	 __wrap_biiter   {
 				pointer			operator->() const { return (__i);}
 				__wrap_biiter		operator++(int) { return (__i++); }
 				// __wrap_biiter		operator++() { return (++__i); }
-				// __wrap_biiter		operator--(int) { return (__i--); }
+				__wrap_biiter		operator--(int) { return (__i--); }
 				// __wrap_biiter		operator--() { return (--__i);}			
 
 				__wrap_biiter(iterator_type const &p): __i(p){}
