@@ -1,17 +1,20 @@
 
 #include "ft_containers.hpp"
 
-// template < class Key, class T >
-// void	print_map(LIB::map<Key,T> &map)
-// {
-// 	for (typename LIB::map<Key,T>::iterator it = map.begin(); it != map.end(); it++)
-// 	{
-// 		if (it != map.begin())
-// 			std::cout << " ,";
-// 		std::cout << "map[" << (*it).first << "] = " << (*it).second ;
-// 	}
-// 	std::cout << std::endl;
-// }
+template < class Key, class T >
+void	print_map(LIB::map<Key,T> &map)
+{	
+	// typename LIB::map<Key,T>::iterator it = map.begin();
+	// it++;
+	// std::cout << "map[" << (*it).first << "] = " << (*it).second ;
+	for (typename LIB::map<Key,T>::iterator it = map.begin(); it != map.end(); it++)
+	{
+		if (it != map.begin())
+			std::cout << " ,";
+		std::cout << "map[" << (*it).first << "] = " << (*it).second ;
+	}
+	std::cout << std::endl;
+}
 
 void	map_tests(void)
 {
@@ -31,13 +34,7 @@ void	map_tests(void)
 	map['d'] = "cheddar";
 	map['e'] = "castle";
 	map._tree.printTree(20, 9);
-	//print_map(map);
-	std::cout << "map['a'] is " << map['a'] << std::endl;
-	std::cout << "map['k'] is " << map['k'] << std::endl;
-	std::cout << "map['f'] is " << map['f'] << std::endl;
-	std::cout << "map['b'] is " << map['b'] << std::endl;
-	std::cout << "map['z'] is " << map['z'] << std::endl;
-	
+	print_map(map);
 	// std::cout << "map.empty() = " << map.empty() << std::endl;
 	// LIB::pair<char, std::string> pair('b', "cowboy");
 	// LIB::pair<LIB::map<char, std::string>::iterator, bool> ret;

@@ -21,25 +21,26 @@ namespace ft {
         bool		color;
     };
 
-    template < class value_type, class alloc = std::allocator<leaf <value_type> > >
+    template < class T, class alloc = std::allocator<leaf <T> > >
 	class	Tree {
         public:
-            typedef leaf<value_type>                                node_type;
+            typedef leaf<T>                                node_type;
             typedef alloc                                           leaf_allocator_type;
             typedef typename leaf_allocator_type::reference			leaf_reference;
             typedef typename leaf_allocator_type::const_reference	leaf_const_reference;
             typedef typename leaf_allocator_type::pointer			leaf_pointer;
             typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
         protected :
-            leaf_pointer    _root;
-            leaf_pointer    _last;
-            leaf_pointer    _end;
+            leaf_pointer            _root;
+            leaf_pointer            _last;
+            leaf_pointer            _begin;
             leaf_allocator_type    _leaf_alloc;
         public :
-            Tree():_root(NULL), _last(NULL) {};
+            Tree():_root(NULL), _last(NULL), _begin(NULL) {};
 
             leaf_pointer    getLast() { return (_last); }
-            leaf_pointer	newleaf(value_type &value, leaf_pointer parent, bool color) {
+            leaf_pointer    getBegin() { return (_begin); }
+            leaf_pointer	newleaf(T &value, leaf_pointer parent, bool color) {
                 node_type	new_leaf(value);
                 new_leaf.left = NULL;
                 new_leaf.right = NULL;
@@ -49,10 +50,12 @@ namespace ft {
                 _leaf_alloc.construct(pointer, new_leaf);
                 if (!_last || value.first > _last->_value.first)
                     _last = pointer;
+                if (!_begin || value.first < _begin->_value.first)
+                    _begin = pointer;
                 return(pointer);
             }
 
-            leaf_pointer	add_leaf(value_type value)
+            leaf_pointer	add_leaf(T value)
 			{
                 leaf_pointer	iter = _root;
 				leaf_pointer    new_leaf;
@@ -253,37 +256,66 @@ namespace ft {
             // deleteLeaf() {
             //     ;
             // }
-            // class	 iterator {
-            //     public:
-            //         typedef value_type&								reference;
-            //         typedef value_type*								pointer;
+            class	 iterator {
+                public:
+                    typedef T                                       value_type;
+                    typedef size_t                                  difference_type;
+                    typedef value_type&								reference;
+                    typedef value_type*								pointer;
 
-            //     protected:
-            //         leaf_pointer	__i;
+                protected:
+                    leaf_pointer	__i;
 
-            //     public:
-            //         iterator() {}
-            //         iterator(iterator const &copy) {*this = copy;}
-            //         iterator					&operator=(iterator  const &rhs) {
-            //             __i = rhs.__i;
-            //             return (*this);
-            //         }
-            //         bool			operator==(iterator const &rhs) const { return (__i == rhs.__i);}
-            //         bool			operator!=(iterator const &rhs) const { return (__i != rhs.__i);}
-            //         reference		operator*() const { return (__i->_value);}
-            //         pointer			operator->() const { return (&(__i->_value));}
-            //         iterator		operator++(int) { 
-            //             if (__i->right)
-            //                 __i = __i->right;
-            //             if (__i != _last)
-            //                 return(*this);
-            //     }
-            // // 	iterator		operator++() { return (++__i); }
-            // // 	iterator		operator--(int) { return (__i--); }
-            // // 	iterator		operator--() { return (--__i);}			
+                public:
+                    iterator() {}
+                    iterator(iterator const &copy) {*this = copy;}
+                    iterator					&operator=(iterator  const &rhs) {
+                        __i = rhs.__i;
+                        return (*this);
+                    }
+                    bool			operator==(iterator const &rhs) const { return (__i == rhs.__i);}
+                    bool			operator!=(iterator const &rhs) const { return (__i != rhs.__i);}
+                    reference		operator*() const { return (__i->_value);}
+                    pointer			operator->() const { return (&(__i->_value));}
+                    iterator		operator++(int) { 
+                        if (__i && __i->right)
+						{
+							__i = __i->right;
+							while (__i->left)
+								__i = __i->left;
+						}
+						else if (__i)
+						{
+							while (__i->parent && __i == __i->parent->right)
+								__i = __i->parent;
+							__i = __i->parent;
+						}
+						return (*this);
+                }
+                    // iterator		operator++() { return (++__i); }
+                    iterator		operator--(int) { 
+                        if (__i && __i->left)
+                        {
+                            __i = __i->left;
+                            while (__i->right)
+                                __i = __i->right;
+                        }
+                        else if (__i)
+                        {
+                            while (__i->parent && __i == __i->parent->left)
+                                __i = __i->parent;
+                            __i = __i->parent;
+                        }
+                        else
+                        {
+                            
+                        }
+                        return (*this); 
+                    }
+            // 	iterator		operator--() { return (--__i);}			
 
-            // // 	iterator(iterator_type const &p): __i(p){}
-	        // };
+            	    iterator(leaf_pointer const &p): __i(p){}
+	        };
         };
 }
 

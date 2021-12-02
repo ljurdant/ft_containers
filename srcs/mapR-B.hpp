@@ -14,21 +14,21 @@ namespace ft {
 	template < class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<pair<const Key,T> > > 
 		class map {
 			public:
-				typedef	Key													key_type;
-				typedef T													mapped_type;
-				typedef pair<const key_type, mapped_type>					value_type;
-				typedef	Compare												key_compare;
-				typedef	Alloc												allocator_type;
-				typedef typename allocator_type::reference					reference;
-				typedef typename allocator_type::const_reference			const_reference;
-				typedef typename allocator_type::pointer					pointer;
-				typedef typename allocator_type::const_pointer				const_pointer;
-				typedef	std::iterator_traits<pointer>						iterator_traits;
-				typedef __wrap_biiter< value_type >							iterator_i;
-				// typedef	__wrap_biiter<const_pointer>				const_iterator;
-				// typedef	__wrap_reverse_biiter<iterator>				reverse_iterator;
-				typedef	typename iterator_traits::difference_type			difference_type;
-				typedef	size_t												size_type;
+				typedef	Key																key_type;
+				typedef T																mapped_type;
+				typedef pair<const key_type, mapped_type>								value_type;
+				typedef	Compare															key_compare;
+				typedef	Alloc															allocator_type;
+				typedef typename allocator_type::reference								reference;
+				typedef typename allocator_type::const_reference						const_reference;
+				typedef typename allocator_type::pointer								pointer;
+				typedef typename allocator_type::const_pointer							const_pointer;
+				typedef	std::iterator_traits<pointer>									iterator_traits;
+				typedef __wrap_biiter< typename ft::Tree<value_type>::iterator >		iterator;
+				typedef	__wrap_biiter<const typename ft::Tree<value_type>::iterator>	const_iterator;
+				typedef	__wrap_reverse_biiter<iterator>									reverse_iterator;
+				typedef	typename iterator_traits::difference_type						difference_type;
+				typedef	size_t															size_type;
 				class value_compare: public std::binary_function<value_type,value_type,bool> {
 					friend class map;
 					protected:
@@ -85,10 +85,16 @@ namespace ft {
 			// 	}
 
 			// //Iterators
-			// 	iterator begin() { return (_pointer); }
-			// 	const_iterator begin() const { return (_pointer); }
-			// 	iterator end() { return (_pointer + _size); }
-			// 	const_iterator end() const { return (_pointer + _size); }
+				iterator begin() { 
+					iterator	it(_tree.getBegin());
+					return (it); 
+				}
+				// const_iterator begin() const { return (_pointer); }
+				iterator end() { 
+					iterator	it(NULL);
+					return (it); 
+				}
+				// const_iterator end() const { return (NULL); }
 			// 	reverse_iterator	rbegin() { return (end() - 1); }
 			// 	reverse_iterator	rend() { return (begin()); }
 			// //Capacity
@@ -103,8 +109,6 @@ namespace ft {
 			// //Element access
 				mapped_type& operator[] (const key_type& k) {
 					leaf<value_type>	*node = _tree.add_leaf(ft::make_pair(k, mapped_type()));
-
-					// _tree.printTree(20, 6);
 					return (node->_value.second);	
 				}
 			//Modifiers
@@ -127,11 +131,11 @@ namespace ft {
 			// 		diff++;
 			// 	pointer	new_pointer = _alloc.allocate(_size - diff);
 			// 	size_type	i = 0;
-			// 	for (iterator it = begin(); it != first; it++)
-			// 	{
-			// 		_alloc.construct(new_pointer + i, *it);
-			// 		i++;
-			// 	}
+				// for (iterator it = begin(); it != first; it++)
+				// {
+					// _alloc.construct(new_pointer + i, *it);
+					// i++;
+				// }
 			// 	for (iterator it = last; it != end(); it++)
 			// 	{
 			// 		_alloc.construct(new_pointer + i, *it);
