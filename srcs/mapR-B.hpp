@@ -42,9 +42,9 @@ namespace ft {
 							return comp(x.first, y.first);
 						}
 				};
-				typedef __wrap_biiter< typename ft::Tree<value_type, value_compare>::iterator >		iterator;
+				typedef __wrap_biiter< typename ft::Tree<value_type, value_compare>::iterator >	iterator;
 				typedef	__wrap_biiter<const typename ft::Tree<value_type, value_compare>::iterator>	const_iterator;
-				typedef	__wrap_reverse_biiter<iterator>									reverse_iterator;
+				typedef	__wrap_reverse_biiter<iterator>												reverse_iterator;
 			protected:
 				allocator_type		_alloc;
 				key_compare			_key_compare;
@@ -53,7 +53,7 @@ namespace ft {
 				pointer				_pointer;
 				size_type const		_max_size;
 			public:
-				Tree<value_type, value_compare>	_tree;//(value_compare);
+				Tree<value_type, value_compare>	_tree;
 
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
@@ -124,10 +124,12 @@ namespace ft {
 				// 	pair<iterator, bool> ret(it, exists);
 				// 	return (ret);
 				// }
-			// void erase (iterator position) {
-			// 	erase(position, ++position);
-			// }
-			// void erase (iterator first, iterator last) {
+			void erase (iterator position) {
+				erase(position, ++position);
+			}
+			void erase (iterator first, iterator last) {
+			for (iterator it = first; it != last; it++)
+				_tree.deleteNode(it);
 			// 	size_type	diff = 0;
 			// 	for (iterator it = first; it != last; it++)
 			// 		diff++;
@@ -149,7 +151,7 @@ namespace ft {
 			// 			_alloc.deallocate(_pointerf, _size);
 			// 	_pointer = new_pointer;
 			// 	_size-=diff;
-			// }
+			}
 			// void swap (map& x) {
 			// 	map<key_type, mapped_type, key_compare, allocator_type> tmp(*this);
 			// 	*this = x;
