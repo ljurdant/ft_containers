@@ -24,9 +24,6 @@ namespace ft {
 				typedef typename allocator_type::pointer								pointer;
 				typedef typename allocator_type::const_pointer							const_pointer;
 				typedef	std::iterator_traits<pointer>									iterator_traits;
-				typedef __wrap_biiter< typename ft::Tree<value_type>::iterator >		iterator;
-				typedef	__wrap_biiter<const typename ft::Tree<value_type>::iterator>	const_iterator;
-				typedef	__wrap_reverse_biiter<iterator>									reverse_iterator;
 				typedef	typename iterator_traits::difference_type						difference_type;
 				typedef	size_t															size_type;
 				class value_compare: public std::binary_function<value_type,value_type,bool> {
@@ -39,11 +36,15 @@ namespace ft {
 						typedef	bool result_type;
 						typedef value_type	first_argument_type;
 						typedef value_type	second_argument_type;
+						value_compare	(value_compare const & c): comp(c.comp) {};
 						bool	operator() (const value_type &x, const value_type &y) const
 						{
 							return comp(x.first, y.first);
 						}
 				};
+				typedef __wrap_biiter< typename ft::Tree<value_type, value_compare>::iterator >		iterator;
+				typedef	__wrap_biiter<const typename ft::Tree<value_type, value_compare>::iterator>	const_iterator;
+				typedef	__wrap_reverse_biiter<iterator>									reverse_iterator;
 			protected:
 				allocator_type		_alloc;
 				key_compare			_key_compare;
@@ -52,11 +53,12 @@ namespace ft {
 				pointer				_pointer;
 				size_type const		_max_size;
 			public:
-				Tree<value_type>	_tree;
+				Tree<value_type, value_compare>	_tree;//(value_compare);
 
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()){
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size())
+					, _tree(_value_compare){
 				}
 			// 	template <class InputIterator>
   			// 		map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):

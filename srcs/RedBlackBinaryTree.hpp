@@ -21,22 +21,26 @@ namespace ft {
         bool		color;
     };
 
-    template < class T, class alloc = std::allocator<leaf <T> > >
+    template < class T, class Compare, class alloc = std::allocator<leaf <T> > >
 	class	Tree {
         public:
-            typedef leaf<T>                                node_type;
+            typedef leaf<T>                                         node_type;
             typedef alloc                                           leaf_allocator_type;
             typedef typename leaf_allocator_type::reference			leaf_reference;
             typedef typename leaf_allocator_type::const_reference	leaf_const_reference;
             typedef typename leaf_allocator_type::pointer			leaf_pointer;
             typedef typename leaf_allocator_type::const_pointer		leaf_const_pointer;
+            typedef Compare                                         value_compare;
+
         protected :
-            leaf_pointer            _root;
-            leaf_pointer            _last;
-            leaf_pointer            _begin;
-            leaf_allocator_type    _leaf_alloc;
+            leaf_pointer        _root;
+            leaf_pointer        _last;
+            leaf_pointer        _begin;
+            leaf_allocator_type _leaf_alloc;
+            value_compare       _value_compare;
+
         public :
-            Tree():_root(NULL), _last(NULL), _begin(NULL) {};
+            Tree(value_compare comp):_root(NULL), _last(NULL), _begin(NULL), _value_compare(comp) {};
 
             leaf_pointer    getLast() { return (_last); }
             leaf_pointer    getBegin() { return (_begin); }
@@ -68,9 +72,9 @@ namespace ft {
                 while (iter && iter->_value.first != value.first)
                 {
                     prev = iter;
-                    if (value.first < iter->_value.first)
+                    if (_value_compare(value, iter->_value))
                         iter = iter->left;
-                    else if (value.first > iter->_value.first)
+                    else if (value.first != iter->_value.first && !_value_compare(value, iter->_value))
                         iter = iter->right;
                 }
                 if (iter)
@@ -248,24 +252,39 @@ namespace ft {
 			}
 
             void	deleteLeaf(leaf_pointer leaf) {
-                if (leaf == leaf->parent->left)
-				{
-					if (leaf->left)
-						leaf->parent->left =  leaf->left;
-					else if (leaf->right)
-						leaf->parent->left = leaf->right;
-					else
-						leaf->parent->left = NULL;
-				}
-				else
-				{
-					if (leaf->left)
-						leaf->parent->right = leaf->left;
-					else if (leaf->right)
-						leaf->parent->right = leaf->right;
-					else
-						leaf->parent->right = NULL;
-				}
+                if (leaf->parent)
+                {
+                    if (leaf == leaf->parent->left)
+                    {
+                        if (leaf->left)
+                        {
+                            leaf->parent->left =  leaf->left;
+                            leaf->left->parent = leaf->parent;
+                        }
+                        else if (leaf->right)
+                        {
+                            leaf->parent->left = leaf->right;
+                            leaf->right->parent = leaf->parent;
+                        }
+                        else
+                            leaf->parent->left = NULL;
+                    }
+                    else
+                    {
+                        if (leaf->left)
+                        {
+                            leaf->parent->right = leaf->left;
+                            leaf->left->parent = leaf->parent;
+                        }
+                        else if (leaf->right)
+                        {
+                            leaf->parent->right = leaf->right;
+                            leaf->right->parent = leaf->parent;
+                        }
+                        else
+                            leaf->parent->right = NULL;
+                    }
+                }
 				_leaf_alloc.destroy(leaf);
 				_leaf_alloc.deallocate(leaf, 1);
             }
