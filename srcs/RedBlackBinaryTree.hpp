@@ -68,7 +68,6 @@ namespace ft {
                 while (iter && iter->_value.first != value.first)
                 {
                     prev = iter;
-                    // std::cout << iter->_value.first << std::endl;
                     if (value.first < iter->_value.first)
                         iter = iter->left;
                     else if (value.first > iter->_value.first)
@@ -86,7 +85,6 @@ namespace ft {
                         prev->left = new_leaf;
                     else if (value.first > prev->_value.first)
                         prev->right = new_leaf;
-                    // std::cout << "new_leaf->value.second = " << new_leaf->_value.second << std::endl;
                     return (checkLeaf(new_leaf));
                 }
             }
@@ -131,8 +129,6 @@ namespace ft {
                     std::cout << "\033[0;40m";
                 if (leaf)
                     std::cout << "(" << leaf->_value.first << ")" ;
-                // else
-                //     std::cout << "NUL" ;
                 std::cout << "\033[0;m";
             }
             
@@ -185,13 +181,10 @@ namespace ft {
                     level-=3;
                     std::cout << std::endl;
                 }
-                (void)indent;
-                (void)level;
                 std::cout << std::endl;
             }
 
 			leaf_pointer	checkLeaf(leaf_pointer node) {
-				// printTree(20, 8);
 				if (node->parent && node->parent->parent)
 				{
 				leaf_pointer uncle;
@@ -203,27 +196,21 @@ namespace ft {
 					{
 						if (uncle && uncle->color == RED)
 						{
-                            // std::cout << "3.1" << std::endl;
 							node->parent->color = BLACK;
 							uncle->color = BLACK;
 							node->parent->parent->color =  RED;
 						}
 						else if (!uncle || uncle->color == BLACK)
 						{
-                            // std::cout << "3.2" << std::endl;
 							if (node->parent == node->parent->parent->right)
 							{
-                                // blackUncle(leftrotate, rightrotate, node,"right");
                                 if (node == node->parent->left)
                                 {
-                                    // std::cout << "3.2.2" << std::endl;
                                     rightrotate(node->parent);
-                                    // std::cout << "node->value.key = " << node->_value.first << std::endl;
                                     node = checkLeaf(node->right)->parent;
                                 }
                                 else
                                 {
-                                // std::cout << "3.2.1" << std::endl;
                                     node->parent->parent->color =  RED;
                                     leftrotate(node->parent->parent);
                                     node->parent->color = BLACK;
@@ -231,16 +218,13 @@ namespace ft {
 							}
                             else if (node->parent == node->parent->parent->left)
                             {
-                                // blackUncle(rightrotate, leftrotate, node, "left");
                                 if (node == node->parent->right)
                                 {
-                                    // std::cout << "3.2.4" << std::endl;
                                     leftrotate(node->parent);
                                     node = checkLeaf(node->left)->parent;
                                 }
                                 else
                                 {
-                                    // std::cout << "3.2.3" << std::endl;
                                     node->parent->parent->color = RED;
                                     rightrotate(node->parent->parent);
                                     node->parent->color = BLACK;
@@ -253,9 +237,38 @@ namespace ft {
                     _root->color = BLACK;
 				return (node);
 			}
-            // deleteLeaf() {
-            //     ;
-            // }
+
+			void	deleteNode(leaf_pointer	node) {
+				if (!node->left || !node->right)
+					deleteLeaf(node);
+				else
+				{
+					
+				}
+			}
+
+            void	deleteLeaf(leaf_pointer leaf) {
+                if (leaf == leaf->parent->left)
+				{
+					if (leaf->left)
+						leaf->parent->left =  leaf->left;
+					else if (leaf->right)
+						leaf->parent->left = leaf->right;
+					else
+						leaf->parent->left = NULL;
+				}
+				else
+				{
+					if (leaf->left)
+						leaf->parent->right = leaf->left;
+					else if (leaf->right)
+						leaf->parent->right = leaf->right;
+					else
+						leaf->parent->right = NULL;
+				}
+				_leaf_alloc.destroy(leaf);
+				_leaf_alloc.deallocate(leaf, 1);
+            }
             class	 iterator {
                 public:
                     typedef T                                       value_type;
