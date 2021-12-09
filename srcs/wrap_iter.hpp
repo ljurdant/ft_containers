@@ -110,10 +110,10 @@ class	 __wrap_biiter   {
 				bool			operator!=(__wrap_biiter const &rhs) const { return (__i != rhs.__i);}
 				reference		operator*() const { return (*__i);}
 				pointer			operator->() const { return (__i);}
-				__wrap_biiter		operator++(int) { return (__i++); }
-				__wrap_biiter		operator++() { return (++__i); }
-				__wrap_biiter		operator--(int) { return (__i--); }
-				__wrap_biiter		operator--() { return (--__i);}			
+				__wrap_biiter	operator++(int) { return (__i++); }
+				__wrap_biiter	operator++() { return (++__i); }
+				__wrap_biiter	operator--(int) { return (__i--); }
+				__wrap_biiter	operator--() { return (--__i);}			
 
 				__wrap_biiter(iterator_type const &p): __i(p){}
 	        };

@@ -13,7 +13,7 @@
 # include <iostream>
 
 #ifndef LIB
-# define LIB ft
+# define LIB std
 #endif
 
 

@@ -76,7 +76,7 @@ class vector {
 
 			//Iterators:
 			iterator			begin() { return (_pointer); }
-			const_iterator		begin() const { return (_pointer); }
+			const_iterator		begin() const { return (const_cast<const_pointer>(_pointer)); }
 			iterator			end() { return (_pointer + _size); }
 			const_iterator		end() const { return (_pointer + _size); }
 			reverse_iterator	rbegin() { return (end() - 1); }

@@ -409,22 +409,22 @@ namespace ft
             iterator(leaf_pointer const &p) : __i(p) {}
         };
 
-        void deleteNode(iterator it)
-        {
-            leaf_pointer leaf;
-            leaf_pointer node = findLeaf(*it);
+        // void deleteNode(ft::map::iterator it)
+        // {
+        //     leaf_pointer leaf;
+        //     leaf_pointer node = findLeaf(*it);
 
-            if (!node->left || !node->right)
-                leaf = node;
-            else
-            {
-                leaf = node->right;
-                while (leaf->left)
-                    leaf = leaf->left;
-                node->value = leaf->value;
-            }
-            deleteLeaf(leaf);
-        }
+        //     if (!node->left || !node->right)
+        //         leaf = node;
+        //     else
+        //     {
+        //         leaf = node->right;
+        //         while (leaf->left)
+        //             leaf = leaf->left;
+        //         node->value = leaf->value;
+        //     }
+        //     deleteLeaf(leaf);
+        // }
         leaf_pointer findLeaf(T value)
         {
             leaf_pointer iter = _root;
