@@ -409,22 +409,46 @@ namespace ft
             iterator(leaf_pointer const &p) : __i(p) {}
         };
 
-        // void deleteNode(ft::map::iterator it)
-        // {
-        //     leaf_pointer leaf;
-        //     leaf_pointer node = findLeaf(*it);
+        void    swapnodes(leaf_pointer a, leaf_pointer b) {
+            leaf_pointer    a_parent = a->parent;
+            leaf_pointer    a_left = a->left;
+            leaf_pointer    a_right = a->right;
+            
+            if (a->parent->left == a)
+                a->parent->left = b;
+            else
+                a->parent->right = b;
+            if (b->parent->left == b)
+                b->parent->left = a;
+            else
+                b->parent->right = a;
+            a->left = b->left;
+            a->right = b->right;
+            b->left = a_left;
+            b->right = a_right;
+            a->parent = b->parent;
+            b->parent = a_parent;
+            
+        }
 
-        //     if (!node->left || !node->right)
-        //         leaf = node;
-        //     else
-        //     {
-        //         leaf = node->right;
-        //         while (leaf->left)
-        //             leaf = leaf->left;
-        //         node->value = leaf->value;
-        //     }
-        //     deleteLeaf(leaf);
-        // }
+        void deleteNode(T value)
+        {
+            leaf_pointer    leaf;
+            leaf_pointer    node;
+            
+            node = findLeaf(value);
+
+            if (!node->left || !node->right)
+                leaf = node;
+            else
+            {
+                leaf = node->right;
+                while (leaf->left)
+                    leaf = leaf->left;
+                swapnodes(leaf, node);
+            }
+            deleteLeaf(leaf);
+        }
         leaf_pointer findLeaf(T value)
         {
             leaf_pointer iter = _root;

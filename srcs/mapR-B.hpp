@@ -42,8 +42,9 @@ namespace ft {
 							return comp(x.first, y.first);
 						}
 				};
-				typedef __wrap_biiter< typename ft::Tree<value_type, value_compare>::iterator >		iterator;
-				typedef	__wrap_biiter<const typename ft::Tree<value_type, value_compare>::iterator>	const_iterator;
+				typedef	Tree<value_type, value_compare>												tree_type;
+				typedef __wrap_biiter< typename tree_type::iterator >		iterator;
+				typedef	__wrap_biiter<const typename tree_type::iterator>	const_iterator;
 				typedef	__wrap_reverse_biiter<iterator>												reverse_iterator;
 			protected:
 				allocator_type		_alloc;
@@ -53,7 +54,7 @@ namespace ft {
 				pointer				_pointer;
 				size_type const		_max_size;
 			public:
-				Tree<value_type, value_compare>	_tree;
+				tree_type	_tree;
 
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
@@ -88,12 +89,13 @@ namespace ft {
 
 			// //Iterators
 				iterator begin() { 
-					iterator	it(_tree.getBegin());
+					typename tree_type::iterator	tree_it(_tree.getBegin());
+					iterator						it(tree_it);
 					return (it); 
 				}
 				// const_iterator begin() const { return (_pointer); }
 				iterator end() { 
-					iterator	it(NULL);
+					typename tree_type::iterator	it(NULL);
 					return (it); 
 				}
 				// const_iterator end() const { return (NULL); }
@@ -124,12 +126,12 @@ namespace ft {
 				// 	pair<iterator, bool> ret(it, exists);
 				// 	return (ret);
 				// }
-			// void erase (iterator position) {
-			// 	erase(position, ++position);
-			// }
-			// void erase (iterator first, iterator last) {
-			// for (iterator it = first; it != last; it++)
-			// 	_tree.deleteNode(it);
+			void erase (iterator position) {
+				erase(position, ++position);
+			}
+			void erase (iterator first, iterator last) {
+			for (iterator it = first; it != last; it++)
+				_tree.deleteNode(*it);
 			// 	size_type	diff = 0;
 			// 	for (iterator it = first; it != last; it++)
 			// 		diff++;
@@ -151,7 +153,7 @@ namespace ft {
 			// 			_alloc.deallocate(_pointerf, _size);
 			// 	_pointer = new_pointer;
 			// 	_size-=diff;
-			// }
+			}
 			// void swap (map& x) {
 			// 	map<key_type, mapped_type, key_compare, allocator_type> tmp(*this);
 			// 	*this = x;

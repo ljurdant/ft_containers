@@ -48,7 +48,7 @@ void	map_tests(void)
 	map['c'] = "pantatonic";
 	map['d'] = "cheddar";
 	map['e'] = "castle";
-	// map._tree.printTree(20, 9);
+	map._tree.printTree(20, 9);
 	print_map(map);
 	print_map_reverse(map);
 	// std::cout << "map.empty() = " << map.empty() << std::endl;
@@ -59,7 +59,7 @@ void	map_tests(void)
 	// ret = map.insert(LIB::make_pair('b', "ratchet"));
 	// std::cout << "map.insert (exists) -> <" << (*(ret.first)).first << ", " << ret.second << ">" << std::endl;
 	// print_map(map);
-	// map.erase(map.begin());
+	map.erase(map.begin());
 	// std::cout << "map.erase(begin)" << std::endl;
 	// print_map(map);
 	// LIB::map<char, std::string>::iterator	itb = map.begin();
