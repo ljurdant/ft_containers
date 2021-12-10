@@ -35,17 +35,25 @@ namespace ft
         typedef Compare value_compare;
 
     protected:
-        leaf_pointer _root;
-        leaf_pointer _last;
-        leaf_pointer _begin;
+        leaf_pointer    _root;
         leaf_allocator_type _leaf_alloc;
         value_compare _value_compare;
 
     public:
-        Tree(value_compare comp) : _root(NULL), _last(NULL), _begin(NULL), _value_compare(comp){};
+        Tree(value_compare comp) : _root(NULL), _value_compare(comp){};
 
-        leaf_pointer getLast() { return (_last); }
-        leaf_pointer getBegin() { return (_begin); }
+        leaf_pointer getLast() { 
+            leaf_pointer leaf = _root;
+            while (leaf->right)
+                leaf = leaf->right;
+            return (leaf); 
+        }
+        leaf_pointer getBegin() { 
+            leaf_pointer leaf = _root;
+            while (leaf->left)
+                leaf = leaf->left;
+            return (leaf); 
+         }
         leaf_pointer newleaf(T &value, leaf_pointer parent, bool color)
         {
             node_type new_leaf(value);
@@ -55,10 +63,6 @@ namespace ft
             new_leaf.color = color;
             leaf_pointer pointer = _leaf_alloc.allocate(1);
             _leaf_alloc.construct(pointer, new_leaf);
-            if (!_last || value.first > _last->_value.first)
-                _last = pointer;
-            if (!_begin || value.first < _begin->_value.first)
-                _begin = pointer;
             return (pointer);
         }
 
@@ -195,24 +199,32 @@ namespace ft
             std::cout << std::endl;
         }
 
+        bool    getColor(leaf_pointer leaf)
+        {
+            if (!leaf || leaf->color == BLACK)
+                return (BLACK);
+            else
+                return (RED);
+        }
+
         leaf_pointer checkLeaf(leaf_pointer node)
         {
             if (node->parent && node->parent->parent)
             {
-                leaf_pointer uncle;
+                leaf_pointer    uncle;
                 if (node->parent->parent->right == node->parent)
                     uncle = node->parent->parent->left;
                 else
                     uncle = node->parent->parent->right;
                 if (node->parent->color == RED)
                 {
-                    if (uncle && uncle->color == RED)
+                    if (getColor(uncle) == RED)
                     {
                         node->parent->color = BLACK;
                         uncle->color = BLACK;
                         node->parent->parent->color = RED;
                     }
-                    else if (!uncle || uncle->color == BLACK)
+                    else if (getColor(uncle) == BLACK)
                     {
                         if (node->parent == node->parent->parent->right)
                         {
@@ -251,59 +263,6 @@ namespace ft
         }
 
 
-        void deleteLeaf(leaf_pointer leaf)
-        {
-            if (leaf->parent)
-            {
-                if (leaf == leaf->parent->left)
-                {
-                    if (leaf->left)
-                    {
-                        leaf->parent->left = leaf->left;
-                        leaf->left->parent = leaf->parent;
-                    }
-                    else if (leaf->right)
-                    {
-                        leaf->parent->left = leaf->right;
-                        leaf->right->parent = leaf->parent;
-                    }
-                    else
-                        leaf->parent->left = NULL;
-                }
-                else
-                {
-                    if (leaf->left)
-                    {
-                        leaf->parent->right = leaf->left;
-                        leaf->left->parent = leaf->parent;
-                    }
-                    else if (leaf->right)
-                    {
-                        leaf->parent->right = leaf->right;
-                        leaf->right->parent = leaf->parent;
-                    }
-                    else
-                        leaf->parent->right = NULL;
-                }
-            }
-            else
-            {
-                if (leaf->left)
-                {
-                    _root = leaf->left;
-                    leaf->left->parent = NULL;
-                }
-                else if (leaf->right)
-                {
-                    _root = leaf->right;
-                    leaf->right->parent = NULL;
-                }
-                else
-                    _root = NULL;
-            }
-            _leaf_alloc.destroy(leaf);
-            _leaf_alloc.deallocate(leaf, 1);
-        }
 
         class iterator
         {
@@ -413,22 +372,115 @@ namespace ft
             leaf_pointer    a_parent = a->parent;
             leaf_pointer    a_left = a->left;
             leaf_pointer    a_right = a->right;
-            
-            if (a->parent->left == a)
-                a->parent->left = b;
-            else
-                a->parent->right = b;
-            if (b->parent->left == b)
-                b->parent->left = a;
-            else
-                b->parent->right = a;
+            bool            a_color = a->color;
+
+            if (a->parent)
+            {
+                if (a->parent->left == a)
+                    a->parent->left = b;
+                else
+                    a->parent->right = b;
+            }
+            if (b->parent)
+            {
+                if (b->parent->left == b)
+                    b->parent->left = a;
+                else
+                    b->parent->right = a;
+            }
+            if (!a->parent)
+                _root = b;
+            if (!b->parent)
+                _root = a;
             a->left = b->left;
             a->right = b->right;
             b->left = a_left;
             b->right = a_right;
             a->parent = b->parent;
             b->parent = a_parent;
-            
+            a->color = b->color;
+            b->color = a_color;
+        }
+
+        leaf_pointer    getSibling(leaf_pointer leaf)
+        {
+            leaf_pointer    sibling;
+
+            if (leaf == leaf->parent->left)
+                sibling = leaf->parent->right;
+            else
+                sibling = leaf->parent->left;
+            return (sibling);
+        }
+
+        leaf_pointer    deleteCheck(leaf_pointer leaf)
+        {
+            leaf_pointer    sibling;
+
+            sibling = getSibling(leaf);
+            if (sibling->color == RED)
+            {
+                sibling->color = leaf->parent->color;
+                leaf->parent->color = RED;
+                leftrotate(leaf->parent);
+            }
+            sibling = getSibling(leaf);
+            if (sibling->color == BLACK)
+            {
+                if (getColor(sibling->left) == BLACK && getColor(sibling->right) == BLACK)
+                {
+                    sibling->color = RED;
+                    if (leaf->parent->color == RED)
+                        leaf->parent->color = BLACK;
+                    else
+                        deleteCheck(leaf->parent);
+                }
+                else if (getColor(sibling->left) == RED && getColor(sibling->right) == BLACK)
+                {
+                    sibling->color = RED;
+                    sibling->left->color = BLACK;
+                    rightrotate(sibling->left);
+                }
+                if (getColor(sibling->right) == RED)
+                {
+                    sibling->right->color = BLACK;
+                    leaf->parent->color = BLACK;
+                    printTree(20, 9);
+                    leftrotate(leaf->parent);
+                    if (leaf->parent->parent)
+                        leaf->parent->parent->color = RED;
+                }
+            }
+            return (leaf);
+        }
+
+        void    deleteLeaf(leaf_pointer leaf)
+        {
+            leaf_pointer    child;
+              
+            child = NULL;
+            if (leaf->left)
+                child = leaf->left;
+            else if(leaf->right)
+                child = leaf->right;
+            if (child)
+                child->parent = leaf->parent;
+            if (leaf->parent)
+            {
+                if (leaf->parent->left == leaf)
+                    leaf->parent->left = child;
+                else
+                    leaf->parent->right = child;
+            }
+            else
+            {
+                _root = child;
+                if (child)
+                    child->parent = NULL;
+            }
+
+            _leaf_alloc.destroy(leaf);
+            _leaf_alloc.deallocate(leaf, 1);
         }
 
         void deleteNode(T value)
@@ -437,7 +489,7 @@ namespace ft
             leaf_pointer    node;
             
             node = findLeaf(value);
-
+            deleteCheck(node);
             if (!node->left || !node->right)
                 leaf = node;
             else
@@ -455,18 +507,10 @@ namespace ft
 
             while (iter->_value != value)
             {
-                if (iter && iter->right)
-                {
+                if (_value_compare(iter->_value, value))
                     iter = iter->right;
-                    while (iter->left)
-                        iter = iter->left;
-                }
-                else if (iter)
-                {
-                    while (iter->parent && iter == iter->parent->right)
-                        iter = iter->parent;
-                    iter = iter->parent;
-                }
+                else
+                    iter = iter->left;
             }
             return (iter);
         }
