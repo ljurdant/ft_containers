@@ -21,13 +21,14 @@ void	print_map_reverse(LIB::map<Key,T> &map)
 {	
 	typename LIB::map<Key,T>::iterator it = map.end();
 	it--;
-	// it++;
-	// std::cout << "map[" << (*it).first << "] = " << (*it).second ;
 	while (it != map.begin())
 	{
+		
 		std::cout << "map[" << (*it).first << "] = " << (*it).second ;
+		std::cout << ", ";
 		it--;
 	}
+	std::cout << "map[" << (*it).first << "] = " << (*it).second ;
 	std::cout << std::endl;
 }
 
@@ -53,9 +54,9 @@ void	map_tests(void)
 	print_map_reverse(map);
 	ft::map<char, std::string>::iterator it;
 	it = map.begin();
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 3; i++)
 		it++;
 	map.erase(it);
-	// map._tree.printTree(20, 9);
+	map._tree.printTree(20, 9);
 
 }

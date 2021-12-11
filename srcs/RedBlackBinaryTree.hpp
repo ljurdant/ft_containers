@@ -368,7 +368,7 @@ namespace ft
             iterator(leaf_pointer const &p) : __i(p) {}
         };
 
-        void    swapnodes(leaf_pointer a, leaf_pointer b) {
+        leaf_pointer    swapnodes(leaf_pointer a, leaf_pointer b) {
             leaf_pointer    a_parent = a->parent;
             leaf_pointer    a_left = a->left;
             leaf_pointer    a_right = a->right;
@@ -400,6 +400,7 @@ namespace ft
             b->parent = a_parent;
             a->color = b->color;
             b->color = a_color;
+            return (b);
         }
 
         leaf_pointer    getSibling(leaf_pointer leaf)
@@ -441,11 +442,11 @@ namespace ft
                     sibling->left->color = BLACK;
                     rightrotate(sibling->left);
                 }
-                if (getColor(sibling->right) == RED)
+                else if (getColor(sibling->right) == RED)
                 {
                     sibling->right->color = BLACK;
                     leaf->parent->color = BLACK;
-                    printTree(20, 9);
+                    std::cout << 2 << std::endl;
                     leftrotate(leaf->parent);
                     if (leaf->parent->parent)
                         leaf->parent->parent->color = RED;
@@ -478,7 +479,6 @@ namespace ft
                 if (child)
                     child->parent = NULL;
             }
-
             _leaf_alloc.destroy(leaf);
             _leaf_alloc.deallocate(leaf, 1);
         }
@@ -489,17 +489,20 @@ namespace ft
             leaf_pointer    node;
             
             node = findLeaf(value);
-            deleteCheck(node);
-            if (!node->left || !node->right)
-                leaf = node;
-            else
+            // printTree(20, 9);
+            // if (!node->left || !node->right)
+            //     leaf = node;
+            if (node->left && node->right)
             {
                 leaf = node->right;
                 while (leaf->left)
                     leaf = leaf->left;
                 swapnodes(leaf, node);
             }
-            deleteLeaf(leaf);
+            std::cout << "leaf = " << node->_value.first << std::endl;
+            if (node->color == BLACK)
+                deleteCheck(node);
+            deleteLeaf(node);
         }
         leaf_pointer findLeaf(T value)
         {

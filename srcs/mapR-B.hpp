@@ -130,8 +130,15 @@ namespace ft {
 				erase(position, ++position);
 			}
 			void erase (iterator first, iterator last) {
-			for (iterator it = first; it != last; it++)
+			iterator it = first;
+			iterator tmp;
+			while (it != last)
+			{
+				tmp = it;
+				tmp++;
 				_tree.deleteNode(*it);
+				it = tmp;
+			}
 			// 	size_type	diff = 0;
 			// 	for (iterator it = first; it != last; it++)
 			// 		diff++;
