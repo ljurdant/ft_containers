@@ -94,9 +94,10 @@ namespace ft {
 					return (it); 
 				}
 				// const_iterator begin() const { return (_pointer); }
-				iterator end() { 
-					typename tree_type::iterator	it(NULL);
-					return (it); 
+				iterator end() {
+					typename tree_type::iterator	tree_it(NULL, _tree.getLast());
+					iterator						it(tree_it);
+					return (it);
 				}
 				// const_iterator end() const { return (NULL); }
 				// reverse_iterator	rbegin() { return (end() - 1); }
@@ -131,35 +132,8 @@ namespace ft {
 			}
 			void erase (iterator first, iterator last) {
 			iterator it = first;
-			iterator tmp;
 			while (it != last)
-			{
-				tmp = it;
-				tmp++;
-				_tree.deleteNode(*it);
-				it = tmp;
-			}
-			// 	size_type	diff = 0;
-			// 	for (iterator it = first; it != last; it++)
-			// 		diff++;
-			// 	pointer	new_pointer = _alloc.allocate(_size - diff);
-			// 	size_type	i = 0;
-				// for (iterator it = begin(); it != first; it++)
-				// {
-					// _alloc.construct(new_pointer + i, *it);
-					// i++;
-				// }
-			// 	for (iterator it = last; it != end(); it++)
-			// 	{
-			// 		_alloc.construct(new_pointer + i, *it);
-			// 		i++;
-			// 	}
-			// 	for (size_type i = 0; i < _size - 1; i++)
-			// 			_alloc.destroy(_pointer + i);
-			// 		if (_size - 1)
-			// 			_alloc.deallocate(_pointerf, _size);
-			// 	_pointer = new_pointer;
-			// 	_size-=diff;
+				it = _tree.deleteNode(*it);
 			}
 			// void swap (map& x) {
 			// 	map<key_type, mapped_type, key_compare, allocator_type> tmp(*this);

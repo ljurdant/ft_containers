@@ -21,7 +21,8 @@ void	print_map_reverse(LIB::map<Key,T> &map)
 {	
 	typename LIB::map<Key,T>::iterator it = map.end();
 	it--;
-	while (it != map.begin())
+	typename LIB::map<Key,T>::iterator begin = map.begin();
+	while (it != begin)
 	{
 		
 		std::cout << "map[" << (*it).first << "] = " << (*it).second ;
@@ -54,7 +55,7 @@ void	map_tests(void)
 	print_map_reverse(map);
 	ft::map<char, std::string>::iterator it;
 	it = map.begin();
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 6; i++)
 		it++;
 	map.erase(it);
 	map._tree.printTree(20, 9);
