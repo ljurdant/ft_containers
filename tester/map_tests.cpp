@@ -33,6 +33,30 @@ void	print_map_reverse(LIB::map<Key,T> &map)
 	std::cout << std::endl;
 }
 
+template < class Key, class T >
+void	deletekey(LIB::map<Key,T> &map, typename LIB::map<Key,T>::size_type pos)
+{
+	ft::map<char, std::string>::iterator it;
+	it = map.begin();
+	for (typename LIB::map<Key,T>::size_type i = 0; i < pos; i++)
+		it++;
+	map.erase(it);
+}
+
+template < class Key, class T >
+void	deletekeys(LIB::map<Key,T> &map, typename LIB::map<Key,T>::size_type pos1, typename LIB::map<Key,T>::size_type pos2)
+{
+	ft::map<char, std::string>::iterator first;
+	first = map.begin();
+	for (typename LIB::map<Key,T>::size_type i = 0; i < pos1; i++)
+		first++;
+	ft::map<char, std::string>::iterator last;
+	last = map.begin();
+	for (typename LIB::map<Key,T>::size_type i = 0; i < pos2; i++)
+		last++;
+	map.erase(first, last);
+}
+
 void	map_tests(void)
 {
 	LIB::map<char, std::string>	map;
@@ -50,14 +74,13 @@ void	map_tests(void)
 	map['c'] = "pantatonic";
 	map['d'] = "cheddar";
 	map['e'] = "castle";
+	// map['p'] = "peppermint";
 	map._tree.printTree(20, 9);
 	print_map(map);
 	print_map_reverse(map);
-	ft::map<char, std::string>::iterator it;
-	it = map.begin();
-	for (int i = 0; i < 6; i++)
-		it++;
-	map.erase(it);
+	deletekey(map, 5);
+	// print_map(map);
 	map._tree.printTree(20, 9);
-
+	// deletekeys(map, 3, 6);
+	// map._tree.printTree(20, 9);
 }
