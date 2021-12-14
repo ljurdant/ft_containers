@@ -132,8 +132,9 @@ namespace ft {
 			}
 			void erase (iterator first, iterator last) {
 			iterator it = first;
-			while (it != last)
-				it = _tree.deleteNode(*it);
+			// while (it != last)
+				_tree.deleteNode(*it);
+				(void)last;
 			}
 			// void swap (map& x) {
 			// 	map<key_type, mapped_type, key_compare, allocator_type> tmp(*this);

@@ -78,7 +78,7 @@ void	map_tests(void)
 	map._tree.printTree(20, 9);
 	print_map(map);
 	print_map_reverse(map);
-	deletekey(map, 5);
+	deletekey(map, 6);
 	// print_map(map);
 	map._tree.printTree(20, 9);
 	// deletekeys(map, 3, 6);

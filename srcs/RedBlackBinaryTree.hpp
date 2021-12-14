@@ -11,11 +11,17 @@
 
 namespace ft
 {
-    template <class value_type>
+ template <class value_type>
     struct leaf
     {
         leaf(value_type &value) : _value(value) {}
         leaf() : parent(NULL), left(NULL), right(NULL), color(BLACK), _value(value_type()) {}
+        leaf(leaf const & copy) : _value(copy._value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
+        leaf(leaf const & copy, value_type value) : _value(value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
+        leaf & operator=(leaf &rhs) {
+            new (this) leaf(rhs);
+            return (*this);
+        }
         value_type _value;
         leaf *parent;
         leaf *left;
@@ -36,7 +42,7 @@ namespace ft
         typedef Compare value_compare;
 
     protected:
-        leaf_pointer    _root;
+        leaf_pointer        _root;
         leaf_allocator_type _leaf_alloc;
         value_compare _value_compare;
 
@@ -369,50 +375,15 @@ namespace ft
         };
 
         leaf_pointer    swapnodes(leaf_pointer a, leaf_pointer b) {
-            leaf_pointer    a_parent = a->parent;
-            leaf_pointer    a_left = a->left;
-            leaf_pointer    a_right = a->right;
-            bool            a_color = a->color;
+            leaf<T> acopy(*a, b->_value);
+            leaf<T> bcopy(*b, a->_value);
 
-            if (a->parent)
-            {
-                if (a->parent->left == a)
-                    a->parent->left = b;
-                else
-                    a->parent->right = b;
-            }
-            if (b->parent)
-            {
-                if (b->parent->left == b)
-                    b->parent->left = a;
-                else
-                    b->parent->right = a;
-            }
+            *b = bcopy;
+            *a = acopy;
             if (!a->parent)
-                _root = b;
-            if (!b->parent)
                 _root = a;
-            a->left = b->left;
-            a->right = b->right;
-            b->left = a_left;
-            b->right = a_right;
-            if (b->parent == a)
-            {
-                b->parent = a->parent;
-                a->parent = b;
-            }
-            else if (a->parent == b)
-            {
-                a->parent = b->parent;
-                b->parent = a;
-            }
-            else
-            {
-                a->parent = b->parent;
-                b->parent = a_parent;
-            }
-            a->color = b->color;
-            b->color = a_color;
+            if (!b->parent)
+                _root = b;
             return (b);
         }
 
@@ -551,9 +522,7 @@ namespace ft
             leaf_pointer    node;
 
             node = findLeaf(value);
-            iterator        it(node);
-            it++;
-            const T         next_value = *it;
+            leaf = node;
             if (node->left && node->right)
             {
                 leaf = node->right;
@@ -562,19 +531,19 @@ namespace ft
                 swapnodes(leaf, node);
             }
             printTree(30, 12);
-            if (node->color == BLACK)
+            if (leaf->color == BLACK)
             {
-                if (node->left && node->left->color == RED)
-                    node->left->color = BLACK;
-                else if (node->right && node->right->color == RED)
+                if (leaf->left && leaf->left->color == RED)
+                    leaf->left->color = BLACK;
+                else if (leaf->right && leaf->right->color == RED)
                 {
-                    node->right->color = BLACK;
+                    leaf->right->color = BLACK;
                 }
                 else
-                    deleteCheck(node);
+                    deleteCheck(leaf);
             }
-            deleteLeaf(node);
-            node = findLeaf(next_value);
+            deleteLeaf(leaf);
+            // node = findLeaf(next_value);
             return (node);
         }
         leaf_pointer findLeaf(T value)
