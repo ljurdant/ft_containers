@@ -39,24 +39,45 @@ namespace ft
         typedef typename leaf_allocator_type::const_reference leaf_const_reference;
         typedef typename leaf_allocator_type::pointer leaf_pointer;
         typedef typename leaf_allocator_type::const_pointer leaf_const_pointer;
-        typedef Compare value_compare;
+        typedef Compare key_compare;
+        class value_compare: public std::binary_function<T,T,bool> {
+            friend class Tree;
+            protected:
+                Compare comp;
+                value_compare	(Compare c): comp(c) {};
+
+            public:
+                typedef	bool result_type;
+                typedef T	first_argument_type;
+                typedef T	second_argument_type;
+                value_compare	(value_compare const & c): comp(c.comp) {};
+                bool	operator() (const T &x, const T &y) const
+                {
+                    return comp(x.first, y.first);
+                }
+        };
 
     protected:
         leaf_pointer        _root;
         leaf_allocator_type _leaf_alloc;
+        key_compare _key_compare;
         value_compare _value_compare;
 
     public:
-        Tree(value_compare comp) : _root(NULL), _value_compare(comp){};
+        Tree(key_compare comp) : _root(NULL), _key_compare(comp), _value_compare(_key_compare){};
 
         leaf_pointer getLast() { 
             leaf_pointer leaf = _root;
+            if (!_root)
+                return (_root);
             while (leaf->right)
                 leaf = leaf->right;
             return (leaf); 
         }
         leaf_pointer getBegin() { 
             leaf_pointer leaf = _root;
+            if (!_root)
+                return (_root);
             while (leaf->left)
                 leaf = leaf->left;
             return (leaf); 
@@ -208,10 +229,10 @@ namespace ft
 
         bool    getColor(leaf_pointer leaf)
         {
-            if (!leaf || leaf->color == BLACK)
+            if (!leaf)
                 return (BLACK);
             else
-                return (RED);
+                return (leaf->color);
         }
 
         leaf_pointer checkLeaf(leaf_pointer node)
@@ -413,7 +434,7 @@ namespace ft
                     leftrotate(leaf->parent);
                     deleteCheck(leaf);
                 }
-                if (getColor(sibling) == BLACK)
+                if (sibling && sibling->color == BLACK)
                 {
                     if (getColor(sibling->left) == BLACK && getColor(sibling->right) == BLACK)
                     {
@@ -439,7 +460,7 @@ namespace ft
                     }
                 }
             }
-            else
+            else if (sibling)
             {
                 if (getColor(sibling) == RED)
                 {
@@ -516,7 +537,7 @@ namespace ft
             _leaf_alloc.deallocate(leaf, 1);
         }
 
-        iterator deleteNode(T value)
+        void deleteNode(T value)
         {
             leaf_pointer    leaf = NULL;
             leaf_pointer    node;
@@ -530,7 +551,6 @@ namespace ft
                     leaf = leaf->left;
                 swapnodes(leaf, node);
             }
-            printTree(30, 12);
             if (leaf->color == BLACK)
             {
                 if (leaf->left && leaf->left->color == RED)
@@ -539,12 +559,10 @@ namespace ft
                 {
                     leaf->right->color = BLACK;
                 }
-                else
+                else if (leaf != _root)
                     deleteCheck(leaf);
             }
             deleteLeaf(leaf);
-            // node = findLeaf(next_value);
-            return (node);
         }
         leaf_pointer findLeaf(T value)
         {
@@ -553,6 +571,20 @@ namespace ft
             while (iter && iter->_value != value)
             {
                 if (_value_compare(iter->_value, value))
+                    iter = iter->right;
+                else
+                    iter = iter->left;
+            }
+            return (iter);
+        }
+
+        leaf_pointer find(typename T::first_type value)
+        {
+            leaf_pointer iter = _root;
+
+            while (iter && iter->_value.first != value)
+            {
+                if (_key_compare(iter->_value.first, value))
                     iter = iter->right;
                 else
                     iter = iter->left;
