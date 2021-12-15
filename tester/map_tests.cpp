@@ -67,15 +67,15 @@ void	map_tests(void)
 	map['b'] = "banana";
 	map['k'] = "koala";
 	// map._tree.printTree(20, 8);
-	map['f'] = "";
+	map['f'] = "fresco";
 	// map._tree.printTree(20, 8);
-	map['a'] = "yoyo";
+	map['a'] = "Ali Baba";
 	// map._tree.printTree(20, 8);
-	map['z'] = "nounours";
+	map['z'] = "zephyr";
 	// map._tree.printTree(20, 8);
-	map['c'] = "pantatonic";
-	map['d'] = "cheddar";
-	map['e'] = "castle";
+	map['c'] = "cheddar";
+	map['d'] = "diamond";
+	map['e'] = "erratic";
 	map['p'] = "peppermint";
 	// map._tree.printTree(30, 9);
 	print_map(map);
@@ -103,4 +103,16 @@ void	map_tests(void)
 	print_map(map);
 	std::cout << "empty? : " << map.empty() << std::endl;
 	std::cout << "size = " << map.size() << std::endl;
+	
+	LIB::map<key_type, mapped_type>	map3(map2);
+	
+	map2 = map;
+	print_map(map2);
+	print_map(map3);
+	map3.swap(map2);
+	print_map(map2);
+	print_map(map3);
+	std::cout << "count(k) = " << map.count('k') << std::endl;
+	std::cout << "count(v) = " << map.count('v') << std::endl;
+
 }

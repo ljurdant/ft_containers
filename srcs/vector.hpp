@@ -6,6 +6,7 @@
 # include <iterator> //std::iterator_traits
 # include "wrap_iter.hpp"
 # include "ft_utilities.hpp"
+# include <stdexcept>
 
 namespace ft {
 template	<typename T, class Alloc = std::allocator<T> >
@@ -23,6 +24,7 @@ class vector {
 			typedef	__wrap_iter<pointer>						iterator;
 			typedef	__wrap_iter<const_pointer>					const_iterator;
 			typedef	__wrap_reverse_iter<iterator>				reverse_iterator;
+			typedef	__wrap_reverse_iter<const_iterator>			const_reverse_iterator;
 			typedef	typename iterator_traits::difference_type	difference_type;
 
 		
@@ -75,12 +77,14 @@ class vector {
 			}
 
 			//Iterators:
-			iterator			begin() { return (_pointer); }
-			const_iterator		begin() const { return (const_cast<const_pointer>(_pointer)); }
-			iterator			end() { return (_pointer + _size); }
-			const_iterator		end() const { return (_pointer + _size); }
-			reverse_iterator	rbegin() { return (end() - 1); }
-			reverse_iterator	rend() { return(begin()); }
+			iterator				begin() { return (_pointer); }
+			const_iterator			begin() const { return (const_cast<const_pointer>(_pointer)); }
+			iterator				end() { return (_pointer + _size); }
+			const_iterator			end() const { return (_pointer + _size); }
+			reverse_iterator		rbegin() { return (end() - 1); }
+			const_reverse_iterator	rbegin() const { return (end() - 1); }
+			reverse_iterator		rend() { return(begin()); }
+			const_reverse_iterator	rend() const { return(begin()); }
 
 			//Capacity
 			size_type	size() const { return (_size); };
@@ -126,12 +130,20 @@ class vector {
 			// Element access:
 			reference	operator[](size_type n) { return (_pointer[n]); }
 			const_reference operator[] (size_type n) const { return (_pointer[n]); }
-			reference at (size_type n) { return ((*this)[n]); }
-			const_reference at (size_type n) const { return ((*this)[n]); }
+			reference at (size_type n) {
+				if (n >= _size)
+					throw std::out_of_range("vector");
+				return ((*this)[n]); 
+			}
+			const_reference at (size_type n) const { 
+				if (n >= _size)
+					throw std::out_of_range("vector");
+				return ((*this)[n]); 
+			}
 		    reference front() { return (*_pointer); }
-			const_reference front() const { return (front()); }
+			const_reference front() const { return (*_pointer); }
 			reference back() { return (_pointer[_size - 1]); }
-			const_reference back() const { return (back()); }
+			const_reference back() const { return (_pointer[_size - 1]); }
 
 			//Modifiers
 			template <class InputIterator>

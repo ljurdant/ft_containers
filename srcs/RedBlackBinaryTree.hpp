@@ -63,10 +63,32 @@ namespace ft
         key_compare _key_compare;
         value_compare _value_compare;
 
-    public:
-        Tree(key_compare comp) : _root(NULL), _key_compare(comp), _value_compare(_key_compare){};
 
-        leaf_pointer getLast() { 
+    public:
+
+        Tree(key_compare comp) : _root(NULL), _key_compare(comp), _value_compare(_key_compare){};
+        Tree(Tree const & copy) : _root(NULL), _key_compare(copy._key_compare), _value_compare(copy._value_compare){
+            *this = copy;
+        }
+        ~Tree() {
+            clear();
+        }
+        Tree    & operator=(Tree const & rhs) {
+            clear();
+            _key_compare = rhs._key_compare;
+            _value_compare = rhs._value_compare;
+            iterator    end(NULL, rhs.getLast());
+            for (iterator it = rhs.getBegin() ; it != end; it++)
+                add_leaf(*it);
+            return (*this);
+        }
+
+        void    clear() {
+            while (_root != NULL)
+                deleteNode(_root->_value);
+        }
+
+        leaf_pointer getLast() const{ 
             leaf_pointer leaf = _root;
             if (!_root)
                 return (_root);
@@ -74,7 +96,7 @@ namespace ft
                 leaf = leaf->right;
             return (leaf); 
         }
-        leaf_pointer getBegin() { 
+        leaf_pointer getBegin() const{ 
             leaf_pointer leaf = _root;
             if (!_root)
                 return (_root);
@@ -214,6 +236,8 @@ namespace ft
 
         void printTree(int indent, int level)
         {
+            if (!_root)
+                return ;
             std::list<printNode> nodes(1, makeprintNode(_root, indent));
             printIndent(indent);
             printLeaf(_root);
@@ -313,6 +337,7 @@ namespace ft
                 _prev = rhs._prev;
                 return (*this);
             }
+
             bool operator==(iterator const &rhs) const { return (__i == rhs.__i); }
             bool operator!=(iterator const &rhs) const { return (__i != rhs.__i); }
             reference operator*() const { return (__i->_value); }
@@ -419,20 +444,21 @@ namespace ft
             return (sibling);
         }
 
-        leaf_pointer    deleteCheck(leaf_pointer leaf)
+        void    deleteCheck(leaf_pointer leaf)
         {
             leaf_pointer    sibling;
 
-            
+            if (leaf == _root)
+                return ;
             sibling = getSibling(leaf);
-            if (sibling == leaf->parent->right)
+            if (sibling && sibling == leaf->parent->right)
             {
                 if (getColor(sibling) == RED)
                 {
                     sibling->color = BLACK;
                     leaf->parent->color = RED;
                     leftrotate(leaf->parent);
-                    deleteCheck(leaf);
+                    sibling = leaf->parent->right;
                 }
                 if (sibling && sibling->color == BLACK)
                 {
@@ -467,7 +493,7 @@ namespace ft
                     sibling->color = BLACK;
                     leaf->parent->color = RED;
                     rightrotate(leaf->parent);
-                    deleteCheck(leaf);
+                    sibling = leaf->parent->left;
                 }
                 sibling = getSibling(leaf);
                 if (getColor(sibling) == BLACK)
@@ -496,9 +522,8 @@ namespace ft
                     }
                 }
             }
-            return (leaf);
         }
-
+  
         void    deleteLeaf(leaf_pointer leaf)
         {
             leaf_pointer    child;
@@ -529,9 +554,9 @@ namespace ft
             }
             else
             {
-                _root = child;
                 if (child)
                     child->parent = NULL;
+                _root = child;
             }
             _leaf_alloc.destroy(leaf);
             _leaf_alloc.deallocate(leaf, 1);
@@ -559,11 +584,12 @@ namespace ft
                 {
                     leaf->right->color = BLACK;
                 }
-                else if (leaf != _root)
+                else
                     deleteCheck(leaf);
             }
             deleteLeaf(leaf);
         }
+
         leaf_pointer findLeaf(T value)
         {
             leaf_pointer iter = _root;
@@ -578,7 +604,7 @@ namespace ft
             return (iter);
         }
 
-        leaf_pointer find(typename T::first_type value)
+        leaf_pointer find(typename T::first_type value) const
         {
             leaf_pointer iter = _root;
 

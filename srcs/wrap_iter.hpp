@@ -101,12 +101,14 @@ class	 __wrap_biiter   {
 			typedef typename iterator_type::value_type		value_type;
 			typedef typename iterator_type::pointer			pointer;
 			typedef typename iterator_type::reference		reference;
+			typedef	const iterator_type							const_iterator_type;
+
 		protected:
 			iterator_type	__i;
 
 		public:
 			__wrap_biiter() {}
-			__wrap_biiter(__wrap_biiter const &copy) {*this = copy;}
+			__wrap_biiter(__wrap_biiter const &copy): __i(copy.__i) {}
 			__wrap_biiter					&operator=(__wrap_biiter<iterator_type>  const &rhs) {
 				__i = rhs.__i;
 				return (*this);
@@ -121,6 +123,11 @@ class	 __wrap_biiter   {
 			__wrap_biiter	operator--() { return (--__i);}			
 
 			__wrap_biiter(iterator_type const &p): __i(p){}
+
+			operator const __wrap_biiter<const_iterator_type>() {
+				__wrap_biiter<const_iterator_type>	ret(const_cast<const iterator_type>(__i));
+				return (ret);
+			}
 		};
 
 template<class _Iter>						
