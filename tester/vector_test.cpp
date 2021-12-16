@@ -13,6 +13,18 @@ void	print_vector(LIB::vector<T> &vector)
 	std::cout << std::endl;
 }
 
+template <typename T>
+void	constructor_tests()
+{
+	std::cout << "Default Constructor: ";
+	LIB::vector<T>	vector1;
+	std::cout << "vector.size() = " << vector1.size();
+	std::cout << "vecotr.capacity() = " << vector1.capacity();
+
+	std::cout << "Constructor: vector(size): ";
+	LIB::vector<T>
+}
+
 void	vector_tests()
 {
 	try {
