@@ -2,16 +2,19 @@
 # define WRAP_ITER_H
 
 #include "RedBlackBinaryTree.hpp"
+#include "ft_utilities.hpp"
+
+namespace ft {
 
 template<class _Iter>						
 	class	 __wrap_iter {
 		public:
 			typedef _Iter															iterator_type;
-			typedef typename std::iterator_traits<iterator_type>::iterator_category	iterator_category;
-			typedef typename std::iterator_traits<iterator_type>::value_type		value_type;
-			typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
-			typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
-			typedef typename std::iterator_traits<iterator_type>::reference			reference;
+			typedef typename ft::iterator_traits<iterator_type>::iterator_category	iterator_category;
+			typedef typename ft::iterator_traits<iterator_type>::value_type			value_type;
+			typedef typename ft::iterator_traits<iterator_type>::difference_type	difference_type;
+			typedef typename ft::iterator_traits<iterator_type>::pointer			pointer;
+			typedef typename ft::iterator_traits<iterator_type>::reference			reference;
 			typedef	const value_type *												const_iterator_type;
 		protected:
 			iterator_type	__i;
@@ -55,11 +58,11 @@ template<class _Iter>
 	class	 __wrap_reverse_iter {
 		public:
 			typedef _Iter															iterator_type;
-			typedef typename std::iterator_traits<iterator_type>::iterator_category	iterator_category;
-			typedef typename std::iterator_traits<iterator_type>::value_type		value_type;
-			typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
-			typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
-			typedef typename std::iterator_traits<iterator_type>::reference			reference;
+			typedef typename ft::iterator_traits<iterator_type>::iterator_category	iterator_category;
+			typedef typename ft::iterator_traits<iterator_type>::value_type			value_type;
+			typedef typename ft::iterator_traits<iterator_type>::difference_type	difference_type;
+			typedef typename ft::iterator_traits<iterator_type>::pointer			pointer;
+			typedef typename ft::iterator_traits<iterator_type>::reference			reference;
 		protected:
 			iterator_type	__i;		
 		public:
@@ -97,10 +100,12 @@ template<class _Iter>
 template < class _Iter >
 class	 __wrap_biiter   {
 	public:
-			typedef _Iter									iterator_type;
-			typedef typename iterator_type::value_type		value_type;
-			typedef typename iterator_type::pointer			pointer;
-			typedef typename iterator_type::reference		reference;
+			typedef _Iter															iterator_type;
+			typedef typename ft::iterator_traits<iterator_type>::iterator_category	iterator_category;
+			typedef typename ft::iterator_traits<iterator_type>::value_type			value_type;
+			typedef typename ft::iterator_traits<iterator_type>::difference_type	difference_type;
+			typedef typename ft::iterator_traits<iterator_type>::pointer			pointer;
+			typedef typename ft::iterator_traits<iterator_type>::reference			reference;
 			typedef	const iterator_type							const_iterator_type;
 
 		protected:
@@ -160,4 +165,5 @@ template<class _Iter>
 
 		__wrap_reverse_biiter(iterator_type const &p): __i(p){}
 	};
+}
 #endif

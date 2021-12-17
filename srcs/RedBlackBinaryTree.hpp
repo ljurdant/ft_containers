@@ -5,6 +5,7 @@
 #include <memory> //std::allocator
 #include <iostream>
 #include <list>
+#include "ft_utilities.hpp"
 
 #define BLACK 0
 #define RED 1
@@ -323,6 +324,7 @@ namespace ft
             typedef size_t difference_type;
             typedef value_type &reference;
             typedef value_type *pointer;
+            typedef ft::bidirectional_iterator_tag  iterator_category;
 
         protected:
             leaf_pointer __i;
