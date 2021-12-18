@@ -81,8 +81,14 @@ class vector {
 			const_iterator			begin() const { return (const_cast<const_pointer>(_pointer)); }
 			iterator				end() { return (_pointer + _size); }
 			const_iterator			end() const { return (_pointer + _size); }
-			reverse_iterator		rbegin() { return (end() - 1); }
-			const_reverse_iterator	rbegin() const { return (end() - 1); }
+			reverse_iterator		rbegin() { 
+				reverse_iterator	it(end() - 1);
+				return (it); 
+			}
+			const_reverse_iterator	rbegin() const {
+				const_reverse_iterator	it(end() - 1);
+				return (it); 
+			}
 			reverse_iterator		rend() { return(begin()); }
 			const_reverse_iterator	rend() const { return(begin()); }
 

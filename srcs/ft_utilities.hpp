@@ -35,12 +35,43 @@ namespace ft
 		typedef random_access_iterator_tag	iterator_category;
 	};
 	
+	// template <typename T>
+	// 	struct is_integral {
+  	// 		static const bool value;
+	// 	};
+	// template <typename T>
+	// 	const bool is_integral<T>::value = std::numeric_limits<T>::is_integer;
+
+	template <bool B>
+	struct integral_const{ static const bool	value = B;};
 	template <typename T>
-		struct is_integral {
-  			static const bool value;
-		};
-	template <typename T>
-		const bool is_integral<T>::value = std::numeric_limits<T>::is_integer;
+		struct is_integral: integral_const<false> {};
+	template <>
+	struct is_integral<bool> : integral_const<true> {};
+	template <>
+	struct is_integral<char> : integral_const<true> {};
+	template <>
+	struct is_integral<wchar_t> : integral_const<true> {};
+	template <>
+	struct is_integral<signed char> : integral_const<true> {};
+	template <>
+	struct is_integral<short int> : integral_const<true> {};
+	template <>
+	struct is_integral<int> : integral_const<true> {};
+	template <>
+	struct is_integral<long int> : integral_const<true> {};
+	template <>
+	struct is_integral<long long int> : integral_const<true> {};
+	template <>
+	struct is_integral<unsigned char> : integral_const<true> {};
+	template <>
+	struct is_integral<unsigned short int> : integral_const<true> {};
+	template <>
+	struct is_integral<unsigned int> : integral_const<true> {};
+	template <>
+	struct is_integral<unsigned long int> : integral_const<true> {};
+	template <>
+	struct is_integral<unsigned long long int> : integral_const<true> {};
 
 	template<bool B, class T = void>
 		struct enable_if {};
