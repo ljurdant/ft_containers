@@ -1,6 +1,12 @@
 
 #include "ft_containers.hpp"
 
+struct test {
+	test(): value(4){}
+	test(int val): value(val){}
+	int	value;
+};
+
 template <typename T>
 void	print_vector(LIB::vector<T> &vector)
 {
@@ -26,9 +32,7 @@ void	constructor_tests()
 	print_vector(vector2);
 	LIB::vector<T>	vector3(0);
 	print_vector(vector3);
-	LIB::vector<T>	vector4(-1);
-	print_vector(vector4);
-	LIB::vector<T>	vector5(4294967296);
+	LIB::vector<T>	vector5(100000);
 	print_vector(vector5);
 
 	std::cout << "Constructor: vector(size, value): ";
@@ -36,14 +40,91 @@ void	constructor_tests()
 	print_vector(vector6);
 	LIB::vector<T>	vector7(0, -3);
 	print_vector(vector7);
-	LIB::vector<T>	vector8(-1);
-	print_vector(vector8);
-	LIB::vector<T>	vector9(4294967296);
+	LIB::vector<T>	vector9(100000, 6);
 	print_vector(vector9);
-
-	std::cout << "Constructor: vector(vector):"
+	
+	std::cout << "Constructor: vector(vector): ";
 	LIB::vector<T>	vector10(vector6);
 	print_vector(vector10);
+
+}
+
+template<typename T>
+void	operator_tests() {
+	LIB::vector<T>	vector1(12, 4);
+	LIB::vector<T>	vector2;
+
+	std::cout << "Operator=: (empty left side)";
+	vector2 = vector1;
+	print_vector(vector2);
+
+	LIB::vector<T>	vector3(1001, 90);
+	LIB::vector<T>	vector4;
+	std::cout << "Operator=: (empty right side)";
+	vector3 = vector4;
+	print_vector(vector3);
+
+	LIB::vector<T>	vector5(1001, 90);
+	LIB::vector<T>	vector6(2, 9);
+	std::cout << "Operator=: ";
+	vector5 = vector6;
+	print_vector(vector5);
+
+	LIB::vector<T>	vector7(1001, 90);
+	LIB::vector<T>	vector8(2, 9);
+	std::cout << "Operator>=: -> " << (vector7 >= vector8) << std::endl;
+	std::cout << "Operaror>: -> " << (vector7 > vector8) << std::endl;
+	std::cout << "Operator<: -> " << (vector7 < vector8) << std::endl;
+	std::cout << "Operator<=: vector -> " << (vector7 <= vector8) << std::endl;
+	std::cout << "Operaator==: (not equal) -> " << (vector7 == vector8) << std::endl;
+	std::cout << "Operator!=: (not equal) -> " << (vector7 != vector8) << std::endl;
+
+	LIB::vector<T>	vector9(2005, 254);
+	LIB::vector<T>	vector10(2005, 254);
+	std::cout << "Operator>=: -> " << (vector9 >= vector10) << std::endl;
+	std::cout << "Operaror>: -> " << (vector9 > vector10) << std::endl;
+	std::cout << "Operator<: -> " << (vector9 < vector10) << std::endl;
+	std::cout << "Operator<=: vector -> " << (vector9 <= vector10) << std::endl;
+	std::cout << "Operaator==: (not equal) -> " << (vector9 == vector10) << std::endl;
+	std::cout << "Operator!=: (not equal) -> " << (vector9 != vector10) << std::endl;
+}
+
+template <class T>
+void	iterator_integral() {
+	LIB::vector<T>	vector1(12, 5);
+
+	typename LIB::vector<T>::iterator	it1 = vector1.begin();
+	typename LIB::vector<T>::iterator	it2 = vector1.begin();
+	std::cout << "iterator == iterator (equal) -> " << (it1 == it2) << std::endl;
+	std::cout << "iterator != iterator (equal) -> " << (it1 != it2) << std::endl;
+
+	typename LIB::vector<T>::iterator	it3 = vector1.end();
+	std::cout << "iterator == iterator (unequal) -> " << (it3 == it2) << std::endl;
+	std::cout << "iterator != iterator (unequal) -> " << (it3 != it2) << std::endl;
+	std::cout << "*iterator " << *it1 << std::endl;	
+	std::cout << "class iterator++ " << *(it1++) << std::endl;
+	std::cout << "++iterator "<< *(++it1) << std::endl;
+	std::cout << "iterator-- " << *(it1--) << std::endl;
+	std::cout << "--iterator "<< *(--it1) << std::endl;
+	std::cout << "iterator + 4 " << *(it1 + 4) << std::endl;
+}
+
+template <class T>
+void	iterator_class() {
+	LIB::vector<T>	vector1(12, 5);
+
+	typename LIB::vector<T>::iterator	it1 = vector1.begin();
+	typename LIB::vector<T>::iterator	it2 = vector1.begin();
+	std::cout << "iterator == iterator (equal) -> " << (it1 == it2) << std::endl;
+	std::cout << "iterator != iterator (equal) -> " << (it1 != it2) << std::endl;
+
+	typename LIB::vector<T>::iterator	it3 = vector1.end();
+	std::cout << "iterator == iterator (unequal) -> " << (it3 == it2) << std::endl;
+	std::cout << "iterator != iterator (unequal) -> " << (it3 != it2) << std::endl;
+	std::cout << "iterator-> " << it1->value << std::endl;
+	std::cout << "iterator-- " << (it1--)->value << std::endl;
+	std::cout << "--iterator "<< (--it1)->value << std::endl;
+	std::cout << "iterator + 4 " << (it1 + 4)->value << std::endl;
 }
 
 void	vector_tests()
@@ -51,6 +132,10 @@ void	vector_tests()
 	constructor_tests<int>();
 	constructor_tests<char>();
 	constructor_tests<long long int>();
+	iterator_integral<int>();
+	iterator_integral<char>();
+	iterator_integral<long long int>();
+	iterator_class<test>();
 	// LIB::vector<int>            vector(10, 4);
 	// // LIB::vector<int>::const_reverse_iterator	rit = vector.rbegin();
 
