@@ -11,6 +11,8 @@
 # include <stack>
 # include <fstream>
 # include <iostream>
+#include <typeinfo>
+
 
 #ifndef LIB
 # define LIB ft
