@@ -294,23 +294,26 @@ void	element_access_tests() {
 	std::cout << "vector1[400] = " << vector1[400] << std::endl;
 	std::cout << "vector1[401] = " << vector1[401] << std::endl;
 	vector1.resize(300);
-	std::cout << "vector1[401] = " << vector1[401] << std::endl;
 	vector1.reserve(2000);
-	std::cout << "vector1[2200] = " << vector1[2200] << std::endl;
 	vector1.reserve(4000);
-	std::cout << "vector1[3300] = " << vector1[3300]<< std::endl;
-	typename LIB::vector<T>::const_reference a = vector1[401];
-	std::cout << "const_reference vector[401] = " << a << std::cout;
+	typename LIB::vector<T>::const_reference a = vector1[299];
+	std::cout << "const_reference vector[401] = " << a << std::endl;
 
 	LIB::vector<T>	vector2(3000);
-
 	std::cout << "vector2[400] = " << vector2.at(400) << std::endl;
 	vector2[401] = 89;
 	vector2[399] = 88;
 	std::cout << "vector2[400] = " << vector2.at(400) << std::endl;
 	std::cout << "vector2[401] = " << vector2.at(401) << std::endl;
 	vector2.resize(300);
-	std::cout << "vector2[401] = " << vector2.at(401) << std::endl;
+	try
+	{
+		std::cout << "vector2[401] = " << vector2.at(401) << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "bad length error" << '\n';
+	}
 	vector2.reserve(2000);
 	try
 	{
@@ -318,7 +321,7 @@ void	element_access_tests() {
 	}
 	catch (std::exception &e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cout << "bad length error" << std::endl;
 	}
 	vector2.reserve(4000);
 	try
@@ -327,10 +330,11 @@ void	element_access_tests() {
 	}
 	catch (std::exception &e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cout << "bad length error" << std::endl;
 	}
-	typename LIB::vector<T>::const_reference b = vector1.at(401);
-	std::cout << "const_reference vector.at(401) = " << b << std::cout;
+
+	typename LIB::vector<T>::const_reference b = vector1.at(299);
+	std::cout << "const_reference vector.at(401) = " << b << std::endl;
 }
 
 void	vector_tests()
@@ -350,5 +354,5 @@ void	vector_tests()
 	capacity_tests<char>();
 	capacity_tests<long long>();
 	capacity_tests<test>();
-
+	element_access_tests<int>();
 }

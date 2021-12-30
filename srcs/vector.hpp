@@ -7,6 +7,7 @@
 # include "wrap_iter.hpp"
 # include "ft_utilities.hpp"
 # include <stdexcept>
+# include <string>
 
 namespace ft {
 template	<typename T, class Alloc = std::allocator<T> >
@@ -39,7 +40,7 @@ class vector {
 		public:
 			//Constructors:
 			explicit vector	(const allocator_type& alloc = allocator_type()): 
-				_alloc(alloc), _size(0) , _capacity(0), _max_size(max_size()) {
+				_alloc(alloc), _pointer(NULL), _size(0) , _capacity(0), _max_size(max_size()) {
 			}
 			
 			explicit vector	(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):

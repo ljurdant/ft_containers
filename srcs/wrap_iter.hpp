@@ -26,8 +26,6 @@ template<class _Iter>
 				__i = rhs.__i;
 				return (*this);
 			}
-			bool			operator==(__wrap_iter const &rhs) const { return (__i == rhs.__i);}
-			bool			operator!=(__wrap_iter const &rhs) const { return (__i != rhs.__i);}
 			reference		operator*() const { return (*__i);}
 			pointer			operator->() const { return (__i);}
 			__wrap_iter		operator++(int) { return (__i++); }
@@ -37,10 +35,6 @@ template<class _Iter>
 			__wrap_iter		operator+(difference_type n) const { return (__i + n); }
 			__wrap_iter		operator-(difference_type n) const { return (__i - n); }
 			difference_type	operator-(__wrap_iter const &rhs) const { return(__i - (rhs.__i)); }
-			bool			operator<(__wrap_iter const &rhs) { return (__i < rhs.__i); }
-			bool			operator>(__wrap_iter const &rhs) { return (__i > rhs.__i); } 
-			bool			operator<=(__wrap_iter const &rhs) { return (__i <= rhs.__i); }
-			bool			operator>=(__wrap_iter const &rhs) { return (__i >= rhs.__i); }
 			__wrap_iter		operator+=(difference_type n) { return (__i+=n); }
 			__wrap_iter		operator-=(difference_type n) { return (__i-=n); }
 			reference		operator[](difference_type n) const { return (__i[n]); }			
@@ -53,7 +47,25 @@ template<class _Iter>
 			}
 	};
 template<class _Iter>
-		__wrap_iter<_Iter>	operator+(typename __wrap_iter<_Iter>::difference_type n, __wrap_iter<_Iter> &it) {return (it + n); }
+	__wrap_iter<_Iter>	operator+(typename __wrap_iter<_Iter>::difference_type n, __wrap_iter<_Iter> &it) { return (it + n); }
+
+template<class T, class U>
+	bool			operator==(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (&(*lhs) == &(*rhs)); }
+
+template<class T, class U>
+	bool			operator!=(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (!(lhs == rhs)); }
+
+template<class T, class U>
+	bool			operator<(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (&(*lhs) < &(*rhs)); }
+
+template<class T, class U>
+bool			operator<=(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (lhs < rhs || lhs == rhs); }
+
+template<class T, class U>
+bool			operator>(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (!(lhs <= rhs)); }
+
+template<class T, class U>
+bool			operator>=(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (!(lhs < rhs)); }
 
 template<class _Iter>						
 	class	 __wrap_reverse_iter {
@@ -107,6 +119,24 @@ template<class _Iter>
 	};
 template<class _Iter>
 		__wrap_reverse_iter<_Iter>	operator+(typename __wrap_reverse_iter<_Iter>::difference_type n, const __wrap_reverse_iter<_Iter> &it) {return (it + n); }
+template<class T, class U>
+	bool			operator==(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (&(*lhs) == &(*rhs)); }
+
+template<class T, class U>
+	bool			operator!=(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (!(lhs == rhs)); }
+
+template<class T, class U>
+	bool			operator<(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (&(*lhs) > &(*rhs)); }
+
+template<class T, class U>
+bool			operator<=(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (lhs < rhs || lhs == rhs); }
+
+template<class T, class U>
+bool			operator>(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (!(lhs <= rhs)); }
+
+template<class T, class U>
+bool			operator>=(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (!(lhs < rhs)); }
+
 
 template < class _Iter >
 class	 __wrap_biiter   {
