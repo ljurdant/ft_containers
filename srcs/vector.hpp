@@ -44,20 +44,17 @@ class vector {
 			}
 			
 			explicit vector	(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()):
-				_alloc(alloc), _size(0), _capacity(0), _max_size(max_size()) {
-				reserve(n);
-				_size = n;
-				for (size_type i = 0; i < n; i++)
-					_alloc.construct(_pointer + i, val);
+				_alloc(alloc), _pointer(NULL), _size(0), _capacity(0), _max_size(max_size()) {
+				assign(n, val);
 			}
 
 			template <class InputIterator>
          	vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()):
-			 _alloc(alloc), _size(0), _capacity(0), _max_size(max_size()) {
-				this->assign(first, last);
+			 _alloc(alloc), _pointer(NULL), _size(0), _capacity(0), _max_size(max_size()) {
+				assign(first, last);
 			 }
 
-			vector (const vector& x): _size(0), _capacity(0), _max_size(x._max_size) {
+			vector (const vector& x): _alloc(allocator_type()), _pointer(NULL), _size(0), _capacity(0), _max_size(x._max_size) {
 				*this = x;
 			}
 
@@ -71,7 +68,7 @@ class vector {
 
 			//Operator=
 			vector& operator= (const vector& x){
-				this->~vector();
+				clear();
 				assign(x.begin(), x.end());
 				return (*this);
 			}
@@ -188,7 +185,9 @@ class vector {
 			}
 			template <class InputIterator>
     			void insert (iterator position, InputIterator first, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type last) {
-						for (InputIterator it = last - 1 ; it != first -1 ; it--)
+						last--;
+						first--;
+						for (InputIterator it = last ; it != first ; it--)
 					 		position = insert(position, *it);
 				}
 			iterator erase (iterator position) {

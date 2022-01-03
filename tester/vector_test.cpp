@@ -46,7 +46,30 @@ void	constructor_tests()
 	std::cout << "<" << typeid(T).name() << "> " << "Constructor: vector(vector): ";
 	LIB::vector<T>	vector10(vector6);
 	print_vector(vector10);
+	std::cout << vector10.size() << std::endl;
+	std::cout << (vector10.capacity() == vector6.capacity()) << std::endl;
+	vector10.push_back(8);
+	vector6 = vector10;
+	print_vector(vector6);
+	std::cout << vector6.size() << std::endl;
+	
+	LIB::vector<T> vct(5);
+	typename LIB::vector<T>::iterator it = vct.begin(), ite = vct.end();
+	it = vct.begin();
+	LIB::vector<T> vct_range(it, --(--ite));
+	for (int i = 0; it != ite; ++it)
+		*it = ++i * 5;
 
+	it = vct.begin();
+	// LIB::vector<T> vct_copy(vct);
+	for (int i = 0; it != ite; ++it)
+		*it = ++i * 7;
+	// vct_copy.push_back(42);
+	// vct_copy.push_back(21);
+
+	print_vector(vct);
+	// print_vector(vct_range);
+	// print_vector(vct_copy);
 }
 
 template<typename T>
@@ -365,14 +388,14 @@ void	vector_tests()
 	iterator_integral<int>();
 	iterator_integral<char>();
 	iterator_integral<long long int>();
-	iterator_class<test>();
+	// iterator_class<test>();
 	reverse_iterator_integral<int>();
-	// reverse_iterator_integral<char>();
-	// reverse_iterator_integral<long long int>();
+	reverse_iterator_integral<char>();
+	reverse_iterator_integral<long long int>();
 	// reverse_iterator_class<test>();
 	capacity_tests<int>();
 	capacity_tests<char>();
 	capacity_tests<long long>();
-	capacity_tests<test>();
+	// capacity_tests<test>();
 	element_access_tests<int>();
 }
