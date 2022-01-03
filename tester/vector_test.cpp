@@ -70,6 +70,9 @@ void	constructor_tests()
 	print_vector(vct);
 	// print_vector(vct_range);
 	// print_vector(vct_copy);
+	vct.swap(vector6);
+	print_vector(vct);
+	print_vector(vector6);
 }
 
 template<typename T>
@@ -213,13 +216,13 @@ void	reverse_iterator_integral() {
 	typename LIB::vector<T>::reverse_iterator it(it_);
 	for (int i = 0; i < 5; ++i)
 		vct[i] = (i + 1) * 5;
-	std::cout << (it_ == it.base()) << std::endl;
+	std::cout << ( it_== it.base()) << std::endl;
 	std::cout << (it_ == (it + 3).base()) << std::endl;
 	std::cout << *(it.base() + 1) << std::endl;
-	// std::cout << *(it - 3) << std::endl;
+	std::cout << "integral reverse_iterator - 3 -> " << *(it - 3) << std::endl;
 	std::cout << *(it - 3).base() << std::endl;
-	// it -= 3;
-	// std::cout << *it.base() << std::endl;
+	it -= 3;
+	std::cout << *it.base() << std::endl;
 	// std::cout << *(it) << std::endl;
 	// std::cout << *(it).base() << std::endl;
 	// std::cout << *(it - 0) << std::endl;
@@ -259,7 +262,7 @@ void	reverse_iterator_integral() {
 	typename LIB::vector<T>::const_reverse_iterator	it4 = vector1.rbegin();
 	std::cout << "<" << typeid(T).name() << "> " << "*const_reverse_iterator (rbegin)" << *(it4) << std::endl;
 	it4 = vector1.rend();
-	std::cout << "<" << typeid(T).name() << "> " << "*const_reverse_iterator (rend - 1)" << *(it4 - 1) << std::endl;
+	std::cout << "<" << typeid(T).name() << "> " << "*const_reverse_iterator (rend - 1)" << *(it4 - 5) << std::endl;
 }
 
 template <class T>

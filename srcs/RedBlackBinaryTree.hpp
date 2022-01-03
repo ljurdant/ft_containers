@@ -66,7 +66,7 @@ namespace ft
 
 
     public:
-
+        
         Tree(key_compare comp) : _root(NULL), _key_compare(comp), _value_compare(_key_compare){};
         Tree(Tree const & copy) : _root(NULL), _key_compare(copy._key_compare), _value_compare(copy._value_compare){
             *this = copy;

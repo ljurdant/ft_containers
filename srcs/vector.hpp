@@ -78,10 +78,10 @@ class vector {
 			const_iterator			begin() const { return (const_cast<const_pointer>(_pointer)); }
 			iterator				end() { return (_pointer + _size); }
 			const_iterator			end() const { return (_pointer + _size); }
-			reverse_iterator		rbegin() { return (end() - 1); }
-			const_reverse_iterator	rbegin() const { return (end() - 1); }
-			reverse_iterator		rend() { return(begin() - 1); }
-			const_reverse_iterator	rend() const { return(begin() - 1); }
+			reverse_iterator		rbegin() { return (end()); }
+			const_reverse_iterator	rbegin() const { return (end()); }
+			reverse_iterator		rend() { return(begin()); }
+			const_reverse_iterator	rend() const { return(begin()); }
 
 			//Capacity
 			size_type	size() const { return (_size); };
@@ -162,8 +162,8 @@ class vector {
 			}
 			void	push_back(const value_type &val) {
 				reserve(_size + 1);
-				_alloc.construct(_pointer + _size, val);
-				_size++;
+				_alloc.construct(_pointer + _size++, val);
+				// _size++;
 			}
 			void	pop_back() {
 				_alloc.destroy(_pointer + _size);
@@ -204,10 +204,18 @@ class vector {
 				return(first);
 			}
 			void swap (vector& x) {
-				vector<value_type, allocator_type> tmp(*this);
-
-				*this = x;
-				x = tmp;
+				size_type	tmp_size = _size;
+				size_type	tmp_capacity = _capacity;
+				allocator_type	tmp_alloc = _alloc;
+				pointer			tmp_pointer = _pointer;
+				_size = x._size;
+				_capacity = x._capacity;
+				_alloc = x._alloc;
+				_pointer = x._pointer;
+				x._size = tmp_size;
+				x._capacity = tmp_capacity;
+				x._alloc = tmp_alloc;
+				x._pointer = tmp_pointer;
 			}
 			void clear() {
 				while (_size)
@@ -236,17 +244,18 @@ template <class T, class Alloc>
   }
 template <class T, class Alloc>
 	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		return (!(lhs==rhs));
+		return (!(lhs == rhs));
   }
 template <class T, class Alloc>
 	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		typename vector<T,Alloc>::size_type i = 0;
-		while (i < lhs.size() && i < rhs.size() && lhs[i] == rhs[i])
-			i++;
-		if ((i == lhs.size() && lhs.size() != rhs.size()) || (lhs[i] < rhs[i] && i != lhs.size()))
-			return (true);
-		else
-			return (false);
+		// typename vector<T,Alloc>::size_type i = 0;
+		// while (i < lhs.size() && i < rhs.size() && lhs[i] == rhs[i])
+		// 	i++;
+		// if ((i == lhs.size() && lhs.size() != rhs.size()) || (lhs[i] < rhs[i] && i != lhs.size()))
+		// 	return (true);
+		// else
+		// 	return (false);
+		return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
   }
 template <class T, class Alloc>
   	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {

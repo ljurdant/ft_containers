@@ -90,13 +90,17 @@ template<class _Iter>
 			iterator_type	base() const { return (__i); }
 			bool			operator==(__wrap_reverse_iter const &rhs) const { return (__i == rhs.__i);}
 			bool			operator!=(__wrap_reverse_iter const &rhs) const { return (__i != rhs.__i);}
-			reference		operator*() const { return (*__i); }
-			iterator_type	operator->() const { return (__i); }
+			reference		operator*() const { 
+				iterator_type	base(__i);
+				base--;
+				return (*base); 
+			}
+			iterator_type	operator->() const { return (&(operator*())); }
 			bool			operator<(__wrap_reverse_iter const &rhs) { return (__i > rhs.__i); }
 			bool			operator>(__wrap_reverse_iter const &rhs) { return (__i < rhs.__i); } 
 			bool			operator<=(__wrap_reverse_iter const &rhs) { return (__i >= rhs.__i); }
 			bool			operator>=(__wrap_reverse_iter const &rhs) { return (__i <= rhs.__i); }
-			reference		operator[](difference_type n) const { return (*(__i - n)); }			
+			reference		operator[](difference_type n) const { return (*(__i - n - 1)); }			
 
 			__wrap_reverse_iter(iterator_type const &p): __i(p){}
 

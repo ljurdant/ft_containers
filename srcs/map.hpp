@@ -53,9 +53,9 @@ namespace ft {
 				size_type			_size;
 				// pointer				_pointer;
 				size_type const		_max_size;
-			public:
 				tree_type	_tree;
 
+			public:
 			//Constructors
 				explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
 					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size())
@@ -63,7 +63,7 @@ namespace ft {
 				}
 				template <class InputIterator>
   					map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
-					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()){
+					_alloc(alloc), _key_compare(comp), _value_compare(_key_compare), _size(0), _max_size(max_size()), _tree(_key_compare) {
 						insert(first, last);
 				}
 				map (const map& x): _value_compare(x._value_compare), _size(0), _max_size(x.max_size()), _tree(_key_compare) {

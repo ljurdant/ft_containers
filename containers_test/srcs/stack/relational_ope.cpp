@@ -27,7 +27,7 @@ int		main(void)
 	ctnr.push_back(183792);
 
 	t_stack_	stck(ctnr);
-	t_stack_	stck2(ctnr);
+	t_stack_	stck2(ctnr);	
 
 	cmp(stck, stck);  // 0
 	cmp(stck, stck2); // 1
