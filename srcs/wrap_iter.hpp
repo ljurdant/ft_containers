@@ -203,6 +203,7 @@ template<class _Iter>
 		__wrap_reverse_biiter	&operator--() { ++__i; return (*this);}			
 
 		__wrap_reverse_biiter(iterator_type const &p): __i(p){}
+
 	};
 }
 #endif

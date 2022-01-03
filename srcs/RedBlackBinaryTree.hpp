@@ -28,6 +28,13 @@ namespace ft
         leaf *left;
         leaf *right;
         bool color;
+        operator    leaf<const value_type>() {
+            leaf<const value_type>  const_leaf(const_cast<const value_type>(_value));
+            const_leaf.parent = parent;
+            const_leaf.left = left;
+            const_leaf.right = right;
+            return (const_leaf);
+        }
     };
 
     template <class T, class Compare, class alloc = std::allocator<leaf<T> > >
@@ -36,10 +43,11 @@ namespace ft
     public:
         typedef leaf<T> node_type;
         typedef alloc leaf_allocator_type;
-        typedef typename leaf_allocator_type::reference leaf_reference;
-        typedef typename leaf_allocator_type::const_reference leaf_const_reference;
-        typedef typename leaf_allocator_type::pointer leaf_pointer;
-        typedef typename leaf_allocator_type::const_pointer leaf_const_pointer;
+        typedef typename leaf_allocator_type::reference         leaf_reference;
+        typedef typename leaf_allocator_type::const_reference   leaf_const_reference;
+        typedef typename leaf_allocator_type::pointer           leaf_pointer;
+        typedef typename leaf_allocator_type::const_pointer     leaf_const_pointer;
+        typedef leaf<const T> *                                 leaf_pointer_const;
         typedef Compare key_compare;
         class value_compare: public std::binary_function<T,T,bool> {
             friend class Tree;
@@ -317,6 +325,112 @@ namespace ft
 
 
 
+
+        class const_iterator
+        {
+        public:
+            typedef T const value_type;
+            typedef size_t difference_type;
+            typedef value_type &reference;
+            typedef value_type *pointer;
+            typedef ft::bidirectional_iterator_tag  iterator_category;
+
+        protected:
+            leaf_pointer_const __i;
+            leaf_pointer_const _prev;
+
+        public:
+            const_iterator() {}
+            const_iterator(const_iterator const &copy) { *this = copy; }
+            const_iterator &operator=(const_iterator const &rhs)
+            {
+                __i = rhs.__i;
+                _prev = rhs._prev;
+                return (*this);
+            }
+
+            bool operator==(const_iterator const &rhs) const { return (__i == rhs.__i); }
+            bool operator!=(const_iterator const &rhs) const { return (__i != rhs.__i); }
+            reference operator*() const { return (__i->_value); }
+            pointer operator->() const { return (&(__i->_value)); }
+            const_iterator operator++(int)
+            {
+                if (__i && __i->right)
+                {
+                    _prev = __i;
+                    __i = __i->right;
+                    while (__i->left)
+                        __i = __i->left;
+                }
+                else if (__i)
+                {
+                    _prev = __i;
+                    while (__i->parent && __i == __i->parent->right)
+                        __i = __i->parent;
+                    __i = __i->parent;
+                }
+                return (*this);
+            }
+            const_iterator operator++()
+            {
+                if (__i && __i->right)
+                {
+                    _prev = __i;
+                    __i = __i->right;
+                    while (__i->left)
+                        __i = __i->left;
+                }
+                else if (__i)
+                {
+                    _prev = __i;
+                    while (__i->parent && __i == __i->parent->right)
+                        __i = __i->parent;
+                    __i = __i->parent;
+                    if (_prev == __i)
+                        __i = NULL;
+                }
+                return (*this);
+            }
+            const_iterator operator--(int)
+            {
+                if (__i && __i->left)
+                {
+                    __i = __i->left;
+                    while (__i->right)
+                        __i = __i->right;
+                }
+                else if (__i)
+                {
+                    while (__i->parent && __i == __i->parent->left)
+                        __i = __i->parent;
+                    __i = __i->parent;
+                }
+                else
+                    __i = _prev;
+                return (*this);
+            }
+            const_iterator operator--()
+            {
+                if (__i && __i->left)
+                {
+                    __i = __i->left;
+                    while (__i->right)
+                        __i = __i->right;
+                }
+                else if (__i)
+                {
+                    while (__i->parent && __i == __i->parent->left)
+                        __i = __i->parent;
+                    __i = __i->parent;
+                }
+                else
+                    __i = _prev;
+                return (*this);
+            }
+
+            const_iterator(leaf_pointer const &p, leaf_pointer const &prev  = NULL) : __i(p), _prev(prev) {}
+        };
+
         class iterator
         {
         public:
@@ -333,6 +447,7 @@ namespace ft
         public:
             iterator() {}
             iterator(iterator const &copy) { *this = copy; }
+            // iterator(leaf_pointer i, leaf_pointer prev): __i(i), _prev(prev) {}
             iterator &operator=(iterator const &rhs)
             {
                 __i = rhs.__i;
@@ -420,8 +535,12 @@ namespace ft
             }
 
             iterator(leaf_pointer const &p, leaf_pointer const &prev  = NULL) : __i(p), _prev(prev) {}
+            operator const_iterator() {
+                const_iterator  cit(__i, _prev);
+                return (cit);
+            }
         };
-
+    
         leaf_pointer    swapnodes(leaf_pointer a, leaf_pointer b) {
             leaf<T> acopy(*a, b->_value);
             leaf<T> bcopy(*b, a->_value);

@@ -41,8 +41,8 @@ namespace ft {
 						}
 				};
 				typedef	Tree<value_type, key_compare>						tree_type;
-				typedef __wrap_biiter< typename tree_type::iterator >		iterator;
-				typedef	__wrap_biiter<const typename tree_type::iterator>	const_iterator;
+				typedef __wrap_biiter<typename tree_type::iterator>			iterator;
+				typedef	__wrap_biiter<typename tree_type::const_iterator>	const_iterator;
 				typedef	__wrap_reverse_biiter<iterator>						reverse_iterator;
 				typedef	ft::iterator_traits<iterator>						iterator_traits;
 				typedef	typename iterator_traits::difference_type			difference_type;
