@@ -183,6 +183,26 @@ void	reverse_iterator_integral() {
 
 	typename LIB::vector<T>::reverse_iterator	it1 = vector1.rbegin();
 	typename LIB::vector<T>::reverse_iterator	it2 = vector1.rbegin();
+	
+	it1--;
+	LIB::vector<T> vct(5);
+	typename LIB::vector<T>::iterator it_ = vct.begin();
+	typename LIB::vector<T>::reverse_iterator it(it_);
+	for (int i = 0; i < 5; ++i)
+		vct[i] = (i + 1) * 5;
+	std::cout << (it_ == it.base()) << std::endl;
+	std::cout << (it_ == (it + 3).base()) << std::endl;
+	std::cout << *(it.base() + 1) << std::endl;
+	// std::cout << *(it - 3) << std::endl;
+	std::cout << *(it - 3).base() << std::endl;
+	// it -= 3;
+	// std::cout << *it.base() << std::endl;
+	// std::cout << *(it) << std::endl;
+	// std::cout << *(it).base() << std::endl;
+	// std::cout << *(it - 0) << std::endl;
+	// std::cout << *(it - 0).base() << std::endl;
+	// std::cout << *(it - 1).base() << std::endl;
+
 	std::cout << "<" << typeid(T).name() << "> " << "integral reverse_iterator == reverse_iterator (equal) -> " << (it1 == it2) << std::endl;
 	std::cout << "<" << typeid(T).name() << "> " << "integral reverse_iterator != reverse_iterator (equal) -> " << (it1 != it2) << std::endl;
 	std::cout << "<" << typeid(T).name() << "> " << "integral reverse_iterator < reverse_iterator (equal) -> " << (it1 < it2) << std::endl;
@@ -306,32 +326,32 @@ void	element_access_tests() {
 	std::cout << "vector2[400] = " << vector2.at(400) << std::endl;
 	std::cout << "vector2[401] = " << vector2.at(401) << std::endl;
 	vector2.resize(300);
-	try
-	{
-		std::cout << "vector2[401] = " << vector2.at(401) << std::endl;
-	}
-	catch(const std::exception& e)
-	{
-		std::cerr << "bad length error" << '\n';
-	}
+	// try
+	// {
+	// 	std::cout << "vector2[401] = " << vector2.at(401) << std::endl;
+	// }
+	// catch(const std::exception& e)
+	// {
+	// 	std::cerr << "bad length error" << '\n';
+	// }
 	vector2.reserve(2000);
-	try
-	{
-		std::cout << "vector2[2200] = " << vector2.at(2200) << std::endl;
-	}
-	catch (std::exception &e)
-	{
-		std::cout << "bad length error" << std::endl;
-	}
+	// try
+	// {
+	// 	std::cout << "vector2[2200] = " << vector2.at(2200) << std::endl;
+	// }
+	// catch (std::exception &e)
+	// {
+	// 	std::cout << "bad length error" << std::endl;
+	// }
 	vector2.reserve(4000);
-	try
-	{
-		std::cout << "vector2[3300] = " << vector2.at(3300)<< std::endl;
-	}
-	catch (std::exception &e)
-	{
-		std::cout << "bad length error" << std::endl;
-	}
+	// try
+	// {
+	// 	std::cout << "vector2[3300] = " << vector2.at(3300)<< std::endl;
+	// }
+	// catch (std::exception &e)
+	// {
+	// 	std::cout << "bad length error" << std::endl;
+	// }
 
 	typename LIB::vector<T>::const_reference b = vector1.at(299);
 	std::cout << "const_reference vector.at(401) = " << b << std::endl;
@@ -347,9 +367,9 @@ void	vector_tests()
 	iterator_integral<long long int>();
 	iterator_class<test>();
 	reverse_iterator_integral<int>();
-	reverse_iterator_integral<char>();
-	reverse_iterator_integral<long long int>();
-	reverse_iterator_class<test>();
+	// reverse_iterator_integral<char>();
+	// reverse_iterator_integral<long long int>();
+	// reverse_iterator_class<test>();
 	capacity_tests<int>();
 	capacity_tests<char>();
 	capacity_tests<long long>();

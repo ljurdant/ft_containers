@@ -1,0 +1,33 @@
+In file included from srcs/vector/bidirect_it.cpp:1:
+In file included from srcs/vector/common.hpp:1:
+In file included from ./../srcs/vector.hpp:5:
+In file included from /usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/memory:63:
+In file included from /usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_algobase.h:67:
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:311:41: error: invalid operands to binary expression ('const std::_List_iterator<int>' and 'std::reverse_iterator<std::_List_iterator<int> >::difference_type' (aka 'long'))
+      { return reverse_iterator(current + __n); }
+                                ~~~~~~~ ^ ~~~
+./../srcs/vector.hpp:191:36: note: in instantiation of member function 'std::reverse_iterator<std::_List_iterator<int> >::operator-' requested here
+                                                for (InputIterator it = last - 1 ; it != first -1 ; it--)
+                                                                             ^
+srcs/vector/bidirect_it.cpp:22:6: note: in instantiation of function template specialization 'ft::vector<int, std::allocator<int> >::insert<std::reverse_iterator<std::_List_iterator<int> > >' requested here
+        vct.insert(vct.end(), lst.rbegin(), lst.rend());
+            ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:533:5: note: candidate template ignored: could not match 'reverse_iterator<type-parameter-0-0>' against 'long'
+    operator+(typename reverse_iterator<_Iterator>::difference_type __n,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6032:5: note: candidate template ignored: could not match 'basic_string' against '_List_iterator'
+    operator+(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6069:5: note: candidate template ignored: could not match 'basic_string' against '_List_iterator'
+    operator+(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6085:5: note: candidate template ignored: could not match 'basic_string' against '_List_iterator'
+    operator+(const basic_string<_CharT, _Traits, _Alloc>& __lhs, _CharT __rhs)
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.tcc:1152:5: note: candidate template ignored: could not match 'const _CharT *' against 'std::_List_iterator<int>'
+    operator+(const _CharT* __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.tcc:1172:5: note: candidate template ignored: could not match 'basic_string<type-parameter-0-0, type-parameter-0-1, type-parameter-0-2>' against 'long'
+    operator+(_CharT __lhs, const basic_string<_CharT, _Traits, _Alloc>& __rhs)
+    ^
+1 error generated.

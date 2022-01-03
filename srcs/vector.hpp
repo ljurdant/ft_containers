@@ -72,8 +72,7 @@ class vector {
 			//Operator=
 			vector& operator= (const vector& x){
 				this->~vector();
-				this->assign(x.begin(), x.end());
-				
+				assign(x.begin(), x.end());
 				return (*this);
 			}
 

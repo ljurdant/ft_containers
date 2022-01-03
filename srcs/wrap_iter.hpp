@@ -77,22 +77,21 @@ template<class _Iter>
 			typedef typename ft::iterator_traits<iterator_type>::pointer			pointer;
 			typedef typename ft::iterator_traits<iterator_type>::reference			reference;
 			typedef const value_type *												const_iterator_type;
-			// typedef iterator_type<const_pointer>							const_iterator_type;			
 
 		protected:
 			iterator_type	__i;		
 		public:
 			__wrap_reverse_iter() {}
 			__wrap_reverse_iter(__wrap_reverse_iter const &copy) {*this = copy;}
-			__wrap_reverse_iter					&operator=(__wrap_reverse_iter<iterator_type>  const &rhs) {
+			__wrap_reverse_iter	&operator=(__wrap_reverse_iter<iterator_type>  const &rhs) {
 				__i = rhs.__i;
 				return (*this);
 			}
-
+			iterator_type	base() const { return (__i); }
 			bool			operator==(__wrap_reverse_iter const &rhs) const { return (__i == rhs.__i);}
 			bool			operator!=(__wrap_reverse_iter const &rhs) const { return (__i != rhs.__i);}
-			reference		operator*() const { return (*__i);}
-			iterator_type			operator->() const { return (__i);}
+			reference		operator*() const { return (*__i); }
+			iterator_type	operator->() const { return (__i->); }
 			bool			operator<(__wrap_reverse_iter const &rhs) { return (__i > rhs.__i); }
 			bool			operator>(__wrap_reverse_iter const &rhs) { return (__i < rhs.__i); } 
 			bool			operator<=(__wrap_reverse_iter const &rhs) { return (__i >= rhs.__i); }
@@ -107,9 +106,9 @@ template<class _Iter>
 			__wrap_reverse_iter		operator--() { return (++__i);}			
 			__wrap_reverse_iter		operator+(difference_type n) const { return (__i - n); }
 			__wrap_reverse_iter		operator-(difference_type n) const { return (__i + n); }
-			difference_type		operator-(__wrap_reverse_iter const &rhs) const { return (rhs.__i - __i); }
-			__wrap_reverse_iter		operator+=(difference_type n) { return (__i-=n); }
-			__wrap_reverse_iter		operator-=(difference_type n) { return (__i+=n); }
+			difference_type			operator-(__wrap_reverse_iter const &rhs) const { return (rhs.__i - __i); }
+			__wrap_reverse_iter		operator+=(difference_type n) { return (__i -= n); }
+			__wrap_reverse_iter		operator-=(difference_type n) { return (__i += n); }
 
 			operator __wrap_reverse_iter<__wrap_iter<const_iterator_type> >() {
 				__wrap_iter<const_iterator_type>	it(__i);
