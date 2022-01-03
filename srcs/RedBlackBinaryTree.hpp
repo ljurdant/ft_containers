@@ -28,11 +28,12 @@ namespace ft
         leaf *left;
         leaf *right;
         bool color;
-        operator    leaf<const value_type>() {
-            leaf<const value_type>  const_leaf(const_cast<const value_type>(_value));
+        operator     leaf<const value_type>() {
+            leaf<const value_type>  const_leaf(_value);
             const_leaf.parent = parent;
             const_leaf.left = left;
             const_leaf.right = right;
+            const_leaf.color = color;
             return (const_leaf);
         }
     };
@@ -45,8 +46,9 @@ namespace ft
         typedef alloc leaf_allocator_type;
         typedef typename leaf_allocator_type::reference         leaf_reference;
         typedef typename leaf_allocator_type::const_reference   leaf_const_reference;
-        typedef typename leaf_allocator_type::pointer           leaf_pointer;
-        typedef typename leaf_allocator_type::const_pointer     leaf_const_pointer;
+        typedef leaf<T> *                                       leaf_pointer;
+        // typedef typename leaf_allocator_type::pointer           leaf_pointer;
+        // typedef typename leaf_allocator_type::const_pointer     leaf_const_pointer;
         typedef leaf<const T> *                                 leaf_pointer_const;
         typedef Compare key_compare;
         class value_compare: public std::binary_function<T,T,bool> {
@@ -428,7 +430,7 @@ namespace ft
                 return (*this);
             }
 
-            const_iterator(leaf_pointer const &p, leaf_pointer const &prev  = NULL) : __i(p), _prev(prev) {}
+            const_iterator(leaf_pointer_const const &p, leaf_pointer_const const &prev  = NULL) : __i(p), _prev(prev) {}
         };
 
         class iterator
@@ -536,7 +538,9 @@ namespace ft
 
             iterator(leaf_pointer const &p, leaf_pointer const &prev  = NULL) : __i(p), _prev(prev) {}
             operator const_iterator() {
-                const_iterator  cit(__i, _prev);
+                leaf<const value_type>  i(*__i);
+                leaf<const value_type>  prev(*_prev);
+                const_iterator  cit(&i, &prev);
                 return (cit);
             }
         };
