@@ -42,8 +42,9 @@ template<class _Iter>
 			__wrap_iter(iterator_type const &p): __i(p){}
 
 			operator const __wrap_iter<const_iterator_type>() {
-				__wrap_iter<const_iterator_type>	ret(const_cast<const iterator_type>(__i));
-				return (ret);
+				// __wrap_iter<const_iterator_type>	ret(const_cast<const iterator_type>(__i));
+				// return (ret);
+				return (__wrap_iter<const_iterator_type>(const_cast<const iterator_type>(__i)));
 			}
 	};
 template<class _Iter>
@@ -115,9 +116,7 @@ template<class _Iter>
 			__wrap_reverse_iter		operator-=(difference_type n) { return (__i += n); }
 
 			operator __wrap_reverse_iter<__wrap_iter<const_iterator_type> >() {
-				__wrap_iter<const_iterator_type>	it(__i);
-				__wrap_reverse_iter<__wrap_iter<const_iterator_type> >	rit(it);
-				return (rit);
+				return (__wrap_reverse_iter<__wrap_iter<const_iterator_type> >(__wrap_iter<const_iterator_type>(__i)));
 			}			
 	};
 template<class _Iter>
@@ -141,7 +140,7 @@ template<class T, class U>
 bool			operator>=(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (!(lhs < rhs)); }
 
 
-template < class _Iter >
+template < class _Iter, class Compare >
 class	 __wrap_biiter   {
 	public:
 			typedef _Iter															iterator_type;
@@ -150,7 +149,7 @@ class	 __wrap_biiter   {
 			typedef typename ft::iterator_traits<iterator_type>::difference_type	difference_type;
 			typedef typename ft::iterator_traits<iterator_type>::pointer			pointer;
 			typedef typename ft::iterator_traits<iterator_type>::reference			reference;
-			typedef	const iterator_type												const_iterator_type;
+			// typedef	const iterator_type												const_iterator_type;
 
 		protected:
 			iterator_type	__i;
@@ -158,20 +157,23 @@ class	 __wrap_biiter   {
 		public:
 			__wrap_biiter() {}
 			__wrap_biiter(__wrap_biiter const &copy): __i(copy.__i) {}
-			__wrap_biiter					&operator=(__wrap_biiter<iterator_type>  const &rhs) {
+			__wrap_biiter					&operator=(__wrap_biiter<iterator_type, Compare>  const &rhs) {
 				__i = rhs.__i;
 				return (*this);
 			}
 			bool			operator==(__wrap_biiter const &rhs) const { return (__i == rhs.__i);}
 			bool			operator!=(__wrap_biiter const &rhs) const { return (__i != rhs.__i);}
 			reference		operator*() const { return (*__i);}
-			pointer			operator->() const { return (__i);}
+			iterator_type	operator->() const { return (__i);}
 			__wrap_biiter	operator++(int) { return (__i++); }
 			__wrap_biiter	&operator++() { ++__i; return (*this); }
 			__wrap_biiter	operator--(int) { return (__i--); }
 			__wrap_biiter	&operator--() { --__i; return(*this);}			
 
 			__wrap_biiter(iterator_type const &p): __i(p){}
+			operator const __wrap_biiter< typename Tree<const value_type, Compare>::iterator, Compare >() {
+				return (__wrap_biiter< typename Tree<const value_type, Compare>::iterator, Compare >(__i));
+			}	
 		};
 
 template<class _Iter>						

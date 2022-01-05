@@ -248,13 +248,6 @@ template <class T, class Alloc>
   }
 template <class T, class Alloc>
 	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) {
-		// typename vector<T,Alloc>::size_type i = 0;
-		// while (i < lhs.size() && i < rhs.size() && lhs[i] == rhs[i])
-		// 	i++;
-		// if ((i == lhs.size() && lhs.size() != rhs.size()) || (lhs[i] < rhs[i] && i != lhs.size()))
-		// 	return (true);
-		// else
-		// 	return (false);
 		return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
   }
 template <class T, class Alloc>

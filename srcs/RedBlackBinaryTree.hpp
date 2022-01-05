@@ -15,27 +15,30 @@ namespace ft
  template <class value_type>
     struct leaf
     {
-        leaf(value_type &value) : _value(value) {}
-        leaf() : parent(NULL), left(NULL), right(NULL), color(BLACK), _value(value_type()) {}
+        leaf(value_type &value) : _value(value), parent(NULL), left(NULL), right(NULL), color(BLACK) {}
+        leaf() : _value(value_type()), parent(NULL), left(NULL), right(NULL), color(BLACK) {}
         leaf(leaf const & copy) : _value(copy._value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
-        leaf(leaf const & copy, value_type value) : _value(value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
+        leaf(leaf const & copy, value_type &value) : _value(value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
         leaf & operator=(leaf &rhs) {
             new (this) leaf(rhs);
             return (*this);
         }
+        bool operator==(leaf &rhs) { return (_value == rhs._value); }
+
+        operator     leaf<const value_type>() {
+            leaf<const value_type>  const_leaf(_value);
+            const_leaf.parent = reinterpret_cast<leaf<const value_type> *>(parent);
+            const_leaf.left = reinterpret_cast<leaf<const value_type> *>(left);
+            const_leaf.right = reinterpret_cast<leaf<const value_type> *>(right);
+            const_leaf.color = color;
+            return (const_leaf);
+        }
+
         value_type _value;
         leaf *parent;
         leaf *left;
         leaf *right;
         bool color;
-        operator     leaf<const value_type>() {
-            leaf<const value_type>  const_leaf(_value);
-            const_leaf.parent = parent;
-            const_leaf.left = left;
-            const_leaf.right = right;
-            const_leaf.color = color;
-            return (const_leaf);
-        }
     };
 
     template <class T, class Compare, class alloc = std::allocator<leaf<T> > >
@@ -47,8 +50,6 @@ namespace ft
         typedef typename leaf_allocator_type::reference         leaf_reference;
         typedef typename leaf_allocator_type::const_reference   leaf_const_reference;
         typedef leaf<T> *                                       leaf_pointer;
-        // typedef typename leaf_allocator_type::pointer           leaf_pointer;
-        // typedef typename leaf_allocator_type::const_pointer     leaf_const_pointer;
         typedef leaf<const T> *                                 leaf_pointer_const;
         typedef Compare key_compare;
         class value_compare: public std::binary_function<T,T,bool> {
@@ -92,6 +93,16 @@ namespace ft
             for (iterator it = rhs.getBegin() ; it != end; it++)
                 add_leaf(*it);
             return (*this);
+        }
+
+        void    swap(Tree &x) {
+            leaf_pointer    tmp_root = _root;
+            leaf_allocator_type tmp_leaf_alloc = _leaf_alloc;
+
+            _root = x._root;
+            _leaf_alloc = x._leaf_alloc;
+            x._root = tmp_root;
+            x._leaf_alloc = tmp_leaf_alloc;
         }
 
         void    clear() {
@@ -153,9 +164,9 @@ namespace ft
             else
             {
                 new_leaf = newleaf(value, prev, RED);
-                if (value.first < prev->_value.first)
+                if (_value_compare(value, prev->_value))
                     prev->left = new_leaf;
-                else if (value.first > prev->_value.first)
+                else if (value.first != prev->_value.first && !_value_compare(value, prev->_value))
                     prev->right = new_leaf;
                 return (checkLeaf(new_leaf));
             }
@@ -190,7 +201,7 @@ namespace ft
             else if (x == x->parent->right)
                 x->parent->right = y;
             else
-                x->parent->right = y;
+                x->parent->left = y;
             y->right = x;
             x->parent = y;
         }
@@ -325,121 +336,13 @@ namespace ft
             return (node);
         }
 
-
-
-
-        class const_iterator
-        {
-        public:
-            typedef T const value_type;
-            typedef size_t difference_type;
-            typedef value_type &reference;
-            typedef value_type *pointer;
-            typedef ft::bidirectional_iterator_tag  iterator_category;
-
-        protected:
-            leaf_pointer_const __i;
-            leaf_pointer_const _prev;
-
-        public:
-            const_iterator() {}
-            const_iterator(const_iterator const &copy) { *this = copy; }
-            const_iterator &operator=(const_iterator const &rhs)
-            {
-                __i = rhs.__i;
-                _prev = rhs._prev;
-                return (*this);
-            }
-
-            bool operator==(const_iterator const &rhs) const { return (__i == rhs.__i); }
-            bool operator!=(const_iterator const &rhs) const { return (__i != rhs.__i); }
-            reference operator*() const { return (__i->_value); }
-            pointer operator->() const { return (&(__i->_value)); }
-            const_iterator operator++(int)
-            {
-                if (__i && __i->right)
-                {
-                    _prev = __i;
-                    __i = __i->right;
-                    while (__i->left)
-                        __i = __i->left;
-                }
-                else if (__i)
-                {
-                    _prev = __i;
-                    while (__i->parent && __i == __i->parent->right)
-                        __i = __i->parent;
-                    __i = __i->parent;
-                }
-                return (*this);
-            }
-            const_iterator operator++()
-            {
-                if (__i && __i->right)
-                {
-                    _prev = __i;
-                    __i = __i->right;
-                    while (__i->left)
-                        __i = __i->left;
-                }
-                else if (__i)
-                {
-                    _prev = __i;
-                    while (__i->parent && __i == __i->parent->right)
-                        __i = __i->parent;
-                    __i = __i->parent;
-                    if (_prev == __i)
-                        __i = NULL;
-                }
-                return (*this);
-            }
-            const_iterator operator--(int)
-            {
-                if (__i && __i->left)
-                {
-                    __i = __i->left;
-                    while (__i->right)
-                        __i = __i->right;
-                }
-                else if (__i)
-                {
-                    while (__i->parent && __i == __i->parent->left)
-                        __i = __i->parent;
-                    __i = __i->parent;
-                }
-                else
-                    __i = _prev;
-                return (*this);
-            }
-            const_iterator operator--()
-            {
-                if (__i && __i->left)
-                {
-                    __i = __i->left;
-                    while (__i->right)
-                        __i = __i->right;
-                }
-                else if (__i)
-                {
-                    while (__i->parent && __i == __i->parent->left)
-                        __i = __i->parent;
-                    __i = __i->parent;
-                }
-                else
-                    __i = _prev;
-                return (*this);
-            }
-
-            const_iterator(leaf_pointer_const const &p, leaf_pointer_const const &prev  = NULL) : __i(p), _prev(prev) {}
-        };
-
         class iterator
         {
         public:
-            typedef T value_type;
-            typedef size_t difference_type;
-            typedef value_type &reference;
-            typedef value_type *pointer;
+            typedef T               value_type;
+            typedef size_t          difference_type;
+            typedef value_type &    reference;
+            typedef value_type *    pointer;
             typedef ft::bidirectional_iterator_tag  iterator_category;
 
         protected:
@@ -447,7 +350,7 @@ namespace ft
             leaf_pointer _prev;
 
         public:
-            iterator() {}
+            iterator(): __i(NULL), _prev(NULL){}
             iterator(iterator const &copy) { *this = copy; }
             // iterator(leaf_pointer i, leaf_pointer prev): __i(i), _prev(prev) {}
             iterator &operator=(iterator const &rhs)
@@ -458,11 +361,12 @@ namespace ft
             }
 
             bool operator==(iterator const &rhs) const { return (__i == rhs.__i); }
-            bool operator!=(iterator const &rhs) const { return (__i != rhs.__i); }
+            bool operator!=(iterator const &rhs) const { return (!(__i == rhs.__i)); }
             reference operator*() const { return (__i->_value); }
             pointer operator->() const { return (&(__i->_value)); }
             iterator operator++(int)
             {
+                leaf_pointer    tmp = __i;
                 if (__i && __i->right)
                 {
                     _prev = __i;
@@ -477,9 +381,9 @@ namespace ft
                         __i = __i->parent;
                     __i = __i->parent;
                 }
-                return (*this);
+                return (tmp);
             }
-            iterator operator++()
+            iterator &operator++()
             {
                 if (__i && __i->right)
                 {
@@ -501,6 +405,7 @@ namespace ft
             }
             iterator operator--(int)
             {
+                leaf_pointer    tmp = __i;
                 if (__i && __i->left)
                 {
                     __i = __i->left;
@@ -515,9 +420,9 @@ namespace ft
                 }
                 else
                     __i = _prev;
-                return (*this);
+                return (tmp);
             }
-            iterator operator--()
+            iterator &operator--()
             {
                 if (__i && __i->left)
                 {
@@ -537,11 +442,8 @@ namespace ft
             }
 
             iterator(leaf_pointer const &p, leaf_pointer const &prev  = NULL) : __i(p), _prev(prev) {}
-            operator const_iterator() {
-                leaf<const value_type>  i(*__i);
-                leaf<const value_type>  prev(*_prev);
-                const_iterator  cit(&i, &prev);
-                return (cit);
+            operator typename Tree<const value_type, Compare>::iterator() {
+                return (typename Tree<const value_type, Compare>::iterator(reinterpret_cast<leaf<const T> *>(__i), reinterpret_cast<leaf<const T> *>(_prev)));
             }
         };
     
@@ -642,7 +544,7 @@ namespace ft
                         sibling->left->color = BLACK;
                         leaf->parent->color = BLACK;
                         leftrotate(leaf->parent);
-                        if (leaf->parent->parent)
+                        if (leaf->parent && leaf->parent->parent)
                             leaf->parent->parent->color = RED;
                     }
                 }

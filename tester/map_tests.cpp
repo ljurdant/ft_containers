@@ -63,7 +63,7 @@ void	map_tests(void)
 	typedef	std::string	mapped_type;
 	LIB::map<key_type, mapped_type>	map;
 
-	// std::cout << "map.empty() = " << map.empty() << std::endl;
+	std::cout << "map.empty() = " << map.empty() << std::endl;
 	map['b'] = "banana";
 	map['k'] = "koala";
 	// map._tree.printTree(20, 8);
@@ -77,6 +77,7 @@ void	map_tests(void)
 	map['d'] = "diamond";
 	map['e'] = "erratic";
 	map['p'] = "peppermint";
+	std::cout << "map.empty() = " << map.empty() << std::endl;
 	// map._tree.printTree(30, 9);
 	print_map(map);
 	print_map_reverse(map);
@@ -114,5 +115,39 @@ void	map_tests(void)
 	print_map(map3);
 	std::cout << "count(k) = " << map.count('k') << std::endl;
 	std::cout << "count(v) = " << map.count('v') << std::endl;
+	
+	typedef LIB::map<int, int>::value_type T3;
+	// std::list<T3> lst1;
+	// unsigned int lst1_size = 10;
+	// for (unsigned int i = 0; i < lst1_size; ++i)
+	// 	lst1.push_back(T3(i + 1, (i + 1) * 3));
+	// LIB::map<int, int> mp1(lst1.begin(), lst1.end());
+	// print_map(mp1);
+	// LIB::map<int, int>::const_iterator itc[2];
+	// itc[0] = mp1.lower_bound(-10);
+	// std::cout << "lower_bound = " << (*(itc[0])).first << std::endl;
+	// LIB::map<key_type, mapped_type> map4(map);
+	// LIB::map<int, int> map5(mp1);
+	// std::cout << "copy constructor: ";
+	// print_map(map4);
+	// print_map(map5);
 
+	std::list<T3> lst2;
+	unsigned int lst2_size = 7;
+	for (unsigned int i = 0; i < lst2_size; ++i)
+		lst2.push_back(T3('a' + i, lst2_size - i));
+	LIB::map<char, int> mp2(lst2.begin(), lst2.end()), mp3;
+	LIB::map<char, int>::iterator it5;
+	lst2.clear();
+	std::cout << std::boolalpha << "empty ? : " << mp2.empty() << std::endl ;
+	(void)it5;
+	mp3 = mp2;
+	std::cout << std::boolalpha << "empty ? : " << mp3.empty() << std::endl ;
+	it5 = mp2.begin();
+	for (unsigned long int i = 3; i < mp2.size(); ++i)
+		it5++->second = i * 7;
+	print_map(mp2);
+	mp3.clear();
+	std::cout << std::boolalpha << "empty ? : " << mp3.empty() << std::endl ;
+	print_map(mp3);
 }
