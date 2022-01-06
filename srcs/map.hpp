@@ -107,24 +107,16 @@ namespace ft {
 					return (it);
 				}
 				reverse_iterator	rbegin() {
-					typename tree_type::iterator	tree_it(_tree.getBegin());
-					reverse_iterator				it(tree_it);
-					return (it); 
+					return (end()); 
 				 }
 				const_reverse_iterator	rbegin() const {
-					typename tree_type::iterator	tree_it(_tree.getBegin());
-					const_reverse_iterator				it(tree_it);
-					return (it); 
+					return (end()); 
 				}
 				reverse_iterator	rend() { 
-					typename tree_type::iterator	tree_it(NULL, _tree.getLast());
-					reverse_iterator				it(tree_it);
-					return (it);
+					return (begin());
 				}
 				const_reverse_iterator	rend() const { 
-					typename tree_type::iterator	tree_it(NULL, _tree.getLast());
-					const_reverse_iterator				it(tree_it);
-					return (it);
+					return (begin());
 				}
 			// //Capacity
 				bool empty() const { return (!_size); }

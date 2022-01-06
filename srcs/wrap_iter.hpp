@@ -162,7 +162,7 @@ class	 __wrap_biiter   {
 				return (*this);
 			}
 			bool			operator==(__wrap_biiter const &rhs) const { return (__i == rhs.__i);}
-			bool			operator!=(__wrap_biiter const &rhs) const { return (__i != rhs.__i);}
+			bool			operator!=(__wrap_biiter const &rhs) const { return (!(__i == rhs.__i));}
 			reference		operator*() const { return (*__i);}
 			iterator_type	operator->() const { return (__i);}
 			__wrap_biiter	operator++(int) { return (__i++); }
@@ -196,17 +196,24 @@ template<class _Iter, class Compare>
 			__i = rhs.__i;
 			return (*this);
 		}
+		iterator_type	base() const { return (__i); }
 		bool					operator==(__wrap_reverse_biiter const &rhs) const { return (__i == rhs.__i);}
-		bool					operator!=(__wrap_reverse_biiter const &rhs) const { return (__i != rhs.__i);}
-		reference				operator*() const { return (*__i);}
-		pointer					operator->() const { return (__i);}
+		bool					operator!=(__wrap_reverse_biiter const &rhs) const { return (!(__i == rhs.__i));}
+		reference		operator*() const { 
+			iterator_type	base(__i);
+			--base;
+			return (*base); 
+		}
+		pointer			operator->() const {
+			return (&(operator*()));
+		}
 		__wrap_reverse_biiter	operator++(int) { return (__i--); }
 		__wrap_reverse_biiter	&operator++() { --__i; return (*this); }
 		__wrap_reverse_biiter	operator--(int) { return (__i++); }
 		__wrap_reverse_biiter	&operator--() { ++__i; return (*this);}			
 
 		__wrap_reverse_biiter(iterator_type const &p): __i(p){}
-		operator __wrap_reverse_biiter<const_iterator_type, Compare>() {
+		operator __wrap_reverse_biiter<__wrap_biiter<const_iterator_type, Compare>, Compare>() {
 				return (__wrap_reverse_biiter<__wrap_biiter<const_iterator_type, Compare>, Compare>(__wrap_biiter<const_iterator_type, Compare>(__i)));
 			}
 	};

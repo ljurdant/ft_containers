@@ -362,8 +362,10 @@ namespace ft
 
             bool operator==(iterator const &rhs) const { return (__i == rhs.__i); }
             bool operator!=(iterator const &rhs) const { return (!(__i == rhs.__i)); }
-            reference operator*() const { return (__i->_value); }
-            pointer operator->() const { return (&(__i->_value)); }
+            reference operator*() const { 
+                return (__i->_value);
+            }
+            pointer operator->() const { return (&(operator*())); }
             iterator operator++(int)
             {
                 leaf_pointer    tmp = __i;
@@ -381,7 +383,7 @@ namespace ft
                         __i = __i->parent;
                     __i = __i->parent;
                 }
-                return (tmp);
+                return (iterator(tmp, _prev));
             }
             iterator &operator++()
             {
@@ -420,7 +422,7 @@ namespace ft
                 }
                 else
                     __i = _prev;
-                return (tmp);
+                return (iterator(tmp, _prev));
             }
             iterator &operator--()
             {
@@ -621,7 +623,7 @@ namespace ft
         {
             leaf_pointer iter = _root;
 
-            while (iter && iter->_value != value)
+            while (iter && iter->_value.first != value.first)
             {
                 if (_value_compare(iter->_value, value))
                     iter = iter->right;

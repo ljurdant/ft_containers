@@ -150,4 +150,10 @@ void	map_tests(void)
 	mp3.clear();
 	std::cout << std::boolalpha << "empty ? : " << mp3.empty() << std::endl ;
 	print_map(mp3);
+
+	LIB::map<key_type, mapped_type>::reverse_iterator	itend = map3.rbegin(), itendd = map3.rend();
+	// itendd--;
+	// while (itend != itendd)
+	std::cout << "[rev] " << (itend++)->second  << std::endl;
+	(void)itendd;
 }

@@ -23,5 +23,8 @@ int		main(void)
 	*/
 
 	std::cout << "OK" << std::endl;
+	(void)crit;
+	(void)crit_;
+	(void)crit_2;
 	return (0);
 }
