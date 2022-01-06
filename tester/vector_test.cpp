@@ -210,7 +210,7 @@ void	reverse_iterator_integral() {
 	typename LIB::vector<T>::reverse_iterator	it1 = vector1.rbegin();
 	typename LIB::vector<T>::reverse_iterator	it2 = vector1.rbegin();
 	
-	it1--;
+	it1++;
 	LIB::vector<T> vct(5);
 	typename LIB::vector<T>::iterator it_ = vct.begin();
 	typename LIB::vector<T>::reverse_iterator it(it_);
