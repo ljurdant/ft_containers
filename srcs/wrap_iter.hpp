@@ -176,7 +176,7 @@ class	 __wrap_biiter   {
 			}	
 		};
 
-template<class _Iter>						
+template<class _Iter, class Compare>						
 	class	 __wrap_reverse_biiter {
 	public:
 		typedef _Iter															iterator_type;
@@ -185,13 +185,14 @@ template<class _Iter>
 		typedef typename std::iterator_traits<iterator_type>::difference_type	difference_type;
 		typedef typename std::iterator_traits<iterator_type>::pointer			pointer;
 		typedef typename std::iterator_traits<iterator_type>::reference			reference;
+		typedef typename Tree<const value_type, Compare>::iterator				const_iterator_type;
 	protected:
 		iterator_type	__i;
 
 	public:
 		__wrap_reverse_biiter() {}
 		__wrap_reverse_biiter(__wrap_reverse_biiter const &copy) {*this = copy;}
-		__wrap_reverse_biiter					&operator=(__wrap_reverse_biiter<iterator_type>  const &rhs) {
+		__wrap_reverse_biiter					&operator=(__wrap_reverse_biiter<iterator_type, Compare>  const &rhs) {
 			__i = rhs.__i;
 			return (*this);
 		}
@@ -205,7 +206,9 @@ template<class _Iter>
 		__wrap_reverse_biiter	&operator--() { ++__i; return (*this);}			
 
 		__wrap_reverse_biiter(iterator_type const &p): __i(p){}
-
+		operator __wrap_reverse_biiter<const_iterator_type, Compare>() {
+				return (__wrap_reverse_biiter<__wrap_biiter<const_iterator_type, Compare>, Compare>(__wrap_biiter<const_iterator_type, Compare>(__i)));
+			}
 	};
 }
 #endif

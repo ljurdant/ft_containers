@@ -44,12 +44,12 @@ namespace ft {
 				typedef	typename allocator_type::template rebind<ft::leaf<value_type> >::other	leaf_allocator;
 				typedef	Tree<value_type, key_compare, leaf_allocator>							tree_type;
 			public:
-				typedef __wrap_biiter<typename tree_type::iterator, key_compare>	iterator;
+				typedef __wrap_biiter<typename tree_type::iterator, key_compare>							iterator;
 				typedef	__wrap_biiter<typename Tree<const value_type, key_compare>::iterator, key_compare >	const_iterator;
-				typedef	__wrap_reverse_biiter<iterator>								reverse_iterator;
-				typedef	__wrap_reverse_biiter<const_iterator>						const_reverse_iterator;
-				typedef	ft::iterator_traits<iterator>								iterator_traits;
-				typedef	typename iterator_traits::difference_type					difference_type;
+				typedef	__wrap_reverse_biiter<iterator, key_compare>										reverse_iterator;
+				typedef	__wrap_reverse_biiter<const_iterator, key_compare>									const_reverse_iterator;
+				typedef	ft::iterator_traits<iterator>														iterator_traits;
+				typedef	typename iterator_traits::difference_type											difference_type;
 			protected:
 				allocator_type		_alloc;
 				key_compare			_key_compare;
@@ -263,7 +263,7 @@ namespace ft {
 			if (lhs.size() != rhs.size())
 				return (false);
 			else
-			for (typename ft::map<Key,T,Compare,Alloc>::iterator it = lhs.begin(), it2 = rhs.begin(); it != lhs.end(); it++, it2++)
+			for (typename ft::map<Key,T,Compare,Alloc>::const_iterator it = lhs.begin(), it2 = rhs.begin(); it != lhs.end(); it++, it2++)
 				if (*it != *it2)
 					return (false);
 			return (true);
@@ -276,7 +276,7 @@ namespace ft {
 
 	template< class Key, class T, class Compare, class Alloc >
 		bool operator<( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs ) {
-			return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+			return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 		}
 
 	template< class Key, class T, class Compare, class Alloc >
