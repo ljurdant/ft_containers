@@ -5,6 +5,7 @@
 # include "../srcs/vector.hpp"
 # include "../srcs/stack.hpp"
 # include "../srcs/map.hpp"
+# include "../srcs/set.hpp"
 
 # include <vector>
 # include <map>

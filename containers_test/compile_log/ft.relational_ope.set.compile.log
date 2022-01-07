@@ -1,0 +1,166 @@
+srcs/set/relational_ope.cpp:11:30: error: invalid operands to binary expression ('const ft::set<char>' and 'const ft::set<char>')
+        std::cout << "eq: " << (lhs == rhs) << " | ne: " << (lhs != rhs) << std::endl;
+                                ~~~ ^  ~~~
+srcs/set/relational_ope.cpp:30:2: note: in instantiation of function template specialization 'cst<ft::set<char> >' requested here
+        cst(st1, st1); // 0
+        ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/allocator.h:192:7: note: candidate function not viable: no known conversion from 'const ft::set<char>' to 'const std::allocator<char>' for 1st argument
+      operator==(const allocator&, const allocator&) _GLIBCXX_NOTHROW
+      ^
+./../srcs/set.hpp:238:8: note: candidate template ignored: couldn't infer template argument 'Key'
+                bool operator==( const ft::set<T,Compare,Alloc>& lhs, const ft::set<T,Compare,Alloc>& rhs ) {
+                     ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_pair.h:466:5: note: candidate template ignored: could not match 'pair' against 'set'
+    operator==(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:385:5: note: candidate template ignored: could not match 'reverse_iterator' against 'set'
+    operator==(const reverse_iterator<_Iterator>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:423:5: note: candidate template ignored: could not match 'reverse_iterator' against 'set'
+    operator==(const reverse_iterator<_IteratorL>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:1086:5: note: candidate template ignored: could not match '__normal_iterator' against 'set'
+    operator==(const __normal_iterator<_IteratorL, _Container>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:1094:5: note: candidate template ignored: could not match '__normal_iterator' against 'set'
+    operator==(const __normal_iterator<_Iterator, _Container>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/ext/new_allocator.h:171:2: note: candidate template ignored: could not match 'new_allocator' against 'set'
+        operator==(const new_allocator&, const new_allocator<_Up>&)
+        ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/allocator.h:206:5: note: candidate template ignored: could not match 'allocator' against 'set'
+    operator==(const allocator<_T1>&, const allocator<_T2>&)
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/postypes.h:222:5: note: candidate template ignored: could not match 'fpos' against 'set'
+    operator==(const fpos<_StateT>& __lhs, const fpos<_StateT>& __rhs)
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6163:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator==(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6171:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator==(const basic_string<_CharT>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6185:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator==(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6226:5: note: candidate template ignored: could not match 'const _CharT *' against 'ft::set<char>'
+    operator==(const _CharT* __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/streambuf_iterator.h:227:5: note: candidate template ignored: could not match 'istreambuf_iterator' against 'set'
+    operator==(const istreambuf_iterator<_CharT, _Traits>& __a,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_list.h:1995:5: note: candidate template ignored: could not match 'list' against 'set'
+    operator==(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+    ^
+./../srcs/ft_utilities.hpp:149:7: note: candidate template ignored: could not match 'pair' against 'set'
+        bool operator== (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }
+             ^
+./../srcs/wrap_iter.hpp:54:9: note: candidate template ignored: could not match '__wrap_iter' against 'set'
+        bool                    operator==(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (&(*lhs) == &(*rhs)); }
+                                ^
+./../srcs/wrap_iter.hpp:125:9: note: candidate template ignored: could not match '__wrap_reverse_iter' against 'set'
+        bool                    operator==(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (&(*lhs) == &(*rhs)); }
+                                ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_set.h:985:5: note: candidate template ignored: could not match 'std::set' against 'ft::set'
+    operator==(const set<_Key, _Compare, _Alloc>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_multiset.h:971:5: note: candidate template ignored: could not match 'multiset' against 'set'
+    operator==(const multiset<_Key, _Compare, _Alloc>& __x,
+    ^
+srcs/set/relational_ope.cpp:12:30: error: invalid operands to binary expression ('const ft::set<char>' and 'const ft::set<char>')
+        std::cout << "lt: " << (lhs <  rhs) << " | le: " << (lhs <= rhs) << std::endl;
+                                ~~~ ^  ~~~
+./../srcs/set.hpp:254:8: note: candidate template ignored: couldn't infer template argument 'Key'
+                bool operator<( const ft::set<T,Compare,Alloc>& lhs, const ft::set<T,Compare,Alloc>& rhs ) {
+                     ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_pair.h:489:5: note: candidate template ignored: could not match 'pair' against 'set'
+    operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:391:5: note: candidate template ignored: could not match 'reverse_iterator' against 'set'
+    operator<(const reverse_iterator<_Iterator>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:429:5: note: candidate template ignored: could not match 'reverse_iterator' against 'set'
+    operator<(const reverse_iterator<_IteratorL>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:1118:5: note: candidate template ignored: could not match '__normal_iterator' against 'set'
+    operator<(const __normal_iterator<_IteratorL, _Container>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:1126:5: note: candidate template ignored: could not match '__normal_iterator' against 'set'
+    operator<(const __normal_iterator<_Iterator, _Container>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6277:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6290:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator<(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6302:5: note: candidate template ignored: could not match 'const _CharT *' against 'ft::set<char>'
+    operator<(const _CharT* __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_list.h:2050:5: note: candidate template ignored: could not match 'list' against 'set'
+    operator<(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+    ^
+./../srcs/ft_utilities.hpp:155:7: note: candidate template ignored: could not match 'pair' against 'set'
+        bool operator<  (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs) { return (lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second)); }
+             ^
+./../srcs/wrap_iter.hpp:60:9: note: candidate template ignored: could not match '__wrap_iter' against 'set'
+        bool                    operator<(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (&(*lhs) < &(*rhs)); }
+                                ^
+./../srcs/wrap_iter.hpp:131:9: note: candidate template ignored: could not match '__wrap_reverse_iter' against 'set'
+        bool                    operator<(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (&(*lhs) > &(*rhs)); }
+                                ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_set.h:1023:5: note: candidate template ignored: could not match 'std::set' against 'ft::set'
+    operator<(const set<_Key, _Compare, _Alloc>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_multiset.h:1009:5: note: candidate template ignored: could not match 'multiset' against 'set'
+    operator<(const multiset<_Key, _Compare, _Alloc>& __x,
+    ^
+srcs/set/relational_ope.cpp:13:30: error: invalid operands to binary expression ('const ft::set<char>' and 'const ft::set<char>')
+        std::cout << "gt: " << (lhs >  rhs) << " | ge: " << (lhs >= rhs) << std::endl;
+                                ~~~ ^  ~~~
+./../srcs/set.hpp:263:8: note: candidate template ignored: couldn't infer template argument 'Key'
+                bool operator>  (const set<T, Compare, Alloc>& lhs, const set<T, Compare, Alloc>& rhs) {
+                     ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_pair.h:502:5: note: candidate template ignored: could not match 'pair' against 'set'
+    operator>(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:403:5: note: candidate template ignored: could not match 'reverse_iterator' against 'set'
+    operator>(const reverse_iterator<_Iterator>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:441:5: note: candidate template ignored: could not match 'reverse_iterator' against 'set'
+    operator>(const reverse_iterator<_IteratorL>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:1133:5: note: candidate template ignored: could not match '__normal_iterator' against 'set'
+    operator>(const __normal_iterator<_IteratorL, _Container>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_iterator.h:1141:5: note: candidate template ignored: could not match '__normal_iterator' against 'set'
+    operator>(const __normal_iterator<_Iterator, _Container>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6315:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator>(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6328:5: note: candidate template ignored: could not match 'basic_string' against 'set'
+    operator>(const basic_string<_CharT, _Traits, _Alloc>& __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/basic_string.h:6340:5: note: candidate template ignored: could not match 'const _CharT *' against 'ft::set<char>'
+    operator>(const _CharT* __lhs,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_list.h:2063:5: note: candidate template ignored: could not match 'list' against 'set'
+    operator>(const list<_Tp, _Alloc>& __x, const list<_Tp, _Alloc>& __y)
+    ^
+./../srcs/ft_utilities.hpp:161:7: note: candidate template ignored: could not match 'pair' against 'set'
+        bool operator>  (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs) { return (rhs < lhs); }
+             ^
+./../srcs/wrap_iter.hpp:66:8: note: candidate template ignored: could not match '__wrap_iter' against 'set'
+bool                    operator>(__wrap_iter<T> const &lhs, __wrap_iter<U> const &rhs) { return (!(lhs <= rhs)); }
+                        ^
+./../srcs/wrap_iter.hpp:137:8: note: candidate template ignored: could not match '__wrap_reverse_iter' against 'set'
+bool                    operator>(__wrap_reverse_iter<T> const &lhs, __wrap_reverse_iter<U> const &rhs) { return (!(lhs <= rhs)); }
+                        ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_set.h:1037:5: note: candidate template ignored: could not match 'std::set' against 'ft::set'
+    operator>(const set<_Key, _Compare, _Alloc>& __x,
+    ^
+/usr/bin/../lib/gcc/x86_64-linux-gnu/10/../../../../include/c++/10/bits/stl_multiset.h:1023:5: note: candidate template ignored: could not match 'multiset' against 'set'
+    operator>(const multiset<_Key,_Compare,_Alloc>& __x,
+    ^
+3 errors generated.

@@ -1,48 +1,20 @@
 
-#ifndef REDBLACKBINARYTREE_H
-#define REDBLACKBINARYTREE_H
+#ifndef SETTREE_H
+#define SETTREE_H
 
 #include <memory> //std::allocator
 #include <iostream>
 #include <list>
 #include "ft_utilities.hpp"
+#include "RedBlackBinaryTree.hpp"
 
 #define BLACK 0
 #define RED 1
 
 namespace ft
 {
- template <class value_type>
-    struct leaf
-    {
-        leaf(value_type &value) : _value(value), parent(NULL), left(NULL), right(NULL), color(BLACK) {}
-        leaf() : _value(value_type()), parent(NULL), left(NULL), right(NULL), color(BLACK) {}
-        leaf(leaf const & copy) : _value(copy._value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
-        leaf(leaf const & copy, value_type &value) : _value(value), parent(copy.parent), left(copy.left), right(copy.right), color(copy.color){}
-        leaf & operator=(leaf &rhs) {
-            new (this) leaf(rhs);
-            return (*this);
-        }
-        bool operator==(leaf &rhs) { return (_value == rhs._value); }
-
-        operator     leaf<const value_type>() {
-            leaf<const value_type>  const_leaf(_value);
-            const_leaf.parent = reinterpret_cast<leaf<const value_type> *>(parent);
-            const_leaf.left = reinterpret_cast<leaf<const value_type> *>(left);
-            const_leaf.right = reinterpret_cast<leaf<const value_type> *>(right);
-            const_leaf.color = color;
-            return (const_leaf);
-        }
-
-        value_type _value;
-        leaf *parent;
-        leaf *left;
-        leaf *right;
-        bool color;
-    };
-
     template <class T, class Compare, class alloc = std::allocator<leaf<T> > >
-    class Tree
+    class setTree
     {
     public:
         typedef leaf<T> node_type;
@@ -52,22 +24,7 @@ namespace ft
         typedef leaf<T> *                                       leaf_pointer;
         typedef leaf<const T> *                                 leaf_pointer_const;
         typedef Compare                                         key_compare;
-        class value_compare: public std::binary_function<T,T,bool> {
-            friend class Tree;
-            protected:
-                Compare comp;
-                value_compare	(Compare c): comp(c) {};
-
-            public:
-                typedef	bool result_type;
-                typedef T	first_argument_type;
-                typedef T	second_argument_type;
-                value_compare	(value_compare const & c): comp(c.comp) {};
-                bool	operator() (const T &x, const T &y) const
-                {
-                    return comp(x.first, y.first);
-                }
-        };
+        typedef Compare                                         value_compare;
 
     protected:
         leaf_pointer        _root;
@@ -78,14 +35,14 @@ namespace ft
 
     public:
         
-        Tree(key_compare comp) : _root(NULL), _key_compare(comp), _value_compare(_key_compare){};
-        Tree(Tree const & copy) : _root(NULL), _key_compare(copy._key_compare), _value_compare(copy._value_compare){
+        setTree(key_compare comp) : _root(NULL), _key_compare(comp), _value_compare(_key_compare){};
+        setTree(setTree const & copy) : _root(NULL), _key_compare(copy._key_compare), _value_compare(copy._value_compare){
             *this = copy;
         }
-        ~Tree() {
+        ~setTree() {
             clear();
         }
-        Tree    & operator=(Tree const & rhs) {
+        setTree    & operator=(setTree const & rhs) {
             clear();
             _key_compare = rhs._key_compare;
             _value_compare = rhs._value_compare;
@@ -95,7 +52,7 @@ namespace ft
             return (*this);
         }
 
-        void    swap(Tree &x) {
+        void    swap(setTree &x) {
             leaf_pointer    tmp_root = _root;
             leaf_allocator_type tmp_leaf_alloc = _leaf_alloc;
 
@@ -106,8 +63,15 @@ namespace ft
         }
 
         void    clear() {
-            while (_root != NULL)
+            while (_root)
+            {
+                // std::cout << _root->_value << std::endl;
+                // std::cout << std::boolalpha << "yo root? = " << (_root == NULL) << std::endl;
+                printTree(45, 16);
                 deleteNode(_root->_value);
+                // std::cout << std::boolalpha << "root? = " << (_root == NULL) << std::endl;
+            }
+
         }
 
         leaf_pointer getLast() const{ 
@@ -148,12 +112,12 @@ namespace ft
                 _root = newleaf(value, NULL, BLACK);
                 return (_root);
             }
-            while (iter && iter->_value.first != value.first)
+            while (iter && iter->_value != value)
             {
                 prev = iter;
                 if (_value_compare(value, iter->_value))
                     iter = iter->left;
-                else if (value.first != iter->_value.first && !_value_compare(value, iter->_value))
+                else if (value != iter->_value && !_value_compare(value, iter->_value))
                     iter = iter->right;
             }
             if (iter)
@@ -166,7 +130,7 @@ namespace ft
                 new_leaf = newleaf(value, prev, RED);
                 if (_value_compare(value, prev->_value))
                     prev->left = new_leaf;
-                else if (value.first != prev->_value.first && !_value_compare(value, prev->_value))
+                else if (value != prev->_value && !_value_compare(value, prev->_value))
                     prev->right = new_leaf;
                 return (checkLeaf(new_leaf));
             }
@@ -175,18 +139,22 @@ namespace ft
         void leftrotate(leaf_pointer x)
         {
             leaf_pointer y = x->right;
-            x->right = y->left;
-            if (y->left)
-                y->left->parent = x;
-            y->parent = x->parent;
-            if (!x->parent)
-                _root = y;
-            else if (x == x->parent->left)
-                x->parent->left = y;
-            else
-                x->parent->right = y;
-            y->left = x;
-            x->parent = y;
+            
+            if (y)
+            {
+                x->right = y->left;
+                if (y->left)
+                    y->left->parent = x;
+                y->parent = x->parent;
+                if (!x->parent)
+                    _root = y;
+                else if (x == x->parent->left)
+                    x->parent->left = y;
+                else
+                    x->parent->right = y;
+                y->left = x;
+                x->parent = y;
+            }
         }
 
         void rightrotate(leaf_pointer x)
@@ -213,7 +181,7 @@ namespace ft
             else
                 std::cout << "\033[0;40m";
             if (leaf)
-                std::cout << "(" << leaf->_value.first << ")";
+                std::cout << "(" << leaf->_value << ")";
             std::cout << "\033[0;m";
         }
 
@@ -243,14 +211,14 @@ namespace ft
                     printIndent((*it).indent - level - cumulativeIndent);
                     new_nodes.push_back(makeprintNode((*it).leaf->left, (*it).indent - level));
                     printLeaf((*it).leaf->left);
-                    cumulativeIndent += (*it).indent - level - cumulativeIndent + 3;
+                    cumulativeIndent += (*it).indent - level - cumulativeIndent + 2 + (*it).leaf->_value.size();
                 }
                 if ((*it).leaf->right)
                 {
                     printIndent((*it).indent + level - cumulativeIndent);
                     new_nodes.push_back(makeprintNode((*it).leaf->right, (*it).indent + level));
                     printLeaf((*it).leaf->right);
-                    cumulativeIndent += (*it).indent + level - cumulativeIndent + 3;
+                    cumulativeIndent += (*it).indent + level - cumulativeIndent + 2 + (*it).leaf->_value.size();
                 }
             }
             return (new_nodes);
@@ -444,8 +412,8 @@ namespace ft
             }
 
             iterator(leaf_pointer const &p, leaf_pointer const &prev  = NULL) : __i(p), _prev(prev) {}
-            operator typename Tree<const value_type, Compare>::iterator() {
-                return (typename Tree<const value_type, Compare>::iterator(reinterpret_cast<leaf<const T> *>(__i), reinterpret_cast<leaf<const T> *>(_prev)));
+            operator typename setTree<const value_type, Compare>::iterator() {
+                return (typename setTree<const value_type, Compare>::iterator(reinterpret_cast<leaf<const T> *>(__i), reinterpret_cast<leaf<const T> *>(_prev)));
             }
         };
     
@@ -477,7 +445,7 @@ namespace ft
         {
             leaf_pointer    sibling;
 
-            if (leaf == _root)
+            if (!leaf->parent)
                 return ;
             sibling = getSibling(leaf);
             if (sibling && sibling == leaf->parent->right)
@@ -524,7 +492,6 @@ namespace ft
                     rightrotate(leaf->parent);
                     sibling = leaf->parent->left;
                 }
-                // sibling = getSibling(leaf);
                 if (sibling && sibling->color == BLACK)
                 {
                     if (getColor(sibling->right) == BLACK && getColor(sibling->left) == BLACK)
@@ -539,13 +506,13 @@ namespace ft
                     {
                         sibling->color = RED;
                         sibling->right->color = BLACK;
-                        rightrotate(sibling->right);
+                        leftrotate(sibling->right);
                     }
                     else if (getColor(sibling->left) == RED)
                     {
                         sibling->left->color = BLACK;
                         leaf->parent->color = BLACK;
-                        leftrotate(leaf->parent);
+                        rightrotate(leaf->parent);
                         if (leaf->parent && leaf->parent->parent)
                             leaf->parent->parent->color = RED;
                     }
@@ -587,8 +554,12 @@ namespace ft
                     child->parent = NULL;
                 _root = child;
             }
+            // std::cout << "before" << std::endl;
+            // printTree(30, 10);
             _leaf_alloc.destroy(leaf);
             _leaf_alloc.deallocate(leaf, 1);
+            // std::cout << "after" << std::endl;
+            // std::cout << std::boolalpha << "root? = " << !(!(_root)) << std::endl;
         }
 
         void deleteNode(T value)
@@ -623,7 +594,7 @@ namespace ft
         {
             leaf_pointer iter = _root;
 
-            while (iter && iter->_value.first != value.first)
+            while (iter && iter->_value != value)
             {
                 if (_value_compare(iter->_value, value))
                     iter = iter->right;
@@ -633,13 +604,13 @@ namespace ft
             return (iter);
         }
 
-        leaf_pointer find(typename T::first_type value) const
+        leaf_pointer find(T value) const
         {
             leaf_pointer iter = _root;
 
-            while (iter && iter->_value.first != value)
+            while (iter && iter->_value != value)
             {
-                if (_key_compare(iter->_value.first, value))
+                if (_key_compare(iter->_value, value))
                     iter = iter->right;
                 else
                     iter = iter->left;

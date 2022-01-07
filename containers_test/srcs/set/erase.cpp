@@ -48,6 +48,7 @@ int		main(void)
 	st.insert("THREE");
 	st.insert("FOUR");
 	printSize(st);
+	std::cout << *st.begin() << *st.end() << std::endl;
 	ft_erase(st, st.begin(), st.end());
 
 	return (0);

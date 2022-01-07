@@ -222,12 +222,12 @@ void	reverse_iterator_integral() {
 	std::cout << "integral reverse_iterator - 3 -> " << *(it - 3) << std::endl;
 	std::cout << *(it - 3).base() << std::endl;
 	it -= 3;
-	std::cout << *it.base() << std::endl;
-	// std::cout << *(it) << std::endl;
-	// std::cout << *(it).base() << std::endl;
-	// std::cout << *(it - 0) << std::endl;
-	// std::cout << *(it - 0).base() << std::endl;
-	// std::cout << *(it - 1).base() << std::endl;
+	std::cout << "*it.base() " << *it.base() << std::endl;
+	std::cout << "*it = " << *(it) << std::endl;
+	std::cout << "(*it).base() = " << *(it).base() << std::endl;
+	std::cout << "*(it - 0) = " << *(it - 0) << std::endl;
+	std::cout << "*(it - 0).base() = " << *(it - 0).base() << std::endl;
+	std::cout << "*(it - 1).base() = " << *(it - 1).base() << std::endl;
 
 	std::cout << "<" << typeid(T).name() << "> " << "integral reverse_iterator == reverse_iterator (equal) -> " << (it1 == it2) << std::endl;
 	std::cout << "<" << typeid(T).name() << "> " << "integral reverse_iterator != reverse_iterator (equal) -> " << (it1 != it2) << std::endl;
@@ -381,6 +381,38 @@ void	element_access_tests() {
 
 	typename LIB::vector<T>::const_reference b = vector1.at(299);
 	std::cout << "const_reference vector.at(401) = " << b << std::endl;
+	LIB::vector<T>	vct(7);
+	int	i = 1;
+	for (typename LIB::vector<T>::iterator it = vct.begin(); it != vct.end(); it++)
+		*it = i++ * 5;
+	std::cout << "vct.front() = " << vct.front() << std::endl;
+	std::cout << "vct.back() = " << vct.back() << std::endl;
+}
+
+template<typename T>
+void	modifiers_test()
+{
+	LIB::vector<T>	vct;
+	std::list<T> lst2;
+	unsigned int lst2_size = 7;
+	for (unsigned int i = 0; i < lst2_size; ++i)
+		lst2.push_back(i * 98);
+	for (T i = 0; i < 9; i++)
+		vct.push_back(i * 5);
+	std::cout << "push_back: ";
+	print_vector(vct);
+	vct.pop_back();
+	std::cout << "pop_back: ";
+	print_vector(vct);
+	vct.insert(vct.begin() + 1, lst2.begin(), lst2.end());
+	std::cout << "insert(iterator, iterator): ";
+	print_vector(vct);
+	vct.insert(vct.end() - 3, 2, 7);
+	std::cout << " insert(iterator, size, val): ";
+	print_vector(vct);
+	vct.erase(vct.begin());
+	std::cout << "erase(begin()): ";
+	print_vector(vct);
 }
 
 void	vector_tests()

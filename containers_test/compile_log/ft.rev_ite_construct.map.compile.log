@@ -1,0 +1,2 @@
+/usr/bin/ld: : final close failed: Input/output error
+clang: error: linker command failed with exit code 1 (use -v to see invocation)

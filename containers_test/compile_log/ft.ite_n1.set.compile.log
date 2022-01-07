@@ -1,0 +1,13 @@
+srcs/set/ite_n1.cpp:8:38: error: no viable conversion from '__wrap_biiter<typename const_tree_type::iterator, [...]>' to '__wrap_biiter<typename tree_type::iterator, [...]>'
+        TESTED_NAMESPACE::set<T1>::iterator it = st.begin(); // <-- no error, actually ! set allows for const_iterator => iterator conversion
+                                            ^    ~~~~~~~~~~
+./../srcs/wrap_iter.hpp:159:4: note: candidate constructor not viable: no known conversion from 'ft::set<int>::const_iterator' (aka '__wrap_biiter<ft::setTree<const int, std::less<int> >::iterator, setTree<const int, std::less<int> > >') to 'const ft::__wrap_biiter<ft::setTree<int, std::less<int> >::iterator, ft::setTree<const int, std::less<int> > > &' for 1st argument
+                        __wrap_biiter(__wrap_biiter const &copy): __i(copy.__i) {}
+                        ^
+./../srcs/wrap_iter.hpp:173:4: note: candidate constructor not viable: no known conversion from 'ft::set<int>::const_iterator' (aka '__wrap_biiter<ft::setTree<const int, std::less<int> >::iterator, setTree<const int, std::less<int> > >') to 'const ft::__wrap_biiter<ft::setTree<int, std::less<int> >::iterator, ft::setTree<const int, std::less<int> > >::iterator_type &' (aka 'const ft::setTree<int, std::less<int> >::iterator &') for 1st argument
+                        __wrap_biiter(iterator_type const &p): __i(p){}
+                        ^
+./../srcs/wrap_iter.hpp:174:4: note: candidate function
+                        operator const __wrap_biiter< typename const_tree_type::iterator, const_tree_type >() {
+                        ^
+1 error generated.
