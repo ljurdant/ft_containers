@@ -14,7 +14,7 @@ void	print_vector(LIB::vector<T> &vector)
 	{
 		std::cout << "vector[" << i << "] = " << vector[i] ;
 		if (i != vector.size() - 1)
-			std::cout << ", ";
+			std::cout << ", "; 
 	}
 	std::cout << std::endl;
 }
@@ -433,4 +433,13 @@ void	vector_tests()
 	capacity_tests<long long>();
 	// capacity_tests<test>();
 	element_access_tests<int>();
+	modifiers_test<int>();
+	LIB::vector<int>	vct(1000);
+
+	srand(1);
+	for (LIB::vector<int>::iterator it = vct.begin(); it !=vct.end(); it++)
+	{
+		*it = rand() % 3000;
+	}
+	
 }

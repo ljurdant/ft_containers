@@ -12,7 +12,8 @@
 # include <stack>
 # include <fstream>
 # include <iostream>
-#include <typeinfo>
+# include <typeinfo>
+# include <cstdlib>
 
 
 #ifndef LIB

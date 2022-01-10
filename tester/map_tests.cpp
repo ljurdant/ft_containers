@@ -156,4 +156,16 @@ void	map_tests(void)
 	// while (itend != itendd)
 	std::cout << "[rev] " << (itend++)->second  << std::endl;
 	(void)itendd;
+	LIB::map<int, int>	mapp;
+	
+	srand(3);
+	int a;
+	for (int i = 0; i < 100000; i++)
+	{
+		a = rand()% 100000;
+		mapp.insert(LIB::make_pair(a, 4));
+	}
+	print_map(mapp);
+	mapp.find(a);
+	mapp.erase(a);
 }

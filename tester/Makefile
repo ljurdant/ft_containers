@@ -1,6 +1,6 @@
 NAME =	ft_containers
 
-FLAGS =	-Wall -Wextra -Werror -MMD -std=c++98
+FLAGS =	-Wall -Wextra -Werror -g3 -std=c++98
 
 SRCS =	tester/main.cpp\
 		tester/vector_test.cpp\
@@ -27,8 +27,8 @@ clean	:
 	rm -f $(OBJS)
 
 fclean  :		clean
-	rm -rf $(NAME)
-	rm -rf std_containers
+	rm -rf ft_$(NAME)
+	rm -rf std_$(NAME)
 	rm  -f std_out ft_out
 		
 

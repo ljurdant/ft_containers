@@ -67,7 +67,7 @@ namespace ft
             {
                 // std::cout << _root->_value << std::endl;
                 // std::cout << std::boolalpha << "yo root? = " << (_root == NULL) << std::endl;
-                printTree(45, 16);
+                // printTree(45, 16);
                 deleteNode(_root->_value);
                 // std::cout << std::boolalpha << "root? = " << (_root == NULL) << std::endl;
             }
@@ -136,7 +136,7 @@ namespace ft
             }
         }
 
-        void leftrotate(leaf_pointer x)
+        void                                                                                                                                        otate(leaf_pointer x)
         {
             leaf_pointer y = x->right;
             
@@ -146,6 +146,7 @@ namespace ft
                 if (y->left)
                     y->left->parent = x;
                 y->parent = x->parent;
+            
                 if (!x->parent)
                     _root = y;
                 else if (x == x->parent->left)

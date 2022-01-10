@@ -87,25 +87,16 @@ namespace ft {
 
 			// //Iterators
 				iterator begin() { 
-					typename tree_type::iterator	tree_it(_tree.getBegin());
-					iterator						it(tree_it);
-					return (it);
-					// return (iterator(typename tree_type::iterator(_tree.getBegin()))); 
+					return (iterator(typename tree_type::iterator(_tree.getBegin()))); 
 				}
 				const_iterator begin() const { 
-					typename tree_type::iterator		tree_it(_tree.getBegin());
-					const_iterator						it(tree_it);
-					return (it); 
+					return (const_iterator(typename tree_type::iterator(_tree.getBegin()))); 
 				 }
 				iterator end() {
-					typename tree_type::iterator	tree_it(NULL, _tree.getLast());
-					iterator						it(tree_it);
-					return (it);
+					return (iterator(typename tree_type::iterator(NULL, _tree.getLast())));
 				}
-				const_iterator end() const { 
-					typename tree_type::iterator	tree_it(NULL, _tree.getLast());
-					const_iterator					it(tree_it);
-					return (it);
+				const_iterator end() const { 																																																																																																																																																																																																																																																																																																																																																																																																																											
+					return (iterator(typename tree_type::iterator(NULL, _tree.getLast())));
 				}
 				reverse_iterator	rbegin() {
 					return (end()); 
@@ -284,6 +275,10 @@ namespace ft {
 		bool operator>=  (const map<Key, T, Compare, Alloc>& lhs, const map<Key, T, Compare, Alloc>& rhs) {
 			return (!(lhs < rhs));
 		}
+	template< class Key, class T, class Compare, class Alloc >
+	void swap( ft::map<Key,T,Compare,Alloc>& lhs, ft::map<Key,T,Compare,Alloc>& rhs ) {
+		lhs.swap(rhs);
+	}
 }
 
 #endif
