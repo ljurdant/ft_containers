@@ -12,7 +12,7 @@
 namespace ft {
 template	<typename T, class Alloc = std::allocator<T> >
 class vector {
-		public:	
+		public:
 
 			typedef T											value_type;
 			typedef Alloc										allocator_type;

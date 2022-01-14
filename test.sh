@@ -1,5 +1,3 @@
-
-cd ..
 make test
 ts=$(date +%s%N)
 ./ft_containers > f
@@ -9,5 +7,4 @@ ts=$(date +%s%N)
 echo "STL:"$((($(date +%s%N) - $ts)/1000000))"ms"
 make fclean
 rm f s
-cd tester
 

@@ -2,9 +2,9 @@
 #include <deque>
 #include "vector.hpp"
 
-namespace ft {
+namespace ft {  
 	template <class T, class Container = ft::vector<T> >
-		class stack {
+		class stack {   
 		public:
 			typedef T					value_type;
 			typedef Container			container_type;
@@ -13,7 +13,7 @@ namespace ft {
 			typedef value_type const &	const_reference;
 		protected:
 			container_type	c;
-		public:
+		public: 
 			explicit stack (const container_type& ctnr = container_type()): c(ctnr) {}
 			bool				empty() const { return (c.empty()); }
 			size_type			size() const { return (c.size()); }

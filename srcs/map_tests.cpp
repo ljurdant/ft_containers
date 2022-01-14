@@ -1,5 +1,5 @@
 
-#include "ft_containers.hpp"
+#include "../includes/ft_containers.hpp"
 
 template < class Key, class T >
 void	print_map(LIB::map<Key,T> &map)
@@ -16,7 +16,7 @@ void	print_map(LIB::map<Key,T> &map)
 	std::cout << std::endl;
 }
 
-template < class Key, class T >
+template < class Key, class T >  
 void	print_map_reverse(LIB::map<Key,T> &map)
 {	
 	typename LIB::map<Key,T>::iterator it = map.end();
