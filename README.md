@@ -37,10 +37,12 @@ Validity Tester:
 ---
  - run ```Make test``` in root folder
  - If no differences are shown then the implemented containers behave as expected
+
 Speed Tester:
 
 ---
   - run ```./test.sh``` in root folder
+
 Adding your own tests:
 
 ---
