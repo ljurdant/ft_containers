@@ -34,18 +34,19 @@ Usage
 -----
 Validity Tester:
 
----
  - run ```Make test``` in root folder
  - If no differences are shown then the implemented containers behave as expected
 
+---
+
 Speed Tester:
 
----
   - run ```./test.sh``` in root folder
+
+---
 
 Adding your own tests:
 
----
   - go to srcs/<tested container>.cpp
   - create a container in the .cpp file by using ```LIB:<tested container```
   - Run the Validity Tester again
