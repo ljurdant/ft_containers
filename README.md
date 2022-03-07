@@ -25,8 +25,10 @@ Contents
     - ```make test``` will compile tests and compare to the standard library
    4. ./test.sh
     - script to test the compile speed
-   5. .gitignore
-   6. README.md
+   5. ./.gitignore
+   6. ./README.md
+   7. ./en.subject.pdf
+    - 42 school subject
 
 Usage
 -----
